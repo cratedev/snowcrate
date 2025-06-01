@@ -9,6 +9,7 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.suites.common;
   sharedAuthorizedKeys = builtins.readFile "${inputs.nix-ssh}/ssh/authorized_keys";
+  knownhosts = builtins.readFile "${inputs.nix-ssh}/ssh/knownHosts";
 in {
   options.${namespace}.suites.common = with types; {
     enable = mkBoolOpt false "Whether or not to enable common configuration.";
@@ -56,6 +57,7 @@ in {
         openssh = {
           enable = true;
           authorizedKeys = lib.splitString "\n" sharedAuthorizedKeys;
+          knownHosts = knownhosts;
         };
         busybox = {
           enable = true;
