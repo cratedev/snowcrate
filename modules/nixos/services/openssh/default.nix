@@ -36,9 +36,12 @@ in {
     crate.user.extraOptions.openssh.authorizedKeys.keys = cfg.authorizedKeys;
 
     # Allow ssh-rsa for compatibility
-    programs.ssh.extraConfig = ''
-      Host *
-        HostKeyAlgorithms +ssh-rsa
-    '';
+    programs.ssh = {
+      extraConfig = ''
+        Host *
+        	HostKeyAlgorithms +ssh-rsa
+      '';
+      knownHosts = import "${inputs.nix-ssh}/ssh/knownHosts";
+    };
   };
 }
