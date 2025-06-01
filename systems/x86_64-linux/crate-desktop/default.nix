@@ -19,7 +19,7 @@ in {
 
   crate = {
     archetypes = {
-      laptop = enabled;
+      desktop = enabled;
     };
     user = {
       name = "matt";
