@@ -14,7 +14,7 @@ with lib.${namespace}; let
   };
 in {
   imports = [
-    ./hardware-configuration.nix
+    ./hardware.nix
   ];
 
   crate = {
