@@ -54,7 +54,6 @@ in {
       };
       media = {
         spotify = {enable = true;};
-        ytmusic = {enable = true;};
       };
     };
   };
