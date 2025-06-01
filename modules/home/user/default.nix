@@ -5,32 +5,21 @@
   namespace,
   ...
 }: let
-  inherit (lib) types mkIf mkDefault mkMerge;
+  inherit (lib) types mkIf mkDefault;
   inherit (lib.${namespace}) mkOpt;
 
   cfg = config.${namespace}.user;
 
-  # Use the hostname from config.crate.user.hostname
-  hostname = config.crate.user.hostname;
+  authorizedKeysLines = lib.splitString "\n" (builtins.readFile "${inputs.nix-ssh}/ssh/authorized_keys");
 
-  # Read the authorized_keys file from inputs.nix-ssh
-  authorizedKeysFile = "${inputs.nix-ssh}/ssh/authorized_keys";
-
-  # Parse the authorized_keys file into a list of lines
-  authorizedKeysLines = lib.splitString "\n" (builtins.readFile authorizedKeysFile);
-
-  # Filter out empty lines and comments, then find the key matching the hostname
   default-key =
     lib.findFirst
     (
-      line: let
-        parts = lib.splitString " " (lib.trim line);
-        comment =
-          if (builtins.length parts) > 2
-          then lib.last parts
-          else "";
-      in
-        line != "" && !(lib.hasPrefix "#" line) && comment == "matt@${hostname}"
+      line:
+        line
+        != ""
+        && !(lib.hasPrefix "#" line)
+        && lib.last (lib.splitString " " (lib.trim line)) == "${cfg.name}@${cfg.hostname}"
     )
     null
     authorizedKeysLines;
@@ -42,36 +31,34 @@
 in {
   options.${namespace}.user = {
     enable = mkOpt types.bool false "Whether to configure the user account.";
-    name = mkOpt (types.nullOr types.str) config.crate.user.name "The user account name.";
+    name = mkOpt (types.nullOr types.str) "${cfg.name}" "The user account name.";
     uid = mkOpt types.int 1001 "UID of the user.";
-    fullName = mkOpt types.str "Matthew Henderson" "The full name of the user.";
-    email = mkOpt types.str "matt@crate.dev" "The email of the user.";
+    fullName = mkOpt types.str "${cfg.fullName}" "The full name of the user.";
+    email = mkOpt types.str "${cfg.email}" "The email of the user.";
     home = mkOpt (types.nullOr types.str) home-directory "The user's home directory.";
     authorizedKeys = mkOpt types.str default-key "The public key to apply.";
     hostname = mkOpt types.str "default-hostname" "The hostname to use for SSH key selection.";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions = [
-        {
-          assertion = cfg.name != null;
-          message = "${namespace}.user.name must be set";
-        }
-        {
-          assertion = cfg.home != null;
-          message = "${namespace}.user.home must be set";
-        }
-        {
-          assertion = default-key != null;
-          message = "No SSH key found for hostname '${hostname}' in ${authorizedKeysFile}";
-        }
-      ];
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.name != null;
+        message = "${namespace}.user.name must be set";
+      }
+      {
+        assertion = cfg.home != null;
+        message = "${namespace}.user.home must be set";
+      }
+      {
+        assertion = default-key != null;
+        message = "No SSH key found for hostname '${cfg.hostname}' in ${inputs.nix-ssh}/ssh/authorized_keys";
+      }
+    ];
 
-      home = {
-        username = mkDefault cfg.name;
-        homeDirectory = mkDefault cfg.home;
-      };
-    }
-  ]);
+    home = {
+      username = mkDefault cfg.name;
+      homeDirectory = mkDefault cfg.home;
+    };
+  };
 }
