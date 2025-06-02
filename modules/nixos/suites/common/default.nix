@@ -22,6 +22,7 @@ in {
 
       desktop = {
         niri = enabled;
+        hyprland = enabled;
         display-manager = {
           sddm = {
             enable = true;
