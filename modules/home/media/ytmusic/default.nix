@@ -14,6 +14,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ytmdesktop];
+    home.packages = with pkgs; [ytmdesktop];
   };
 }

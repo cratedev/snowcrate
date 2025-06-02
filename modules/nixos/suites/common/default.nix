@@ -76,6 +76,10 @@ in {
         time = enabled;
         #xkb = enabled;
       };
+
+      cache = {
+        public = enabled;
+      };
     };
   };
 }
