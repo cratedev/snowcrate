@@ -154,7 +154,7 @@ in {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
 
           "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
-          "Mod+D".action = spawn "rofi" "-show" "drun" "-theme" ".config/rofi/styles/style-6.rasi";
+          "Mod+D".action = spawn "rofi" "-show" "drun" "-theme" ".config/rofi/styles/style-16.rasi";
 
           "Mod+Q".action = close-window;
 
