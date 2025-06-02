@@ -19,6 +19,9 @@ in {
           enable = true;
           profileNames = ["matt"];
         };
+        waybar = {
+          enable = false;
+        };
       };
     };
   };

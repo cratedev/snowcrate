@@ -26,22 +26,28 @@ tooltip label {
 }
 
 #workspaces button {
-  padding: 3px;
+  padding: 5px;
   color: @surface1;
+	background: @mantle;
   opacity: 0.6;
-  margin-right: 5px;
-  background-color: @mantle;
+  margin-right: 0px;
+	font-size: 30px;
+	font-family: "JetBrainsMono Nerd Font", "MesloLGS Nerd Font", "Font Awesome";
 }
 
 #workspaces button.active {
   color: @lavender;
   opacity: 0.8;
+	font-size: 30px;
+	font-family: "JetBrainsMono Nerd Font", "MesloLGS Nerd Font", "Font Awesome";
 }
 
 #workspaces button.focused {
   color: @rosewater;
   background: @crust;
   border-radius: 15px;
+	font-size: 30px;
+	font-family: "JetBrainsMono Nerd Font", "MesloLGS Nerd Font", "Font Awesome";
 }
 
 #workspaces button.urgent {
@@ -330,6 +336,7 @@ tooltip label {
 #workspaces {
   background-color: @mantle;
   border-radius: 5px;
+	font-size: 30px;
 }
 
 #window {

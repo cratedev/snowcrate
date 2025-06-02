@@ -111,6 +111,27 @@
             "3": []
         }
     },
+		"niri/workspaces": {
+			"on-click": "activate",
+			"format": "{name}",
+			"format-icons": {
+				"1": "󰺕 ",
+				"2": "󰄛 ",
+				"3": " ",
+				"4": " ",
+				"5": " ",
+				"6": "󰉋 ",
+				"7": " ",
+				"8": "󰓇 ",
+				"9": "󰙯 ",
+				"10": " ",
+			},
+			"all-outputs": false,
+			"disable-scroll": false,
+			"active-only": false,
+			"display-condition": "only-populated",
+			"min-length": 10,
+		},
 
     "custom/cpu-icon": {
         "format": "",
