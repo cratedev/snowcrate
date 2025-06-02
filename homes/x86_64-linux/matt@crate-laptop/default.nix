@@ -8,7 +8,6 @@
     };
     archetypes.laptop = {
       enable = true;
-      display-name = "eDP-1";
     };
   };
 

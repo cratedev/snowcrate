@@ -16,7 +16,7 @@ in {
     environment.systemPackages = [];
 
     services = {
-      #      logind.lidSwitch = "ignore";
+      #logind.lidSwitch = "ignore";
       power-profiles-daemon.enable = false;
       thermald.enable = false;
       tlp.enable = false;

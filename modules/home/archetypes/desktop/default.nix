@@ -9,7 +9,7 @@ with lib.${namespace}; let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.${namespace}.archetypes.desktop;
 in {
-  options.${namespace}.archetypes.desktop = with types; {
+  options.${namespace}.archetypes.desktop = {
     enable = mkEnableOption "desktop home environment";
   };
 
