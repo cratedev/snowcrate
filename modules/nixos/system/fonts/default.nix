@@ -39,6 +39,7 @@ in {
         liberation_ttf
         jetbrains-mono
         nerd-fonts.jetbrains-mono
+        font-awesome
       ]
       ++ cfg.fonts;
     fonts = {
