@@ -44,10 +44,6 @@ in {
         ];
 
         env = [
-          "XCURSOR_THEME,Adwaita"
-          "XCURSOR_SIZE,12"
-          "GTK_THEME,Orchis-Purple"
-          "ICON_THEME,kora"
         ];
 
         exec-once = [
@@ -90,21 +86,21 @@ in {
         bind =
           [
             "$mod, RETURN, exec, ghostty -e zellij attach --create main"
-            "$mod, D, exec, rofi -show drun -theme .config/rofi/styles/style-16.rasi"
+            "$mod, D, exec, rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
             "$mod, E, exec, nemo"
             "$mod, Q, killactive"
             "$mod, V, togglefloating"
             "$mod, F, fullscreen"
             "$mod, SPACE, exec, rofi -show run"
             "$mod, P, pseudo"
-            "$mod, J, movefocus, l"
-            "$mod, K, movefocus, u"
-            "$mod, H, movefocus, r"
-            "$mod, L, movefocus, d"
-            "$mod SHIFT, J, swapwindow, l"
-            "$mod SHIFT, K, swapwindow, u"
-            "$mod SHIFT, H, swapwindow, r"
-            "$mod SHIFT, L, swapwindow, d"
+            "$mod, left, movefocus, l"
+            "$mod, up, movefocus, u"
+            "$mod, right, movefocus, r"
+            "$mod, down, movefocus, d"
+            "$mod SHIFT, left, swapwindow, l"
+            "$mod SHIFT, up, swapwindow, u"
+            "$mod SHIFT, right, swapwindow, r"
+            "$mod SHIFT, down, swapwindow, d"
             "$mod, TAB, workspace, e+1"
             "$mod SHIFT, TAB, workspace, e-1"
             "$mod, S, togglesplit"

@@ -18,6 +18,7 @@ in {
     ${namespace} = {
       desktop = {
         niri = {enable = true;};
+        hyprland = {enable = true;};
         addons = {
           waybar = {enable = true;};
           gtk = {enable = true;};
