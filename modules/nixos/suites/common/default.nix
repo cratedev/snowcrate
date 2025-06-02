@@ -35,10 +35,6 @@ in {
         _1password = enabled;
       };
 
-      media = {
-        ytmusic = enabled;
-      };
-
       tools = {
         git = enabled;
         ripgrep = enabled;

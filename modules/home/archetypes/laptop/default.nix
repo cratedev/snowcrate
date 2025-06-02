@@ -37,6 +37,11 @@ in {
         discord = {enable = true;};
         nautilus = {enable = true;};
       };
+
+      media = {
+        ytmusic = enabled;
+      };
+
       cli = {
         nushell = {enable = true;};
         btop = {enable = true;};
