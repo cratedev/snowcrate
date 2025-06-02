@@ -15,8 +15,13 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      hyprland
+      #hyprland
     ];
-    programs.hyprland.enable = true;
+    programs.hyprland = {
+      enable = true;
+      xwayland.enable = false;
+      package = pkgs.hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
+    };
   };
 }

@@ -30,10 +30,12 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [gtk3 swww grim slurp];
-    programs.hyprland = {
-      settings = {
-        environment."NIXOS_OZONE_WL" = "1";
-      };
+    home.sessionVariables.NIXOS_OZONE_WL = "1";
+
+    programs.kitty.enable = true; # required for the default Hyprland config
+
+    wayland.windowManager.hyprland = {
+      enable = true; # enable Hyprland
     };
   };
 }
