@@ -42,7 +42,6 @@ in {
         cliphist = enabled;
         wlclipboard = enabled;
         nh = enabled;
-        devenv = enabled;
       };
 
       theming = {
