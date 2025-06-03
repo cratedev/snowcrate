@@ -18,7 +18,7 @@ in {
       #hyprland
     ];
 
-    home.configFile."scripts".source = ./scripts;
+    crate.home.configFile."hypr/scripts".source = ./scripts;
     programs.hyprland = {
       enable = true;
       xwayland.enable = false;
