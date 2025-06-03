@@ -27,6 +27,7 @@
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
+    fabric-nix.url = "github:muhchaudhary/fabric-nix";
   };
 
   outputs = inputs: let

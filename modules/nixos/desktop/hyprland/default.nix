@@ -15,6 +15,10 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      python3Full
+      python312Packages.dbus-python
+      meson
+      dbus
       jq
     ];
 
