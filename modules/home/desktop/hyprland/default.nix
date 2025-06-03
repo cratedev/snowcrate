@@ -119,7 +119,7 @@ in {
             "$mod, Q, killactive"
             "$mod, V, togglefloating"
             "$mod, F, fullscreen"
-            "$mod, S, exec, ~/.config/hyprland/scripts/fake_fullscreen.sh"
+            "$mod, S, exec, /home/matt/.config/hypr/scripts/fake_fullscreen.sh"
             "$mod, SPACE, exec, rofi -show run"
             "$mod, P, pseudo"
             "$mod, left, movefocus, l"

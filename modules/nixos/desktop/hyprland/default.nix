@@ -15,7 +15,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      #hyprland
+      jq
     ];
 
     crate.home.configFile."hypr/scripts".source = ./scripts;
