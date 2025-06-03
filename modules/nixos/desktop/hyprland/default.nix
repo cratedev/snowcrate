@@ -17,6 +17,8 @@ in {
     environment.systemPackages = with pkgs; [
       #hyprland
     ];
+
+    home.configFile."scripts".source = ./scripts;
     programs.hyprland = {
       enable = true;
       xwayland.enable = false;

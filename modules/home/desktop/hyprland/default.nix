@@ -31,7 +31,6 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [gtk3 swww grim slurp];
     home.sessionVariables.NIXOS_OZONE_WL = "1";
-
     programs.kitty.enable = true; # required for the default Hyprland config
 
     wayland.windowManager.hyprland = {
@@ -120,7 +119,7 @@ in {
             "$mod, Q, killactive"
             "$mod, V, togglefloating"
             "$mod, F, fullscreen"
-            "$mod, S, exec, ./scripts/fake_fullscreen.sh"
+            "$mod, S, exec, ~/.config/scripts/fake_fullscreen.sh"
             "$mod, SPACE, exec, rofi -show run"
             "$mod, P, pseudo"
             "$mod, left, movefocus, l"
