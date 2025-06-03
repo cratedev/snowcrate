@@ -9,9 +9,9 @@ with lib.${namespace}; let
   cfg = config.${namespace}.desktop.addons.waybar;
   waybarConfig = {
     include = [
-      "\${HOME}/.config/niri/waybar/modules/modules-dual-tone.jsonc"
-      "\${HOME}/.config/niri/waybar/modules/modules-custom.jsonc"
-      "\${HOME}/.config/niri/waybar/modules/modules-groups.jsonc"
+      "\${HOME}/.config/waybar/modules/modules-dual-tone.jsonc"
+      "\${HOME}/.config/waybar/modules/modules-custom.jsonc"
+      "\${HOME}/.config/waybar/modules/modules-groups.jsonc"
     ];
 
     layer = "top";
@@ -28,7 +28,7 @@ with lib.${namespace}; let
 
     "modules-left" = [
       "custom/launch_rofi"
-      "niri/window"
+      "hyprland/window"
       "idle_inhibitor"
       "custom/nightlight"
       #      "custom/clipboard_icon"
@@ -39,7 +39,7 @@ with lib.${namespace}; let
     ];
 
     "modules-center" = [
-      "niri/workspaces"
+      "hyprland/workspaces"
     ];
 
     "modules-right" = [
@@ -59,7 +59,7 @@ with lib.${namespace}; let
       "group/power"
     ];
 
-    "niri/workspaces" = {
+    "hyprland/workspaces" = {
       "disable-scroll" = true;
       "all-outputs" = true;
       "on-click" = "activate";
@@ -91,9 +91,9 @@ in {
     };
     home.file = {
       ".config/waybar/style/mocha.css".source = ./mocha.css;
-      ".config/niri/waybar/modules/modules-dual-tone.jsonc".source = ./modules/modules-dual-tone.jsonc;
-      ".config/niri/waybar/modules/modules-custom.jsonc".source = ./modules/modules-custom.jsonc;
-      ".config/niri/waybar/modules/modules-groups.jsonc".source = ./modules/modules-groups.jsonc;
+      ".config/waybar/modules/modules-dual-tone.jsonc".source = ./modules/modules-dual-tone.jsonc;
+      ".config/waybar/modules/modules-custom.jsonc".source = ./modules/modules-custom.jsonc;
+      ".config/waybar/modules/modules-groups.jsonc".source = ./modules/modules-groups.jsonc;
     };
   };
 }

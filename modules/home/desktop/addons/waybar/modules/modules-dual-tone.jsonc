@@ -104,11 +104,14 @@
         "on-scroll-down": "hyprctl dispatch workspace e+1",
         "format-icons": {
             //  "default": ""
+					"1": "󰺕 ",
+					"2": " ",
+					"3": " ",
           },
         "persistent-workspaces": {
-            "1": [],
-            "2": [],
-            "3": []
+					"1": "󰺕 ",
+					"2": " ",
+					"3": " ",
         }
     },
 		"niri/workspaces": {

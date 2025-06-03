@@ -18,6 +18,9 @@ in {
       targets = {
         hyprland.enable = true;
         gtk.enable = true;
+        firefox = {
+          profileNames = ["matt"];
+        };
       };
     };
   };

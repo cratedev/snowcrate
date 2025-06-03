@@ -28,27 +28,8 @@ in {
         mkOpt package pkgs.libsForQt5.breeze-icons
         "The package to use for the icon theme.";
     };
-    #    theme = {
-    #      name =
-    #        mkOpt str "Catppuccin-Macchiato-Standard-Blue-Dark"
-    #        "The name of the GTK theme to apply.";
-    #      pkg =
-    #        mkOpt package
-    #        (pkgs.catppuccin-gtk.override {
-    #        accents = ["blue"];
-    #          size = "standard";
-    #          variant = "macchiato";
-    #        }) "The package to use for the theme.";
-    #    };
   };
   config = mkIf cfg.enable {
-    home.sessionVariables = {
-      CURSOR_THEME = cfg.cursor.name;
-      #      GTK_THEME = cfg.theme.name;
-      XCURSOR_SIZE = "${toString cfg.cursor.size}";
-      XCURSOR_THEME = cfg.cursor.name;
-    };
-
     dconf = {
       enable = true;
 
@@ -72,28 +53,10 @@ in {
         inherit (cfg.cursor) name;
         package = cfg.cursor.pkg;
       };
-
-      #      gtk3.extraConfig = {"gtk-application-prefer-dark-theme" = 1;};
-
-      #      gtk4.extraConfig = {"gtk-application-prefer-dark-theme" = 1;};
-
       iconTheme = {
         inherit (cfg.icon) name;
         package = cfg.icon.pkg;
       };
-
-      #      theme = {
-      #        inherit (cfg.theme) name;
-      #        package = cfg.theme.pkg;
-      #      };
-    };
-
-    home.pointerCursor = {
-      inherit (cfg.cursor) name;
-      inherit (cfg.cursor) size;
-      package = cfg.cursor.pkg;
-      gtk.enable = true;
-      x11.enable = true;
     };
   };
 }

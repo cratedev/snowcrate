@@ -18,7 +18,7 @@
     };
     nix-ssh.url = "git+ssh://git@github.com/cratedev/nix-ssh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    #niri.url = "github:sodiboo/niri-flake/daf2e18eb92420e05e06adbf3116899c359d8b15";
+    niri.url = "github:sodiboo/niri-flake/daf2e18eb92420e05e06adbf3116899c359d8b15";
     hyprland.url = "github:hyprwm/Hyprland";
     agenix.url = "github:yaxitech/ragenix";
     ghostty.url = "github:ghostty-org/ghostty";
@@ -48,8 +48,8 @@
       systems.modules.nixos = [
         inputs.home-manager.nixosModules.home-manager
         inputs.stylix.nixosModules.stylix
-        #inputs.niri.nixosModules.niri
-        #{niri-flake.cache.enable = true;}
+        inputs.niri.nixosModules.niri
+        {niri-flake.cache.enable = true;}
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
         #inputs.agenix.nixosModules.default
