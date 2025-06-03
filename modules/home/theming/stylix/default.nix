@@ -14,14 +14,10 @@ in {
 
   config = mkIf cfg.enable {
     stylix = {
+      autoEnable = true;
       targets = {
-        firefox = {
-          enable = true;
-          profileNames = ["matt"];
-        };
-        waybar = {
-          enable = false;
-        };
+        hyprland.enable = true;
+        gtk.enable = true;
       };
     };
   };

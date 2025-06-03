@@ -29,10 +29,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [gtk3 swww grim slurp];
+    home.packages = with pkgs; [gtk3 gtk4 swww grim slurp];
     home.sessionVariables.NIXOS_OZONE_WL = "1";
     programs.kitty.enable = true; # required for the default Hyprland config
-
+    stylix.targets.hyprland.enable = true; # Enable Stylix theming for Hyprland
     wayland.windowManager.hyprland = {
       enable = true;
       settings = {
@@ -118,8 +118,7 @@ in {
             "$mod, E, exec, nemo"
             "$mod, Q, killactive"
             "$mod, V, togglefloating"
-            "$mod, F, fullscreen"
-            "$mod, S, exec, /home/matt/.config/hypr/scripts/fake_fullscreen.sh"
+            "$mod, F, fullscreen, 1"
             "$mod, SPACE, exec, rofi -show run"
             "$mod, P, pseudo"
             "$mod, left, movefocus, l"
