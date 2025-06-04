@@ -45,6 +45,11 @@ in {
         env = [
         ];
 
+        ecosystem = {
+          "no_update_news" = true;
+          "no_donation_nag" = true;
+        };
+
         exec-once = [
           "swww-daemon"
           "swww img /home/matt/snowcrate/assets/wallpaper/12.png"
