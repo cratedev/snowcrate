@@ -116,6 +116,8 @@ in {
             "$mod, RETURN, exec, ghostty -e zellij attach --create main"
             "$mod, D, exec, rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
             "$mod, E, exec, nemo"
+            "$mod, I, exec, sh -c 'grim -g \"$(slurp)\" /home/matt/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'"
+
             "$mod, Q, killactive"
             "$mod, V, togglefloating"
             "$mod, F, fullscreen, 1"
