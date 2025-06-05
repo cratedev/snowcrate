@@ -42,7 +42,6 @@ in {
         hyprcursor
         inputs.grim-hyprland.packages.${system}.default
       ];
-      sessionVariables.NIXOS_OZONE_WL = "1";
       file = {
         ".config/hypr/scripts" = {
           source = ./scripts;
@@ -71,6 +70,7 @@ in {
         ];
 
         env = [
+          "ELECTRON_OZONE_PLATFORM_HINT,wayland"
         ];
 
         ecosystem = {
@@ -80,9 +80,9 @@ in {
 
         exec-once = [
           "uwsm app -- swww-daemon"
-          "uwsm app -- swww img /home/matt/snowcrate/assets/wallpaper/12.png"
+          "swww img /home/matt/snowcrate/assets/wallpaper/12.png"
           "uwsm app -- waybar"
-          "uwsm app -- 1password --silent"
+          "1password --silent"
           "uwsm app -- foot --server"
         ];
 
