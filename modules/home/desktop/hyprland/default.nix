@@ -97,7 +97,7 @@ in {
 
         general = {
           gaps_in = 10;
-          gaps_out = 10;
+          gaps_out = 15;
           border_size = 1;
         };
 
@@ -143,6 +143,18 @@ in {
 
         decoration = {
           rounding = 6;
+
+          blur = {
+            enabled = true;
+            size = 2;
+            passes = 1;
+          };
+
+          shadow = {
+            enabled = true;
+            range = 8;
+            render_power = 3;
+          };
         };
 
         bind =
