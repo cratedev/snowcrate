@@ -27,6 +27,7 @@
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
+    grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
   };
 
   outputs = inputs: let

@@ -17,7 +17,6 @@ in {
     environment.systemPackages = with pkgs; [
     ];
 
-    crate.home.configFile."hypr/scripts".source = ./scripts;
     programs.hyprland = {
       enable = true;
       xwayland.enable = false;

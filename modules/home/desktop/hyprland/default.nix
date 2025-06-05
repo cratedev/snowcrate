@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   namespace,
   ...
 }:
@@ -30,14 +31,39 @@ in {
 
   config = mkIf cfg.enable {
     home = {
-      packages = with pkgs; [gtk4 swww grim fzf foot chafa jq slurp hyprcursor catppuccin-cursors.latteLight];
+      packages = with pkgs; [
+        gtk4
+        swww
+        fzf
+        foot
+        chafa
+        jq
+        slurp
+        hyprcursor
+        catppuccin-cursors.latteLight
+        inputs.grim-hyprland.packages.${system}.default
+      ];
       sessionVariables.NIXOS_OZONE_WL = "1";
-      file = {".config/hypr/scripts".source = ./scripts;};
+      file = {
+        ".config/hypr/scripts" = {
+          source = ./scripts;
+          recursive = true;
+        };
+      };
     };
     programs.kitty.enable = true; # required for the default Hyprland config
     stylix.targets.hyprland.enable = true; # Enable Stylix theming for Hyprland
     wayland.windowManager.hyprland = {
       enable = true;
+      extraConfig = ''
+        ${cfg.appendConfig}
+             submap=alttab
+             bind = ALT, tab, sendshortcut, , tab, class:alttab
+             bind = ALT SHIFT, tab, sendshortcut, shift, tab, class:alttab
+             submap = reset
+             bindrt = ALT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
+             bindrt = ALT SHIFT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
+      '';
       settings = {
         "$mod" = "SUPER";
 
@@ -167,14 +193,5 @@ in {
           );
       };
     };
-    ${namespace}.desktop.hyprland.appendConfig = ''
-      submap=alttab
-      bind = ALT, tab, sendshortcut, , tab, class:alttab
-      bind = ALT SHIFT, tab, sendshortcut, shift, tab, class:alttab
-      submap = reset
-
-      bindrt = ALT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
-      bindrt = ALT SHIFT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
-    '';
   };
 }
