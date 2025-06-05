@@ -40,7 +40,6 @@ in {
         jq
         slurp
         hyprcursor
-        catppuccin-cursors.latteLight
         inputs.grim-hyprland.packages.${system}.default
       ];
       sessionVariables.NIXOS_OZONE_WL = "1";
@@ -80,11 +79,11 @@ in {
         };
 
         exec-once = [
-          "swww-daemon"
-          "swww img /home/matt/snowcrate/assets/wallpaper/12.png"
-          "waybar"
-          "1password --silent"
-          "foot --server"
+          "uwsm app -- swww-daemon"
+          "uwsm app -- swww img /home/matt/snowcrate/assets/wallpaper/12.png"
+          "uwsm app -- waybar"
+          "uwsm app -- 1password --silent"
+          "uwsm app -- foot --server"
         ];
 
         input = {
@@ -148,8 +147,8 @@ in {
 
         bind =
           [
-            "$mod, RETURN, exec, ghostty -e zellij attach --create main"
-            "$mod, D, exec, rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
+            "$mod, RETURN, exec, uwsm app -- ghostty -e zellij attach --create main"
+            "$mod, D, exec, uwsm app -- rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
             "$mod, E, exec, nemo"
             "$mod, I, exec, sh -c 'grim -g \"$(slurp)\" /home/matt/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'"
 

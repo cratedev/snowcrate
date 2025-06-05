@@ -40,10 +40,18 @@ in {
           cursor-theme = cfg.cursor.name;
           enable-hot-corners = false;
           font-name = config.${namespace}.system.fonts.default;
-          #          gtk-theme = cfg.theme.name;
+          #gtk-theme = cfg.theme.name;
           icon-theme = cfg.icon.name;
         };
       };
+    };
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      # x11.enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Ice";
+      size = 16;
     };
 
     gtk = {

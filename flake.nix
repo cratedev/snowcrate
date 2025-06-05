@@ -28,6 +28,7 @@
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
     grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
+    #catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs = inputs: let
@@ -53,6 +54,7 @@
         {niri-flake.cache.enable = true;}
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
+        #inputs.catppuccin.nixosModules.catppuccin
         #inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
