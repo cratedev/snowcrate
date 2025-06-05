@@ -56,7 +56,7 @@ in {
         ]
         ++ optional config.services.hydra.enable "hydra";
     in {
-      package = cfg.package;
+      inherit (cfg) package;
 
       settings = {
         experimental-features = "nix-command flakes repl-flake";
@@ -81,7 +81,7 @@ in {
       };
 
       gc = {
-        automatic = true;
+        automatic = false;
         dates = "weekly";
         options = "--delete-older-than 30d";
       };

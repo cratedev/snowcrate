@@ -29,8 +29,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [gtk3 gtk4 swww grim slurp];
-    home.sessionVariables.NIXOS_OZONE_WL = "1";
+    home = {
+      packages = with pkgs; [gtk4 swww grim fzf foot chafa jq slurp hyprcursor catppuccin-cursors.latteLight];
+      sessionVariables.NIXOS_OZONE_WL = "1";
+      file = {".config/hypr/scripts".source = ./scripts;};
+    };
     programs.kitty.enable = true; # required for the default Hyprland config
     stylix.targets.hyprland.enable = true; # Enable Stylix theming for Hyprland
     wayland.windowManager.hyprland = {
@@ -54,12 +57,8 @@ in {
           "swww-daemon"
           "swww img /home/matt/snowcrate/assets/wallpaper/12.png"
           "waybar"
-          #          "1password --ozone-platform-hint=auto"
-          #          "nm-applet"
-          #          "blueman-applet"
-          #          "dunst"
-          #          "udiskie"
-          #          "wl-paste --watch cliphist store"
+          "1password --silent"
+          "foot --server"
         ];
 
         input = {
@@ -81,6 +80,7 @@ in {
           "w[t1], gapsout:10, gapsin:10"
           "w[tg1], gapsout:10, gapsin:10"
           "f[1], gapsout:10, gapsin:10"
+          "special:alttab, gapsout:0, gapsin:0, bordersize:0"
         ];
 
         windowrulev2 = [
@@ -90,6 +90,10 @@ in {
           "rounding 0, floating:0, onworkspace:w[tg1]"
           "bordersize 0, floating:0, onworkspace:f[1]"
           "rounding 0, floating:0, onworkspace:f[1]"
+          "noanim, class:alttab"
+          "stayfocused, class:alttab"
+          "workspace special:alttab, class:alttab"
+          "bordersize 0, class:alttab"
         ];
 
         animations = {
@@ -141,6 +145,12 @@ in {
             "$mod, S, togglesplit"
             "$mod SHIFT, E, exit"
             "$mod ALT, R, exec, hyprctl reload"
+            "ALT, TAB, exec, $HOME/.config/hypr/scripts/alttab/enable.sh 'down'"
+            "ALT SHIFT, TAB, exec, $HOME/.config/hypr/scripts/alttab/enable.sh 'up'"
+            "ALT, Return, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return, class:alttab"
+            "ALT SHIFT, Return, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return, class:alttab"
+            "ALT, escape, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , escape,class:alttab"
+            "ALT SHIFT, escape, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , escape,class:alttab"
           ]
           ++ (
             # workspaces
@@ -157,5 +167,14 @@ in {
           );
       };
     };
+    ${namespace}.desktop.hyprland.appendConfig = ''
+      submap=alttab
+      bind = ALT, tab, sendshortcut, , tab, class:alttab
+      bind = ALT SHIFT, tab, sendshortcut, shift, tab, class:alttab
+      submap = reset
+
+      bindrt = ALT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
+      bindrt = ALT SHIFT, ALT_L, exec, $XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh ; hyprctl -q dispatch sendshortcut , return,class:alttab
+    '';
   };
 }
