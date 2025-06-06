@@ -29,7 +29,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [gtk3 swww grim slurp];
+    home.packages = with pkgs; [gtk4 swww grim slurp];
     programs.niri = {
       settings = {
         environment."NIXOS_OZONE_WL" = "1";
@@ -40,6 +40,7 @@ in {
           {command = ["swww" "img" "${config.home.homeDirectory}/snow${namespace}/assets/wallpaper/12.png"];}
           {command = ["waybar"];}
           {command = ["1password" "--ozone-platform-hint=auto" "--silent"];}
+          {command = ["uwsm" "finalize"];}
           {
             command = [
               "sh"
@@ -154,8 +155,7 @@ in {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
 
           "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
-          "Mod+D".action = spawn "rofi" "-show" "drun" "-theme" ".config/rofi/styles/style-16.rasi";
-
+          "Mod+D".action = spawn "rofi" "-show" "drun" "-run-command" "uwsm app -- {cmd}" "-theme" ".config/rofi/styles/style-16.rasi";
           "Mod+Q".action = close-window;
 
           "Mod+Left".action = focus-column-left;
