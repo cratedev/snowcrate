@@ -49,7 +49,7 @@ in {
         };
       };
     };
-    programs.kitty.enable = true; # required for the default Hyprland config
+
     stylix.targets.hyprland.enable = true; # Enable Stylix theming for Hyprland
     wayland.windowManager.hyprland = {
       enable = true;

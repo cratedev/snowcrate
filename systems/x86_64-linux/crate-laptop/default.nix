@@ -35,12 +35,12 @@ in {
     domain = "crate.dev";
     networkmanager.enable = true;
     firewall = {
-      enable = false;
+      enable = true;
       checkReversePath = "loose";
     };
   };
 
-  hardware.bluetooth.enable = false;
+  hardware.bluetooth.enable = true;
 
   #  fileSystems."/home/matt/unraid-ssh" = {
   #    device = "root@10.0.0.10:/mnt";

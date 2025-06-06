@@ -41,6 +41,7 @@ in {
 
       media = {
         ytmusic = enabled;
+        spotify = enabled;
       };
 
       cli = {
@@ -57,9 +58,6 @@ in {
       tools = {
         nvf = {enable = true;};
         git = {enable = true;};
-      };
-      media = {
-        spotify = {enable = true;};
       };
     };
   };

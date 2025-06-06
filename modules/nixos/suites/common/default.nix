@@ -58,10 +58,9 @@ in {
           enable = true;
           authorizedKeys = lib.splitString "\n" sharedAuthorizedKeys;
         };
-        busybox = {
-          enable = true;
-        };
+        busybox = enabled;
         fwupd = enabled;
+        beszel = enabled;
       };
 
       security = {
