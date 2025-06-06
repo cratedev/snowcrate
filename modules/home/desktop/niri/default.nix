@@ -77,7 +77,7 @@ in {
             enable = true;
             draw-behind-window = true;
           };
-          gaps = 10;
+          gaps = 15;
           center-focused-column = "on-overflow";
           focus-ring = {
             enable = false;
@@ -90,7 +90,8 @@ in {
             active.color = "#344e66";
             inactive.color = "#333333";
           };
-          default-column-width = {};
+
+          default-column-width = {proportion = 0.5;};
         };
 
         screenshot-path = null;

@@ -22,6 +22,7 @@ in {
         addons = {
           waybar = {enable = true;};
           gtk = {enable = true;};
+          mako = {enable = true;};
         };
       };
       user = {
