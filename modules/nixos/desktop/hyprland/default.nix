@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   namespace,
   ...
 }:
@@ -14,15 +13,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-    ];
-
     programs.hyprland = {
       enable = true;
       withUWSM = true;
       xwayland.enable = false;
       package = pkgs.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
+    };
+
+    programs.uwsm = {
+      enable = true;
+      waylandCompositors = {
+        hyprland = {
+          prettyName = "Hyprland";
+          comment = "Hyprland compositor managed by UWSM";
+          binPath = "/run/current-system/sw/bin/Hyprland";
+        };
+      };
     };
   };
 }

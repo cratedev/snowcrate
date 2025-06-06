@@ -17,8 +17,8 @@ in {
   config = mkIf cfg.enable {
     ${namespace} = {
       desktop = {
-        niri = {enable = false;};
-        hyprland = {enable = true;};
+        niri = {enable = true;};
+        hyprland = {enable = false;};
         addons = {
           waybar = {enable = true;};
           gtk = {enable = true;};

@@ -41,10 +41,6 @@ in {
         impermanence = enabled;
       };
 
-      system = {
-        uwsm = enabled;
-      };
-
       hardware = {
         #audio = enabled;
         #networking = enabled;

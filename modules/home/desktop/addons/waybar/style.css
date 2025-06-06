@@ -34,7 +34,7 @@ tooltip label {
   color: @surface1;
 	background: @mantle;
   opacity: 0.6;
-  margin-right: 0px;
+  margin-right: 4px;
 }
 
 #workspaces button.active {

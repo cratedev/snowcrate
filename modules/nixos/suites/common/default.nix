@@ -21,8 +21,8 @@ in {
       nix = {enable = true;};
 
       desktop = {
-        niri = disabled;
-        hyprland = enabled;
+        niri = enabled;
+        hyprland = disabled;
         display-manager = {
           sddm = {
             enable = true;
