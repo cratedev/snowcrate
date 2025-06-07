@@ -23,6 +23,7 @@ in {
           waybar = {enable = true;};
           gtk = {enable = true;};
           mako = {enable = true;};
+          hyprlock = {enable = true;};
         };
       };
       user = {
