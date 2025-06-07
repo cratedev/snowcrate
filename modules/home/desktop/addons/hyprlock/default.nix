@@ -7,9 +7,9 @@
 }:
 with lib;
 with lib.${namespace}; let
-  cfg = config.${namespace}.desktop.hyprlock;
+  cfg = config.${namespace}.desktop.addons.hyprlock;
 in {
-  options.${namespace}.desktop.hyprlock = with types; {
+  options.${namespace}.desktop.addons.hyprlock = with types; {
     enable = mkBoolOpt false "Whether or not to turn on hyprlock config.";
   };
 
@@ -20,9 +20,9 @@ in {
       enable = true;
       settings = {
         general = {
-          no_fade_in = "false";
           grace = "0";
-          disable_loading_bar = "false";
+          hide_cursor = "true";
+          no_fade_out = "false";
         };
 
         auth = {
@@ -30,6 +30,15 @@ in {
             enabled = "true";
           };
         };
+
+        animations = {
+          enabled = "true";
+          bezier = "linear, 1, 1, 0, 0";
+          animation = [
+            "fade, 1, 10, linear"
+          ];
+        };
+
         background = [
           {
             monitor = "";
