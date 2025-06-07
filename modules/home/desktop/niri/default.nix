@@ -48,7 +48,7 @@ in {
         background = [
           {
             monitor = "";
-            path = "${config.home.homeDirectory}/snowcrate/assets/hypr/hyprlock2.png";
+            path = "${config.home.homeDirectory}/snowcrate/assets/hypr/hyprlock.png";
             blur_passes = "0";
             contrast = "0.8916";
             brightness = "0.8916";
@@ -71,7 +71,7 @@ in {
             font_family = "SF Pro Display Bold";
             placeholder_text = "<i><span foreground=\"##ffffff99\">  </span></i>";
             hide_input = "false";
-            position = "34, -80";
+            position = "0, -90";
             halign = "center";
             valign = "center";
           }
@@ -83,7 +83,7 @@ in {
             color = "rgba(216, 222, 233, 0.80)";
             font_size = "60";
             font_family = "SF Pro Display Bold";
-            position = "30, 40";
+            position = "0, 60";
             halign = "center";
             valign = "center";
           }
@@ -93,7 +93,7 @@ in {
             color = "rgba(216, 222, 233, .80)";
             font_size = "19";
             font_family = "SF Pro Display Bold";
-            position = "35, 0";
+            position = "0, 0";
             halign = "center";
             valign = "center";
           }
