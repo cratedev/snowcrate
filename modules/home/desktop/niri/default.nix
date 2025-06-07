@@ -218,6 +218,7 @@ in {
 
           "Print".action = screenshot;
           "Mod+I".action = sh ''grim -g "$(slurp)" /home/matt/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'';
+          "Mod+L".action = spawn "hyprlock";
           "Mod+Shift+E".action = quit;
 
           "XF86AudioMicMute".action = spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
