@@ -16,11 +16,9 @@ in {
     stylix = {
       autoEnable = true;
       targets = {
-        hyprland.enable = true;
-        gtk.enable = true;
-        firefox = {
-          profileNames = ["matt"];
-        };
+        waybar.enable = false;
+        hyprlock.enable = false;
+        firefox.profileNames = ["matt"];
       };
     };
   };

@@ -27,25 +27,26 @@ tooltip label {
 }
 
 #workspaces label {
-	font-size: 20px;
+	font-size: 12px;
 }
 
 #workspaces button {
-  color: @surface1;
-	background: @mantle;
-  opacity: 0.6;
-  margin-right: 4px;
+  color: white;
+	background: @surface2;
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 5px;
+	padding: 0 10px 0 10px;
+	margin: 0px 2px 0px 2px;
 }
 
 #workspaces button.active {
   color: @lavender;
-  opacity: 0.8;
 }
 
 #workspaces button.focused {
-  color: @rosewater;
-  background: @crust;
-  border-radius: 15px;
+  background-color: @sky;
+  color: @mantle;
 }
 
 #workspaces button.urgent {

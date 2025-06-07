@@ -30,6 +30,145 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [gtk4 swww grim slurp];
+
+    programs.hyprlock = {
+      enable = true;
+      settings = {
+        general = {
+          no_fade_in = "false";
+          grace = "0";
+          disable_loading_bar = "false";
+        };
+
+        auth = {
+          fingerprint = {
+            enabled = "true";
+          };
+        };
+        background = [
+          {
+            monitor = "";
+            path = "${config.home.homeDirectory}/snowcrate/assets/hypr/hyprlock.png";
+            blur_passes = "0";
+            contrast = "0.8916";
+            brightness = "0.8916";
+            vibrancy = "0.8916";
+            vibrancy_darkness = "0.0";
+          }
+        ];
+        image = [
+          {
+            monitor = "";
+            path = "~/.config/hypr/vivek.png";
+            border_size = "2";
+            border_color = "rgba(216, 222, 233, 0.80)";
+            size = "100";
+            rounding = "-1";
+            rotate = "0";
+            reload_time = "-1";
+            reload_cmd = "";
+            position = "25, 200";
+            halign = "center";
+            valign = "center";
+          }
+        ];
+        input-field = [
+          {
+            monitor = "";
+            size = "320, 55";
+            outline_thickness = "0";
+            dots_size = "0.2";
+            dots_spacing = "0.2";
+            dots_center = "true";
+            outer_color = "rgba(255, 255, 255, 0)";
+            inner_color = "rgba(255, 255, 255, 0.1)";
+            font_color = "rgb(200, 200, 200)";
+            fade_on_empty = "false";
+            font_family = "SF Pro Display Bold";
+            placeholder_text = "<i><span foreground=\"##ffffff99\">🔒  Enter Pass</span></i>";
+            hide_input = "false";
+            position = "34, -268";
+            halign = "center";
+            valign = "center";
+          }
+        ];
+        label = [
+          {
+            monitor = "";
+            text = "Vivek Rajan";
+            color = "rgba(216, 222, 233, 0.80)";
+            outline_thickness = "0";
+            dots_size = "0.2";
+            dots_spacing = "0.2";
+            dots_center = "true";
+            font_size = "20";
+            font_family = "SF Pro Display Bold";
+            position = "25, 110";
+            halign = "center";
+            valign = "center";
+          }
+          {
+            monitor = "";
+            text = "cmd[update:1000] echo \"<span>$(date +\"%I:%M\")</span>\"";
+            color = "rgba(216, 222, 233, 0.80)";
+            font_size = "60";
+            font_family = "SF Pro Display Bold";
+            position = "30, -8";
+            halign = "center";
+            valign = "center";
+          }
+          {
+            monitor = "";
+            text = "cmd[update:1000] echo -e \"$(date +\"%A, %B %d\")\"";
+            color = "rgba(216, 222, 233, .80)";
+            font_size = "19";
+            font_family = "SF Pro Display Bold";
+            position = "35, -60";
+            halign = "center";
+            valign = "center";
+          }
+          {
+            monitor = "";
+            text = "    $USER";
+            color = "rgba(216, 222, 233, 0.80)";
+            outline_thickness = "0";
+            dots_size = "0.2";
+            dots_spacing = "0.2";
+            dots_center = "true";
+            font_size = "16";
+            font_family = "SF Pro Display Bold";
+            position = "38, -190";
+            halign = "center";
+            valign = "center";
+          }
+          {
+            monitor = "";
+            text = " 󰐥  󰜉  󰤄 ";
+            color = "rgba(255, 255, 255, 0.6)";
+            font_size = "50";
+            position = "0, 100";
+            halign = "center";
+            valign = "bottom";
+          }
+        ];
+        shape = [
+          {
+            monitor = "";
+            size = "320, 55";
+            color = "rgba(255, 255, 255, 0.1)";
+            rounding = "-1";
+            border_size = "0";
+            border_color = "rgba(255, 255, 255, 1)";
+            rotate = "0";
+            xray = "false";
+            position = "34, -190";
+            halign = "center";
+            valign = "center";
+          }
+        ];
+      };
+    };
+
     programs.niri = {
       settings = {
         environment."NIXOS_OZONE_WL" = "1";

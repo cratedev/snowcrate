@@ -39,7 +39,7 @@ with lib.${namespace}; let
     ];
 
     "modules-center" = [
-      "hyprland/workspaces"
+      "niri/workspaces"
     ];
 
     "modules-right" = [
@@ -59,7 +59,7 @@ with lib.${namespace}; let
       "group/power"
     ];
 
-    "hyprland/workspaces" = {
+    "niri/workspaces" = {
       "disable-scroll" = true;
       "all-outputs" = true;
       "on-click" = "activate";

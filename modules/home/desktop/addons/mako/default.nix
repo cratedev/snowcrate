@@ -12,16 +12,12 @@ in {
     enable = mkBoolOpt false "Whether to enable mako";
   };
   config = mkIf cfg.enable {
-    programs.mako = {
+    services.mako = {
       enable = true;
       settings = {
         actions = true;
         anchor = "top-right";
-        background-color = "#000000";
-        border-color = "#FFFFFF";
-        border-radius = 0;
-        default-timeout = 0;
-        font = "monospace 10";
+        default-timeout = 5000;
         height = 100;
         width = 300;
         icons = true;
