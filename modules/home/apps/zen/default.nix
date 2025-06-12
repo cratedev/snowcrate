@@ -15,7 +15,7 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = [
-      inputs.zen-browser.packages.x86_64-linux.default
+      inputs.zen-browser.packages.x86_64-linux.beta
     ];
   };
 }
