@@ -16,7 +16,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      inputs.quickshell.packages.x86_64-linux.default
+      quickshell
       jq
       fish
       fd
