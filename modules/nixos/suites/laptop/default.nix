@@ -39,6 +39,7 @@ in {
     ${namespace} = {
       tools = {
         impermanence = enabled;
+        virt = enabled;
       };
 
       hardware = {

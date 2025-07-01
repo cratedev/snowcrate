@@ -43,7 +43,7 @@ in {
         # system to select).
         uid = 1001;
 
-        extraGroups = ["steamcmd"] ++ cfg.extraGroups;
+        extraGroups = ["steamcmd" "libvirtd"] ++ cfg.extraGroups;
       }
       // optionalAttrs (cfg.hashedPassword != null) {
         inherit (cfg) name hashedPassword;
