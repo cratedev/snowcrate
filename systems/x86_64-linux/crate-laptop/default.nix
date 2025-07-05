@@ -40,6 +40,7 @@ in {
     };
   };
 
+  virtualisation.libvirtd.enable = true;
   hardware.bluetooth.enable = false;
 
   #  fileSystems."/home/matt/unraid-ssh" = {

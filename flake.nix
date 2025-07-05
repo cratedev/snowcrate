@@ -18,7 +18,7 @@
     };
     nix-ssh.url = "git+ssh://git@github.com/cratedev/nix-ssh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    niri.url = "github:sodiboo/niri-flake/daf2e18eb92420e05e06adbf3116899c359d8b15";
+    niri.url = "github:sodiboo/niri-flake"; #/daf2e18eb92420e05e06adbf3116899c359d8b15";
     hyprland.url = "github:hyprwm/Hyprland";
     agenix.url = "github:yaxitech/ragenix";
     ghostty.url = "github:ghostty-org/ghostty";
@@ -28,14 +28,6 @@
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
     grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
-    astal = {
-      url = "github:aylur/astal";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs: let
