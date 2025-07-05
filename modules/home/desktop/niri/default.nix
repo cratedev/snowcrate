@@ -144,7 +144,7 @@ in {
           (builtins.listToAttrs (map (n: {
             name = "Mod+Shift+" + builtins.toString n;
             value = {
-              action = [
+              action.spawn = [
                 "move-window-to-workspace"
                 (builtins.toString n)
               ];
