@@ -67,7 +67,7 @@ in {
         "$mod" = "SUPER";
 
         monitor = [
-          "eDP-1,preferred,auto,1"
+          "HDMI-A-1,3840x2160@120,auto,1"
         ];
 
         env = [
