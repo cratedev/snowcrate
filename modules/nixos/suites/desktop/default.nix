@@ -20,6 +20,10 @@ in {
         #impermanence = enabled; still need to configure btrfs etc
       };
 
+      apps = {
+        steam = enabled;
+      };
+
       hardware = {
         #audio = enabled;
         #networking = enabled;
