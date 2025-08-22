@@ -162,6 +162,11 @@ in {
           };
         };
 
+        bindm = [
+          "$mod, mouse:272, movewindow"
+          "$mod, mouse:273, resizewindow"
+        ];
+
         bind =
           [
             "$mod, RETURN, exec, uwsm app -- ghostty -e zellij attach --create main"
