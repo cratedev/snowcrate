@@ -35,6 +35,7 @@ in {
         rofi = enabled;
         quickshell = enabled;
         _1password = enabled;
+        managarr = enabled;
       };
 
       tools = {
