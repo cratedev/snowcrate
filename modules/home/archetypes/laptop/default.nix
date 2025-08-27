@@ -53,6 +53,7 @@ in {
         fzf = {enable = true;};
         just = {enable = true;};
         env = {enable = true;};
+        managarr = {enable = true;};
       };
       theming = {
         stylix = {enable = true;};

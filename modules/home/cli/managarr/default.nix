@@ -14,10 +14,10 @@ in {
 
   config = mkIf cfg.enable {
     home.file.".config/managarr/config.yml".text = ''
-        radarr:
+      radarr:
       - host: 10.0.0.10
-      	port: 7878
-      	api_token: 09b8b6d99bfa4bb89a54d55c1e750381
+        port: 7878
+        api_token: 09b8b6d99bfa4bb89a54d55c1e750381
     '';
   };
 }
