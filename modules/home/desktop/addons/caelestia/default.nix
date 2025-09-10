@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs,
   namespace,
   ...
 }:
@@ -11,6 +12,8 @@ in {
   options.${namespace}.desktop.addons.caelestia = with types; {
     enable = mkBoolOpt false "Whether to enable caelestia";
   };
+
+  imports = [inputs.caelestia-shell.homeManagerModules.default];
   config = mkIf cfg.enable {
     programs.caelestia = {
       enable = true;
@@ -20,10 +23,16 @@ in {
         environment = [];
       };
       settings = {
+        appearance.font.size = {
+          scale = 0.75;
+        };
         bar.status = {
           showBattery = false;
         };
         paths.wallpaperDir = "/home/matt/snowcrate/assets/wallpaper";
+        services = {
+          smartScheme = false;
+        };
       };
       cli = {
         enable = true; # Also add caelestia-cli to path

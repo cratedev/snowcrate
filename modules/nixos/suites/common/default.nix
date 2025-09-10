@@ -33,7 +33,7 @@ in {
 
       apps = {
         rofi = enabled;
-        quickshell = enabled;
+        quickshell = disabled;
         _1password = enabled;
         managarr = enabled;
       };

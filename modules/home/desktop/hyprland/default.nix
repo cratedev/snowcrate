@@ -90,9 +90,9 @@ in {
 
         exec-once = [
           "uwsm app -- hyprlock"
-          "uwsm app -- qs -c caelestia"
           "1password --silent"
           "uwsm app -- foot --server"
+          "uwsm app -- caelestia shell"
         ];
 
         input = {
@@ -180,7 +180,7 @@ in {
           [
             "$mod, RETURN, exec, uwsm app -- ghostty -e zellij attach --create main"
             #            "$mod, D, exec, uwsm app -- rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
-            "$mod, D, exec, qs -c caelestia ipc call drawers toggle launcher"
+            "$mod, D, exec, caelestia shell drawers toggle launcher"
 
             "$mod, H, exec, qs -c caelestia ipc call drawers toggle dashboard"
             "$mod, P, exec, qs -c caelestia ipc call drawers toggle session"
