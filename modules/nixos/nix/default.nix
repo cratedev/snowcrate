@@ -19,7 +19,7 @@ with lib.${namespace}; let
 in {
   options.${namespace}.nix = with types; {
     enable = mkBoolOpt true "Whether or not to manage nix configuration.";
-    package = mkOpt package pkgs.lix "Which nix package to use.";
+    #package = mkOpt package pkgs.lix "Which nix package to use.";
 
     default-substituter = {
       url = mkOpt str "https://cache.nixos.org" "The url for the substituter.";
@@ -56,7 +56,7 @@ in {
         ]
         ++ optional config.services.hydra.enable "hydra";
     in {
-      inherit (cfg) package;
+      #inherit (cfg) package;
 
       settings = {
         experimental-features = "nix-command flakes";

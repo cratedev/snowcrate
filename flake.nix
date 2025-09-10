@@ -21,6 +21,8 @@
     niri.url = "github:sodiboo/niri-flake"; #/daf2e18eb92420e05e06adbf3116899c359d8b15";
     #hyprland.url = "github:hyprwm/Hyprland";
 
+    determinate.url = "github:DeterminateSystems/determinate";
+
     agenix.url = "github:yaxitech/ragenix";
     ghostty.url = "github:ghostty-org/ghostty";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
@@ -29,6 +31,10 @@
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
     grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -48,6 +54,7 @@
       channels-config.allowUnfree = true;
 
       systems.modules.nixos = [
+        inputs.determinate.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         inputs.stylix.nixosModules.stylix
         inputs.niri.nixosModules.niri

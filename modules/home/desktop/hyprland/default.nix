@@ -9,6 +9,14 @@
 with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.desktop.hyprland;
+  monitorSettings = let
+    display = config.${namespace}.archetypes.laptop.display-name;
+  in
+    if display == "HDMI-A-1"
+    then ["HDMI-A-1,3840x2160@120,auto,1"]
+    else if display == "eDP-1"
+    then ["eDP-1,1920x1200@60,auto,1"]
+    else []; # Fallback to auto-detection
 in {
   options.${namespace}.desktop.hyprland = with types; {
     enable = mkBoolOpt false "Whether or not to turn on hyprland config.";
@@ -66,9 +74,10 @@ in {
       settings = {
         "$mod" = "SUPER";
 
-        monitor = [
-          "HDMI-A-1,3840x2160@120,auto,1"
-        ];
+        monitor = monitorSettings;
+        #monitor = [
+        #  "HDMI-A-1,3840x2160@120,auto,1"
+        #];
 
         env = [
           "ELECTRON_OZONE_PLATFORM_HINT,wayland"

@@ -17,13 +17,14 @@ in {
   config = mkIf cfg.enable {
     ${namespace} = {
       desktop = {
-        niri = {enable = true;};
+        niri = {enable = false;};
         hyprland = {enable = true;};
         addons = {
           #waybar = {enable = true;};
           gtk = {enable = true;};
           mako = {enable = true;};
           hyprlock = {enable = true;};
+          caelestia = {enable = true;};
         };
       };
       user = {

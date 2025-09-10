@@ -11,6 +11,7 @@ with lib.${namespace}; let
 in {
   options.${namespace}.archetypes.desktop = {
     enable = mkEnableOption "desktop home environment";
+    display-name = mkOpt str "HDMI-A-1" "The name of the primary display";
   };
 
   config = mkIf cfg.enable {
