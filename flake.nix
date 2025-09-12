@@ -57,7 +57,7 @@
         inputs.niri.nixosModules.niri
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
-        #inputs.agenix.nixosModules.default
+        inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
 

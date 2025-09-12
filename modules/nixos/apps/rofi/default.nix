@@ -14,7 +14,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [pkgs.rofi-wayland];
+    environment.systemPackages = [pkgs.rofi];
     crate.home.configFile."rofi".source = ./rofi;
   };
 }
