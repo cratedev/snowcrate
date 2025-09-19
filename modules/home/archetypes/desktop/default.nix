@@ -54,7 +54,7 @@ in {
         git = {enable = true;};
       };
       media = {
-        spotify = {enable = true;};
+        spotify = {enable = false;};
       };
     };
   };

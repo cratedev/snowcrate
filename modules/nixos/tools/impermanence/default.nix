@@ -49,6 +49,7 @@ in {
           ".config/YouTube Music Desktop App"
           ".local/share/keyrings"
           ".local/state/nvf/shada" # MRU History
+          ".local/state/caelestia"
           ".cache/zellij" # zellij session
           ".zen"
           {

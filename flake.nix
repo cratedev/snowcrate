@@ -19,15 +19,16 @@
     nix-ssh.url = "git+ssh://git@github.com/cratedev/nix-ssh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     niri.url = "github:sodiboo/niri-flake";
+    hyprland.url = "github:hyprwm/Hyprland";
     determinate.url = "github:DeterminateSystems/determinate";
-    agenix.url = "github:yaxitech/ragenix";
+    #agenix.url = "github:yaxitech/ragenix";
     ghostty.url = "github:ghostty-org/ghostty";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
-    grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
+    #grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
     caelestia-shell = {
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,7 +58,7 @@
         inputs.niri.nixosModules.niri
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
-        inputs.agenix.nixosModules.default
+        #inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
 

@@ -44,7 +44,7 @@ in {
 
       media = {
         ytmusic = enabled;
-        spotify = enabled;
+        spotify = disabled;
       };
 
       cli = {

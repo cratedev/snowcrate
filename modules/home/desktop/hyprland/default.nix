@@ -49,7 +49,8 @@ in {
         jq
         slurp
         hyprcursor
-        inputs.grim-hyprland.packages.${system}.default
+        grim
+        #inputs.grim-hyprland.packages.${system}.default
       ];
       file = {
         ".config/hypr/scripts" = {
@@ -89,9 +90,10 @@ in {
         };
 
         exec-once = [
-          "uwsm app -- hyprlock"
+          #"uwsm app -- hyprlock"
           "1password --silent"
           "uwsm app -- foot --server"
+          "sleep 1 && uwsm app -- caelestia shell lock lock"
           "uwsm app -- caelestia shell"
         ];
 

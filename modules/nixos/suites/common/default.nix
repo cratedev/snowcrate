@@ -50,7 +50,7 @@ in {
       };
 
       hardware = {
-        #audio = enabled;
+        audio = enabled;
         networking = enabled;
       };
 
@@ -75,7 +75,6 @@ in {
         fonts = enabled;
         locale = enabled;
         time = enabled;
-        #xkb = enabled;
       };
 
       cache = {

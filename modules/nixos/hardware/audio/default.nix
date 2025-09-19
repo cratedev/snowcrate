@@ -22,10 +22,9 @@ in {
       jack.enable = true;
     };
 
-    hardware.pulseaudio.enable = mkForce false;
+    #hardware.pulseaudio.enable = mkForce false;
 
-    environment.systemPackages = with pkgs;
-      [pulsemixer pavucontrol] ++ cfg.extra-packages;
+    environment.systemPackages = with pkgs; [pulsemixer pavucontrol];
 
     crate.user.extraGroups = ["audio"];
 

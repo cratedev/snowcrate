@@ -26,8 +26,6 @@ in {
 
       hardware = {
         #audio = enabled;
-        #networking = enabled;
-        #fingerprint = enabled;
       };
     };
   };

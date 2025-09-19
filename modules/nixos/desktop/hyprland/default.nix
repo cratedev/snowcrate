@@ -19,7 +19,7 @@ in {
       withUWSM = true;
       xwayland.enable = false;
       package = pkgs.hyprland;
-      portalPackage = pkgs.xdg-desktop-portal-hyprland;
+      #      portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
 
     programs.uwsm = {
