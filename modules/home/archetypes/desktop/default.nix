@@ -20,8 +20,10 @@ in {
         niri = {enable = false;};
         hyprland = {enable = true;};
         addons = {
-          waybar = {enable = true;};
           gtk = {enable = true;};
+          mako = {enable = true;};
+          hyprlock = {enable = false;};
+          caelestia = {enable = true;};
         };
       };
       user = {
