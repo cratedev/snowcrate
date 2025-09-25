@@ -9,7 +9,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.archetypes.desktop;
 in {
   options.${namespace}.archetypes.desktop = with types; {
-    enable = mkBoolOpt false "enable/disable the desktop archetype";
+    enable = mkBoolOpt false "Enable desktop archetype";
   };
 
   config = mkIf cfg.enable {
@@ -17,17 +17,6 @@ in {
       suites = {
         common = enabled;
         desktop = enabled;
-      };
-      services = {
-        #ntp = enabled;
-      };
-      system = {
-        #wifi = {
-        #  enable = true;
-        #  networks = {
-        #    SkyNet = { ssid = "SkyNet"; };
-        #  };
-        #};
       };
     };
   };

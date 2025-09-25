@@ -11,7 +11,7 @@ with lib.${namespace}; let
   sharedAuthorizedKeys = builtins.readFile "${inputs.nix-ssh}/ssh/authorized_keys";
 in {
   options.${namespace}.suites.common = with types; {
-    enable = mkBoolOpt false "Whether or not to enable common configuration.";
+    enable = mkBoolOpt false "Enable Common module";
   };
 
   config = mkIf cfg.enable {

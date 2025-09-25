@@ -9,7 +9,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.suites.desktop;
 in {
   options.${namespace}.suites.desktop = with types; {
-    enable = mkBoolOpt false "Whether or not to enable desktop configuration.";
+    enable = mkBoolOpt false "Enable Desktop module";
   };
 
   config = mkIf cfg.enable {
@@ -22,10 +22,6 @@ in {
 
       apps = {
         steam = enabled;
-      };
-
-      hardware = {
-        #audio = enabled;
       };
     };
   };
