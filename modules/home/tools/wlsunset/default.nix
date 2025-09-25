@@ -17,6 +17,9 @@ in {
       enable = true;
       latitude = 45.3;
       longitude = -75.6;
+      temperature = {
+        night = 5000;
+      };
     };
   };
 }
