@@ -9,7 +9,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.security.sudo;
 in {
   options.${namespace}.security.sudo = with types; {
-    enable = mkBoolOpt false "Enable/disable sudo.";
+    enable = mkBoolOpt false "Enable/disable sudo";
   };
 
   config = mkIf cfg.enable {

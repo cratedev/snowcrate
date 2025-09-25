@@ -7,7 +7,6 @@
 with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.tools.impermanence;
-  #  inherit (cfg) user;
 in {
   options.${namespace}.tools.impermanence = with types; {
     enable = mkBoolOpt false "Whether or not to install and configure impermanence.";

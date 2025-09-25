@@ -35,7 +35,6 @@ in {
       XDG_BIN_HOME = "${home-directory}/.local/bin";
       XDG_CACHE_HOME = mkDefault "${home-directory}/.cache";
       OP_BIOMETRIC_UNLOCK_ENABLED = "true";
-      #NH_FLAKE = "${home-directory}/snow${namespace}";
     };
   };
 }

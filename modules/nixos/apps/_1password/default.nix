@@ -17,7 +17,6 @@ in {
       _1password = enabled;
       _1password-gui = {
         enable = true;
-
         polkitPolicyOwners = [config.${namespace}.user.name];
       };
     };

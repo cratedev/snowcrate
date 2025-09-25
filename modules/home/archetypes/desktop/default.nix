@@ -9,13 +9,13 @@ with lib.${namespace}; let
   cfg = config.${namespace}.archetypes.desktop;
 in {
   options.${namespace}.archetypes.desktop = with types; {
-    enable = mkBoolOpt false "enable/disable the desktop archetype";
+    enable = mkBoolOpt false "Enable Desktop archetype";
   };
 
   config = mkIf cfg.enable {
     ${namespace} = {
       suites = {
-        #common = enabled;
+        common = enabled;
         desktop = enabled;
       };
     };

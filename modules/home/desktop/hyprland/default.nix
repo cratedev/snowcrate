@@ -50,7 +50,6 @@ in {
         slurp
         hyprcursor
         grim
-        #inputs.grim-hyprland.packages.${system}.default
       ];
       file = {
         ".config/hypr/scripts" = {
@@ -76,9 +75,6 @@ in {
         "$mod" = "SUPER";
 
         monitor = monitorSettings;
-        #monitor = [
-        #  "HDMI-A-1,3840x2160@120,auto,1"
-        #];
 
         env = [
           "ELECTRON_OZONE_PLATFORM_HINT,wayland"
@@ -90,7 +86,6 @@ in {
         };
 
         exec-once = [
-          #"uwsm app -- hyprlock"
           "1password --silent"
           "uwsm app -- foot --server"
           "sleep 1 && uwsm app -- caelestia shell lock lock"
@@ -140,7 +135,6 @@ in {
         animations = {
           enabled = "yes";
 
-          # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
           bezier = [
             "easein, 0.47, 0, 0.745, 0.715"
             "myBezier, 0.05, 0.9, 0.1, 1.05"
@@ -181,7 +175,6 @@ in {
         bind =
           [
             "$mod, RETURN, exec, uwsm app -- ghostty -e zellij attach --create main"
-            #            "$mod, D, exec, uwsm app -- rofi -show drun -theme ~/.config/rofi/styles/style-16.rasi"
             "$mod, D, exec, caelestia shell drawers toggle launcher"
 
             "$mod, H, exec, qs -c caelestia ipc call drawers toggle dashboard"
@@ -195,7 +188,6 @@ in {
             "$mod, V, togglefloating"
             "$mod, F, fullscreen, 1"
             "$mod, SPACE, exec, rofi -show run"
-            #"$mod, P, pseudo"
             "$mod, left, movefocus, l"
             "$mod, up, movefocus, u"
             "$mod, right, movefocus, r"

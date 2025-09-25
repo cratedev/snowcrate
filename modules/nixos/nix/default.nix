@@ -10,7 +10,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.nix;
 
   substituters-submodule = types.submodule (
-    {name, ...}: {
+    _: {
       options = with types; {
         key = mkOpt (nullOr str) null "The trusted public key for this substituter.";
       };
@@ -51,13 +51,11 @@ in {
     nix = let
       users =
         [
-          "root"
+          "matt"
           config.${namespace}.user.name
         ]
         ++ optional config.services.hydra.enable "hydra";
     in {
-      #inherit (cfg) package;
-
       settings = {
         experimental-features = "nix-command flakes";
         http-connections = 50;
@@ -72,12 +70,12 @@ in {
           [
             cfg.default-substituter.url
           ]
-          ++ (mapAttrsToList (name: value: name) cfg.extra-substituters);
+          ++ (mapAttrsToList (name: _value: name) cfg.extra-substituters);
         trusted-public-keys =
           [
             cfg.default-substituter.key
           ]
-          ++ (mapAttrsToList (name: value: value.key) cfg.extra-substituters);
+          ++ (mapAttrsToList (_name: value: value.key) cfg.extra-substituters);
       };
 
       gc = {

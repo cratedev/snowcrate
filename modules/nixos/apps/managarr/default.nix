@@ -10,7 +10,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.apps.managarr;
 in {
   options.${namespace}.apps.managarr = with types; {
-    enable = mkBoolOpt false "Whether or not to enable managarr";
+    enable = mkBoolOpt false "Enable/disable managarr";
   };
 
   config = mkIf cfg.enable {

@@ -26,7 +26,7 @@ in {
     };
 
     snowfallorg.users.${config.${namespace}.user.name}.home.config =
-      config.${namespace}.home.extraOptions;
+      cfg.extraOptions;
 
     home-manager = {
       useUserPackages = true;

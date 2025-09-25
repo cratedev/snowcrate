@@ -9,7 +9,7 @@ with lib.${namespace}; let
   cfg = config.${namespace}.archetypes.laptop;
 in {
   options.${namespace}.archetypes.laptop = with types; {
-    enable = mkBoolOpt false "enable/disable the laptop archetype";
+    enable = mkBoolOpt false "Enable Laptop archetype";
   };
 
   config = mkIf cfg.enable {

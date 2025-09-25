@@ -15,8 +15,7 @@ in {
 
   config = mkIf cfg.enable {
     ${namespace} = {
-      apps = {
-      };
+      #apps = {};
     };
   };
 }

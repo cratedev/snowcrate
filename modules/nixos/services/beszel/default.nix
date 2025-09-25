@@ -21,7 +21,6 @@ in {
       after = ["network.target"];
       serviceConfig = {
         ExecStart = "${pkgs.beszel}/bin/beszel-agent --key='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINojBy0FFGbrpw85MQMPGFx3s1p+hSmkMP0QSXVfDPxB'";
-
         Restart = "always";
       };
     };
