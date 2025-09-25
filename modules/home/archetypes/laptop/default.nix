@@ -61,6 +61,7 @@ in {
       tools = {
         nvf = {enable = true;};
         git = {enable = true;};
+        wlsunset = {enable = true;};
       };
     };
   };
