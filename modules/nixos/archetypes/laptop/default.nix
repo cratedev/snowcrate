@@ -18,17 +18,6 @@ in {
         common = enabled;
         laptop = enabled;
       };
-      services = {
-        #ntp = enabled;
-      };
-      system = {
-        #wifi = {
-        #  enable = true;
-        #  networks = {
-        #    SkyNet = { ssid = "SkyNet"; };
-        #  };
-        #};
-      };
     };
   };
 }

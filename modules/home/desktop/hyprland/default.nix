@@ -10,7 +10,7 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.desktop.hyprland;
   monitorSettings = let
-    display = config.${namespace}.archetypes.laptop.display-name;
+    display = config.${namespace}.suites.laptop.display-name;
   in
     if display == "HDMI-A-1"
     then ["HDMI-A-1,3840x2160@120,auto,1"]

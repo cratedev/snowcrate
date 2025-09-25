@@ -1,62 +1,22 @@
 {
-  lib,
   config,
+  lib,
   namespace,
   ...
 }:
 with lib;
 with lib.${namespace}; let
-  inherit (lib) mkEnableOption mkIf;
   cfg = config.${namespace}.archetypes.desktop;
 in {
-  options.${namespace}.archetypes.desktop = {
-    enable = mkEnableOption "desktop home environment";
-    display-name = mkOpt str "HDMI-A-1" "The name of the primary display";
+  options.${namespace}.archetypes.desktop = with types; {
+    enable = mkBoolOpt false "enable/disable the desktop archetype";
   };
 
   config = mkIf cfg.enable {
     ${namespace} = {
-      desktop = {
-        niri = {enable = false;};
-        hyprland = {enable = true;};
-        addons = {
-          gtk = {enable = true;};
-          mako = {enable = true;};
-          hyprlock = {enable = false;};
-          caelestia = {enable = true;};
-        };
-      };
-      user = {
-        enable = true;
-      };
-      xdg = {
-        enable = true;
-      };
-      apps = {
-        firefox = {enable = true;};
-        ghostty = {enable = true;};
-        zen = {enable = true;};
-        obsidian = {enable = true;};
-        discord = {enable = true;};
-        nautilus = {enable = true;};
-      };
-      cli = {
-        nushell = {enable = true;};
-        btop = {enable = true;};
-        zellij = {enable = true;};
-        fzf = {enable = true;};
-        just = {enable = true;};
-        env = {enable = true;};
-      };
-      theming = {
-        stylix = {enable = true;};
-      };
-      tools = {
-        nvf = {enable = true;};
-        git = {enable = true;};
-      };
-      media = {
-        spotify = {enable = false;};
+      suites = {
+        #common = enabled;
+        desktop = enabled;
       };
     };
   };

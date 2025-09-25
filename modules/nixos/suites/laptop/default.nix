@@ -6,6 +6,7 @@
 }:
 with lib;
 with lib.${namespace}; let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.${namespace}.suites.laptop;
 in {
   options.${namespace}.suites.laptop = with types; {
@@ -42,8 +43,6 @@ in {
       };
 
       hardware = {
-        #audio = enabled;
-        #networking = enabled;
         fingerprint = enabled;
       };
     };
