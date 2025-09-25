@@ -8,54 +8,18 @@
 with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.nix;
-
-  substituters-submodule = types.submodule (
-    _: {
-      options = with types; {
-        key = mkOpt (nullOr str) null "The trusted public key for this substituter.";
-      };
-    }
-  );
 in {
   options.${namespace}.nix = with types; {
     enable = mkBoolOpt true "Whether or not to manage nix configuration.";
-    #package = mkOpt package pkgs.lix "Which nix package to use.";
-
-    default-substituter = {
-      url = mkOpt str "https://cache.nixos.org" "The url for the substituter.";
-      key =
-        mkOpt str "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "The trusted public key for the substituter.";
-    };
-
-    extra-substituters = mkOpt (attrsOf substituters-submodule) {} "Extra substituters to configure.";
+    package = mkOpt package pkgs.nix "Which nix package to use.";
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      mapAttrsToList
-      (name: value: {
-        assertion = value.key != null;
-        message = "crate.nix.extra-substituters.${name}.key must be set";
-      })
-      cfg.extra-substituters;
-
     environment.systemPackages = with pkgs; [
-      deploy-rs
-      nixfmt-rfc-style
       nix-index
-      nix-prefetch-git
-      nix-output-monitor
+      nix-prefetch-scripts
     ];
-
-    nix = let
-      users =
-        [
-          "matt"
-          config.${namespace}.user.name
-        ]
-        ++ optional config.services.hydra.enable "hydra";
-    in {
+    nix = {
       settings = {
         experimental-features = "nix-command flakes";
         http-connections = 50;
@@ -63,31 +27,28 @@ in {
         log-lines = 50;
         sandbox = "relaxed";
         auto-optimise-store = true;
-        trusted-users = users;
-        allowed-users = users;
-
-        substituters =
-          [
-            cfg.default-substituter.url
-          ]
-          ++ (mapAttrsToList (name: _value: name) cfg.extra-substituters);
-        trusted-public-keys =
-          [
-            cfg.default-substituter.key
-          ]
-          ++ (mapAttrsToList (_name: value: value.key) cfg.extra-substituters);
+        substituters = [
+          "https://cache.nixos.org/"
+          "https://nix-community.cachix.org"
+          "https://hyprland.cachix.org"
+        ];
+        trusted-public-keys = [
+          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtKuGc="
+        ];
       };
 
       gc = {
         automatic = false;
         dates = "weekly";
-        options = "--delete-older-than 30d";
+        options = "--delete-older-than 7d";
       };
 
-      # flake-utils-plus
-      generateRegistryFromInputs = true;
-      generateNixPathFromInputs = true;
-      linkInputs = true;
+      optimise = {
+        automatic = true;
+        dates = ["weekly"];
+      };
     };
   };
 }

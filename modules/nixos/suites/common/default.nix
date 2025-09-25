@@ -18,8 +18,6 @@ in {
     environment.systemPackages = [];
 
     ${namespace} = {
-      nix = {enable = true;};
-
       desktop = {
         niri = disabled;
         hyprland = enabled;
@@ -77,9 +75,7 @@ in {
         time = enabled;
       };
 
-      cache = {
-        public = enabled;
-      };
+      nix = {enable = true;};
     };
   };
 }
