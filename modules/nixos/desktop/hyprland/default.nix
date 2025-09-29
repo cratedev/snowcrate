@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   namespace,
   ...
 }:
@@ -17,8 +16,6 @@ in {
     programs.hyprland = {
       enable = true;
       withUWSM = true;
-      xwayland.enable = false;
-      package = pkgs.hyprland;
     };
 
     programs.uwsm = {

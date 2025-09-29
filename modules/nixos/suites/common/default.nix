@@ -75,7 +75,7 @@ in {
         time = enabled;
       };
 
-      nix = {enable = true;};
+      nix = enabled;
     };
   };
 }
