@@ -17,7 +17,7 @@ in {
 
     ${namespace} = {
       tools = {
-        #impermanence = enabled; still need to configure btrfs etc
+        impermanence = enabled;
       };
 
       apps = {
