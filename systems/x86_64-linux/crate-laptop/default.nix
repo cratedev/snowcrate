@@ -10,7 +10,7 @@ with lib.${namespace}; let
     isNormalUser = true;
     createHome = true;
     home = "/home/${name}";
-    shell = pkgs.nushell;
+    shell = pkgs.zsh;
   };
 in {
   imports = [

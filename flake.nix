@@ -4,6 +4,7 @@
     #      url = "git+ssh://git@github.com/cratedev/nix-secrets";
     #      flake = false;
     #    };
+    disko.url = "github:nix-community/disko";
     snowfall-lib = {
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,6 +59,7 @@
         inputs.niri.nixosModules.niri
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
+        inputs.disko.nixosModules.disko
         #inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
