@@ -38,6 +38,18 @@
     umount /btrfs_tmp
   '';
 
+  fileSystems."/home" = {
+    neededForBoot = true;
+  };
+
+  fileSystems."/var" = {
+    neededForBoot = true;
+  };
+
+  fileSystems."/persist" = {
+    neededForBoot = true;
+  };
+
   swapDevices = [
     {device = "/swap/swapfile";}
   ];
