@@ -37,7 +37,6 @@ in {
 
       users.matt = {
         directories = [
-          "whiskeyvault"
           "unraid"
           "snowcrate"
           "documents"
@@ -45,12 +44,17 @@ in {
           ".config/vesktop"
           ".config/spotify"
           ".config/1Password"
+          ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".local/share/keyrings"
           ".local/state/nvf/shada" # MRU History
           ".local/state/caelestia"
           ".cache/zellij" # zellij session
           ".zen"
+          {
+            directory = "whiskeyvault";
+            mode = "0700";
+          }
           {
             directory = ".ssh";
             mode = "0700";
