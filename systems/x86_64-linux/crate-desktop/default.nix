@@ -14,7 +14,7 @@ with lib.${namespace}; let
   };
 in {
   imports = [
-    ./disk-config.nix
+    #./disk-config.nix
     ./hardware.nix
   ];
 
