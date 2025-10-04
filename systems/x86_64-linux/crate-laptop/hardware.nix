@@ -35,17 +35,11 @@
     umount /btrfs_tmp
   '';
 
-  fileSystems."/home" = {
-    neededForBoot = true;
-  };
+  fileSystems."/home".neededForBoot = true;
 
-  fileSystems."/var" = {
-    neededForBoot = true;
-  };
+  fileSystems."/var".neededForBoot = true;
 
-  fileSystems."/persist" = {
-    neededForBoot = true;
-  };
+  fileSystems."/persist".neededForBoot = true;
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/8E9E-2EB4";
