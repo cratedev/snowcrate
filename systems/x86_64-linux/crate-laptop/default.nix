@@ -15,6 +15,7 @@ with lib.${namespace}; let
 in {
   imports = [
     ./hardware.nix
+    ./disk-config.nix
   ];
 
   crate = {
