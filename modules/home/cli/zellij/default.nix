@@ -38,7 +38,7 @@ in {
       "zellij/config.kdl".text = import ./config.nix {inherit colors;};
       "zellij/layouts/default.kdl".text = import ./layout.nix {inherit colors;};
     };
-    home.file.".cache/zellij/permissions.kdl".text = ''
+    home.file.".local/cache/zellij/permissions.kdl".text = ''
       "/home/matt/.config/zellij/plugins/zjstatus.wasm" {
       		ReadApplicationState
       		ChangeApplicationState

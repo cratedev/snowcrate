@@ -19,6 +19,10 @@ in {
         interactiveShellInit = ''
           set fish_greeting # Disable greeting
         '';
+        shellAliases = {
+          ntest = "nh os test";
+          nswitch = "nh os switch";
+        };
       };
     };
   };
