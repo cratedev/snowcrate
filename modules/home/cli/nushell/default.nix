@@ -14,9 +14,6 @@ in {
 
   config = mkIf cfg.enable {
     programs = {
-      fish = {
-        enable = true;
-      };
       nushell = {
         enable = true;
         extraConfig = ''

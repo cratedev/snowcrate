@@ -49,6 +49,7 @@ in {
 
       cli = {
         nushell = {enable = true;};
+        fish = {enable = true;};
         btop = {enable = true;};
         zellij = {enable = true;};
         fzf = {enable = true;};
