@@ -15,7 +15,7 @@
 
   boot.initrd.postResumeCommands = lib.mkAfter ''
     mkdir -p /btrfs_tmp
-    mount -o subvol=/ /dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25 /btrfs_tmp
+    mount -o subvol=/ /dev/disk/by-uuid/84be45b9-f3a6-483c-b26d-201456283506 /btrfs_tmp
 
     delete_subvolume_recursively() {
     	IFS=$'\n'
@@ -40,12 +40,6 @@
   fileSystems."/var".neededForBoot = true;
 
   fileSystems."/persist".neededForBoot = true;
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/8E9E-2EB4";
-    fsType = "vfat";
-    options = ["fmask=0022" "dmask=0022"];
-  };
 
   swapDevices = [
     {device = "/swap/swapfile";}

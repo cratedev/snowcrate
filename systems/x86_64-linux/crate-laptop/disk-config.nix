@@ -1,51 +1,62 @@
 {
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    fsType = "btrfs";
-    #    neededForBoot = true;
-    options = ["subvol=@root" "compress=zstd"];
+  disko.devices = {
+    disk = {
+      main = {
+        type = "disk";
+        device = "/dev/nvme0n1";
+        content = {
+          type = "gpt";
+          partitions = {
+            ESP = {
+              size = "512M";
+              type = "EF00";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = [
+                  "fmask=0022"
+                  "dmask=0022"
+                ];
+              };
+            };
+            root = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = ["-f"];
+                subvolumes = {
+                  "@root" = {
+                    mountpoint = "/";
+                    mountOptions = ["compress=zstd"];
+                  };
+                  "@home" = {
+                    mountpoint = "/home";
+                    mountOptions = ["compress=zstd"];
+                  };
+                  "@var" = {
+                    mountpoint = "/var";
+                    mountOptions = ["compress=zstd"];
+                  };
+                  "@nix" = {
+                    mountpoint = "/nix";
+                    mountOptions = ["compress=zstd" "noatime"];
+                  };
+                  "@persist" = {
+                    mountpoint = "/persist";
+                    mountOptions = ["compress=zstd"];
+                  };
+                  "@swap" = {
+                    mountpoint = "/swap";
+                    mountOptions = ["noatime"];
+                    swap.swapfile.size = "16G";
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
   };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    neededForBoot = true;
-    fsType = "btrfs";
-    options = ["subvol=@home" "compress=zstd"];
-  };
-
-  fileSystems."/var" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    neededForBoot = true;
-    fsType = "btrfs";
-    options = ["subvol=@var" "compress=zstd"];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    fsType = "btrfs";
-    options = ["subvol=@nix" "compress=zstd" "noatime"];
-  };
-
-  fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    neededForBoot = true;
-    fsType = "btrfs";
-    options = ["subvol=@persist" "compress=zstd"];
-  };
-
-  fileSystems."/swap" = {
-    device = "/dev/disk/by-uuid/e7fc8953-54dd-4581-a279-029da0da2d25";
-    fsType = "btrfs";
-    options = ["subvol=@swap" "noatime"];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/8E9E-2EB4";
-    fsType = "vfat";
-    options = ["fmask=0022" "dmask=0022"];
-  };
-
-  swapDevices = [
-    {device = "/swap/swapfile";}
-  ];
 }
