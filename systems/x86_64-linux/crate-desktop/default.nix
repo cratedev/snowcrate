@@ -38,7 +38,7 @@ in {
       if [ ! -d /home/matt/snowcrate ]; then
         mkdir -p /home/matt/snowcrate
         chown matt:users /home/matt/snowcrate
-        ${pkgs.git}/bin/git clone https://github.com/cratedev/snowcrate /home/matt/snowcrate
+        ${pkgs.git}/bin/git clone https://github.com/cratedev/snowcrate.git /home/matt/snowcrate
       fi
     '';
   };

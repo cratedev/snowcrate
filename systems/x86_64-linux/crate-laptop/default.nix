@@ -31,16 +31,14 @@ in {
     };
   };
 
-  # Install Git for cloning
   environment.systemPackages = [pkgs.git];
 
-  # Activation script to clone snowcrate if missing
   system.activationScripts.cloneSnowcrate = {
     text = ''
       if [ ! -d /home/matt/snowcrate ]; then
         mkdir -p /home/matt/snowcrate
         chown matt:users /home/matt/snowcrate
-        ${pkgs.git}/bin/git clone https://github.com/cratedev/snowcrate /home/matt/snowcrate
+        ${pkgs.git}/bin/git clone https://github.com/cratedev/snowcrate.git /home/matt/snowcrate
       fi
     '';
   };
