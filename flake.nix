@@ -1,9 +1,9 @@
 {
   inputs = {
-    #   mysecrets = {
-    #      url = "git+ssh://git@github.com/cratedev/nix-secrets";
-    #      flake = false;
-    #    };
+    mysecrets = {
+      url = "git+ssh://git@github.com/cratedev/nix-secrets";
+      flake = false;
+    };
     disko.url = "github:nix-community/disko";
     snowfall-lib = {
       url = "github:snowfallorg/lib";
@@ -22,7 +22,7 @@
     niri.url = "github:sodiboo/niri-flake";
     hyprland.url = "github:hyprwm/Hyprland";
     determinate.url = "github:DeterminateSystems/determinate";
-    #agenix.url = "github:yaxitech/ragenix";
+    agenix.url = "github:ryantm/agenix";
     ghostty.url = "github:ghostty-org/ghostty";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -60,7 +60,7 @@
         inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
         inputs.disko.nixosModules.disko
-        #inputs.agenix.nixosModules.default
+        inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
 

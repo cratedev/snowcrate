@@ -15,7 +15,7 @@
 
   boot.initrd.postResumeCommands = lib.mkAfter ''
     mkdir -p /btrfs_tmp
-    mount -o subvol=/ /dev/disk/by-uuid/84be45b9-f3a6-483c-b26d-201456283506 /btrfs_tmp
+    mount -o subvol=/ /dev/disk/by-uuid/72eab434-9628-4d22-ae0f-b08318622b22 /btrfs_tmp
 
     delete_subvolume_recursively() {
     	IFS=$'\n'

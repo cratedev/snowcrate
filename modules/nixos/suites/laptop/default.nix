@@ -28,6 +28,10 @@ in {
       services = {
         power = enabled;
       };
+
+      security = {
+        agenix = enabled;
+      };
     };
   };
 }
