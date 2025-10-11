@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -38,7 +39,5 @@ in {
       home = "/home/matt";
       extraGroups = ["users"];
     };
-
-    programs.ssh.knownHosts = inputs.nix-ssh.knownHosts;
   };
 }
