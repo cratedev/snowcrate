@@ -29,7 +29,7 @@ in {
         bar.status = {
           showBattery = false;
         };
-        paths.wallpaperDir = "/home/matt/snowcrate/assets/wallpaper";
+        paths.wallpaperDir = "/home/matt/snowcrate/assets/wallpaper/";
         services = {
           smartScheme = false;
         };
