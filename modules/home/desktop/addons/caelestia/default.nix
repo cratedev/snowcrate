@@ -14,6 +14,7 @@ in {
   };
 
   imports = [inputs.caelestia-shell.homeManagerModules.default];
+
   config = mkIf cfg.enable {
     programs.caelestia = {
       enable = true;

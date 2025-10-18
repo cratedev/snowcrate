@@ -29,7 +29,6 @@
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     impermanence.url = "github:nix-community/impermanence";
     nvf.url = "github:notashelf/nvf";
-    #grim-hyprland.url = "github:eriedaberrie/grim-hyprland";
     caelestia-shell = {
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -54,13 +53,8 @@
 
       systems.modules.nixos = [
         inputs.determinate.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
-        inputs.stylix.nixosModules.stylix
-        inputs.niri.nixosModules.niri
-        inputs.impermanence.nixosModules.impermanence
         inputs.nix-ssh.nixosModules.ssh
         inputs.disko.nixosModules.disko
-        inputs.agenix.nixosModules.default
         #./secrets/default.nix
       ];
 

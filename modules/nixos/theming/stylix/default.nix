@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   namespace,
@@ -13,6 +14,8 @@ in {
   options.${namespace}.theming.stylix = with types; {
     enable = mkBoolOpt false "Whether or not to enable stylix.";
   };
+
+  imports = [inputs.stylix.nixosModules.stylix];
 
   config = mkIf cfg.enable {
     stylix = {

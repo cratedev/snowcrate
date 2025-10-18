@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -11,6 +12,8 @@ in {
   options.${namespace}.tools.impermanence = with types; {
     enable = mkBoolOpt false "Whether or not to install and configure impermanence.";
   };
+
+  imports = [inputs.impermanence.nixosModules.impermanence];
 
   config = mkIf cfg.enable {
     environment.persistence."/persist" = {
@@ -68,6 +71,7 @@ in {
         files = [
           ".git-credentials"
           ".config/nushell/history.txt"
+          ".local/share/fish/fish_history"
         ];
       };
     };

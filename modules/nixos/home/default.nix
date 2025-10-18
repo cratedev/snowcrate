@@ -3,6 +3,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -16,6 +17,8 @@ in {
     );
     extraOptions = mkOpt attrs {} "Options to pass directly to home-manager.";
   };
+
+  imports = [inputs.home-manager.nixosModules.home-manager];
 
   config = {
     crate.home.extraOptions = {

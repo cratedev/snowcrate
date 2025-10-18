@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -11,6 +12,8 @@ in {
   options.${namespace}.desktop.niri = with types; {
     enable = mkBoolOpt false "Whether or not to enable niri.";
   };
+
+  imports = [inputs.niri.nixosModules.niri];
 
   config = mkIf cfg.enable {
     programs.niri.enable = true;
