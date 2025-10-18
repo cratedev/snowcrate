@@ -50,6 +50,7 @@ in {
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".local/share/keyrings"
+          ".local/share/fish"
           ".local/state/nvf/shada" # MRU History
           ".local/state/caelestia"
           ".cache/zellij" # zellij session
@@ -71,7 +72,7 @@ in {
         files = [
           ".git-credentials"
           ".config/nushell/history.txt"
-          ".local/share/fish/fish_history"
+          #".local/share/fish/fish_history"
         ];
       };
     };
