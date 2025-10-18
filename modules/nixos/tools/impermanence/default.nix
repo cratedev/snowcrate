@@ -38,7 +38,7 @@ in {
       users.matt = {
         directories = [
           "unraid"
-          #          "snowcrate"
+          "snowcrate"
           "documents"
           ".config/chromium"
           ".config/vesktop"
