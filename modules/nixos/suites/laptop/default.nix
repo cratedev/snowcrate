@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs,
   namespace,
   ...
 }:
@@ -28,6 +27,10 @@ in {
 
       services = {
         power = enabled;
+      };
+
+      security = {
+        agenix = enabled;
       };
     };
   };

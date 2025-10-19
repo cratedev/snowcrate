@@ -13,11 +13,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.gnome.gnome-keyring.enable = true;
     security = {
       polkit.enable = true;
       pam.services.hyprlock = {
         enableGnomeKeyring = true;
       };
+      pam.services.sddm.enableGnomeKeyring = true;
       pam.services.sddm.text = ''
         auth      sufficient   pam_fprintd.so
         auth      required     pam_unix.so try_first_pass

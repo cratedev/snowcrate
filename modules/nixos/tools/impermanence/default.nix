@@ -20,14 +20,11 @@ in {
       hideMounts = true;
       directories = [
         "/var/lib/nixos"
-        "/var/lib/systemd"
-        "/var/lib/tailscale"
+        "/var/lib/systemd/coredump"
         "/var/log"
-        "/var/lib/NetworkManager"
         "/var/lib/bluetooth"
         "/var/lib/fprint"
-        "/etc/ssh"
-        "/etc/NetworkManager"
+        "/etc/NetworkManager/system-connections"
         {
           directory = "/var/lib/colord";
           user = "colord";
@@ -36,7 +33,13 @@ in {
         }
       ];
 
-      files = ["/etc/machine-id"];
+      files = [
+        "/etc/machine-id"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
+        "/etc/ssh/ssh_host_rsa_key"
+        "/etc/ssh/ssh_host_rsa_key.pub"
+      ];
 
       users.matt = {
         directories = [
@@ -49,7 +52,6 @@ in {
           ".config/1Password"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
-          ".local/share/keyrings"
           ".local/share/fish"
           ".local/state/nvf/shada" # MRU History
           ".local/state/caelestia"
@@ -67,12 +69,15 @@ in {
             directory = ".gnupg";
             mode = "0700";
           }
+          {
+            directory = ".local/share/keyrings";
+            mode = "0700";
+          }
         ];
 
         files = [
           ".git-credentials"
           ".config/nushell/history.txt"
-          #".local/share/fish/fish_history"
         ];
       };
     };

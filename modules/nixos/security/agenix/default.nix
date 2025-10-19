@@ -13,7 +13,9 @@ in {
     enable = mkBoolOpt false "Whether to enable agenix.";
   };
 
-  config =
-    mkIf cfg.enable {
-    };
+  imports = [inputs.agenix.nixosModules.default];
+
+  config = mkIf cfg.enable {
+    environment.systemPackages = [inputs.agenix.packages.x86_64-linux.default];
+  };
 }

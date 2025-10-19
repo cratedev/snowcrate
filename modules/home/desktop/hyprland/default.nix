@@ -85,7 +85,7 @@ in {
         };
 
         exec-once = [
-          "1password --ozone-platform-hint=auto --silent"
+          "1password --silent"
           # "uwsm app -- foot --server"
           "sleep 1 && uwsm app -- caelestia shell lock lock"
           "uwsm app -- caelestia shell"

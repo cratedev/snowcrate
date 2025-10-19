@@ -16,6 +16,7 @@ in {
   imports = [
     ./hardware.nix
     ./disk-config.nix
+    ./agenix.nix
   ];
 
   crate = {
