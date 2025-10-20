@@ -14,8 +14,15 @@
     secrets = {
       sshHostKey = {
         file = "${inputs.mysecrets}/secrets/desktop/ssh_host_ed25519_key.age";
-        path = "/persist/etc/ssh/ssh_host_ed25519_key"; # Persist for SSH
+        path = "/persist/etc/ssh/ssh_host_ed25519_key"; # persist for ssh
         mode = "600";
+        owner = "root";
+        group = "root";
+      };
+      sshHostKeyPub = {
+        file = "${inputs.mysecrets}/secrets/desktop/ssh_host_ed25519_key.pub.age";
+        path = "/persist/etc/ssh/ssh_host_ed25519_key.pub"; # persist for ssh
+        mode = "644";
         owner = "root";
         group = "root";
       };
