@@ -42,12 +42,6 @@
     ];
   };
 
-  # Impermanence for /etc/ssh and other paths
-  environment.persistence."/persist" = {
-    files = [
-      "/persist/deployment_key" # Persist the deployment key
-    ];
-  };
   system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
     chown -R matt:users /home/matt
   '';
