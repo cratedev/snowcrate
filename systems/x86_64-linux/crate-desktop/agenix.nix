@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   inputs,
   ...
@@ -47,6 +48,9 @@
       "/persist/deployment_key" # Persist the deployment key
     ];
   };
+  system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
+    chown -R matt:users /home/matt
+  '';
 
   # SSH configuration (let nixos-anywhere generate keys)
   services.openssh = {
