@@ -37,9 +37,9 @@
         group = "users";
       };
     };
-    #    identityPaths = [
-    #      "/persist/deployment_key"
-    #    ];
+    identityPaths = [
+      "/persist/deployment_key"
+    ];
   };
 
   # I don't know why my homeDir becomes owned by root... this is a future-me problem
