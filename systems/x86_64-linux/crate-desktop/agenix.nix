@@ -1,15 +1,11 @@
 {
   lib,
-  config,
   inputs,
   ...
 }: {
-  # Import agenix module (adjust if defined in modules/nixos/tools/impermanence)
   imports = [
     inputs.agenix.nixosModules.default
   ];
-
-  # Agenix configuration
   age = {
     secrets = {
       sshHostKey = {
@@ -33,7 +29,6 @@
         owner = "matt";
         group = "users";
       };
-
       sshUserKeyPub = {
         file = "${inputs.mysecrets}/secrets/desktop/id_ed25519_pub.age";
         path = "/persist/home/matt/.ssh/id_ed25519.pub";
@@ -41,26 +36,14 @@
         owner = "matt";
         group = "users";
       };
-
-      # Add other secrets (e.g., user SSH keys) as needed
     };
-    identityPaths = [
-      "/persist/deployment_key" # Where we'll deploy the private key
-    ];
+    #    identityPaths = [
+    #      "/persist/deployment_key"
+    #    ];
   };
 
+  # I don't know why my homeDir becomes owned by root... this is a future-me problem
   system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
     chown -R matt:users /home/matt
   '';
-
-  # SSH configuration (let nixos-anywhere generate keys)
-  services.openssh = {
-    enable = true;
-    hostKeys = [
-      {
-        path = "/persist/etc/ssh/ssh_host_ed25519_key";
-        type = "ed25519";
-      }
-    ];
-  };
 }
