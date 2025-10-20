@@ -1,48 +1,49 @@
 {
-  config,
   lib,
   inputs,
   ...
 }: {
-  age.secrets = {
-    userSshKey = {
-      file = inputs.mysecrets + /secrets/laptop/id_ed25519.age;
+  imports = [
+    inputs.agenix.nixosModules.default
+  ];
+  age = {
+    secrets = {
+      sshHostKey = {
+        file = "${inputs.mysecrets}/secrets/laptop/ssh_host_ed25519_key.age";
+        path = "/persist/etc/ssh/ssh_host_ed25519_key"; # persist for ssh
+        mode = "600";
+        owner = "root";
+        group = "root";
+      };
+      sshHostKeyPub = {
+        file = "${inputs.mysecrets}/secrets/laptop/ssh_host_ed25519_key.pub.age";
+        path = "/persist/etc/ssh/ssh_host_ed25519_key.pub"; # persist for ssh
+        mode = "644";
+        owner = "root";
+        group = "root";
+      };
+      sshUserKey = {
+        file = "${inputs.mysecrets}/secrets/laptop/id_ed25519.age";
+        path = "/persist/home/matt/.ssh/id_ed25519";
+        mode = "400";
+        owner = "matt";
+        group = "users";
+      };
+      sshUserKeyPub = {
+        file = "${inputs.mysecrets}/secrets/laptop/id_ed25519_pub.age";
+        path = "/persist/home/matt/.ssh/id_ed25519.pub";
+        mode = "600";
+        owner = "matt";
+        group = "users";
+      };
     };
-    userSshKeyPub = {
-      file = inputs.mysecrets + /secrets/laptop/id_ed25519_pub.age;
-    };
-    hostSshKey = {
-      file = inputs.mysecrets + /secrets/laptop/ssh_host_ed25519_key.age;
-    };
-    hostSshKeyPub = {
-      file = inputs.mysecrets + /secrets/laptop/ssh_host_ed25519_key.pub.age;
-    };
+    identityPaths = [
+      "/persist/deployment_key"
+    ];
   };
 
-  # EARLY: Deploy keys (impermanence will keep them)
+  # I don't know why my homeDir becomes owned by root... this is a future-me problem
   system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
-    # Host keys
-    mkdir -p /persist/etc/ssh
-    rm -f /persist/etc/ssh/ssh_host_ed25519_key*
-    cp ${config.age.secrets.hostSshKey.path} /persist/etc/ssh/ssh_host_ed25519_key
-    cp ${config.age.secrets.hostSshKeyPub.path} /persist/etc/ssh/ssh_host_ed25519_key.pub
-    chmod 600 /persist/etc/ssh/ssh_host_ed25519_key
-    chmod 644 /persist/etc/ssh/ssh_host_ed25519_key.pub
-    chown root:root /persist/etc/ssh/ssh_host_ed25519_key*
-
-    # User keys (root + matt)
-    mkdir -p /root/.ssh /persist/home/matt/.ssh
-    cp ${config.age.secrets.userSshKey.path} /persist/home/matt/.ssh/id_ed25519
-    cp ${config.age.secrets.userSshKeyPub.path} /persist/home/matt/.ssh/id_ed25519.pub
-    chmod 600 /persist/home/matt/.ssh/id_ed25519
-    chmod 644 /persist/home/matt/.ssh/id_ed25519.pub
-    chown matt:users /persist/home/matt/.ssh/id_ed25519*
+    chown -R matt:users /home/matt
   '';
-
-  services.openssh.hostKeys = lib.mkForce [
-    {
-      type = "ed25519";
-      path = "/persist/etc/ssh/ssh_host_ed25519_key";
-    }
-  ];
 }
