@@ -45,16 +45,16 @@ in {
   virtualisation.libvirtd.enable = true;
   hardware.bluetooth.enable = false;
 
-  fileSystems."/home/matt/unraid-ssh" = {
-    device = "root@10.0.0.10:/mnt";
-    fsType = "fuse.sshfs";
-    options = [
-      "nodev"
-      "noatime"
-      "allow_other"
-      "IdentityFile=/home/matt/.ssh/id_ed25519"
-    ];
-  };
+  #  fileSystems."/home/matt/unraid-ssh" = {
+  #device = "root@10.0.0.10:/mnt";
+  #fsType = "fuse.sshfs";
+  #options = [
+  #  "nodev"
+  #  "noatime"
+  #  "allow_other"
+  #  "IdentityFile=/home/matt/.ssh/id_ed25519"
+  #];
+  #};
 
   system.stateVersion = "24.05";
 }

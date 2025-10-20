@@ -19,26 +19,30 @@
     };
   };
 
-  # Rest of your activation scripts (unchanged)
-  system.activationScripts.deployHostKey = lib.stringAfter ["agenix"] ''
-    mkdir -p /etc/ssh
-    cp ${config.age.secrets.hostSshKey.path} /etc/ssh/ssh_host_ed25519_key
-    chmod 600 /etc/ssh/ssh_host_ed25519_key
-    chown root:root /etc/ssh/ssh_host_ed25519_key
-    cp ${config.age.secrets.hostSshKeyPub.path} /etc/ssh/ssh_host_ed25519_key.pub
-    chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
+  # EARLY: Deploy keys (impermanence will keep them)
+  system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
+    # Host keys
+    mkdir -p /persist/etc/ssh
+    rm -f /persist/etc/ssh/ssh_host_ed25519_key*
+    cp ${config.age.secrets.hostSshKey.path} /persist/etc/ssh/ssh_host_ed25519_key
+    cp ${config.age.secrets.hostSshKeyPub.path} /persist/etc/ssh/ssh_host_ed25519_key.pub
+    chmod 600 /persist/etc/ssh/ssh_host_ed25519_key
+    chmod 644 /persist/etc/ssh/ssh_host_ed25519_key.pub
+    chown root:root /persist/etc/ssh/ssh_host_ed25519_key*
+
+    # User keys (root + matt)
+    mkdir -p /root/.ssh /persist/home/matt/.ssh
+    cp ${config.age.secrets.userSshKey.path} /persist/home/matt/.ssh/id_ed25519
+    cp ${config.age.secrets.userSshKeyPub.path} /persist/home/matt/.ssh/id_ed25519.pub
+    chmod 600 /persist/home/matt/.ssh/id_ed25519
+    chmod 644 /persist/home/matt/.ssh/id_ed25519.pub
+    chown matt:users /persist/home/matt/.ssh/id_ed25519*
   '';
 
-  system.activationScripts.deployUserKeys = lib.stringAfter ["deployHostKey"] ''
-    mkdir -p /home/matt/.ssh
-    cp ${config.age.secrets.userSshKey.path} /home/matt/.ssh/id_ed25519
-    chmod 600 /home/matt/.ssh/id_ed25519
-    cp ${config.age.secrets.userSshKeyPub.path} /home/matt/.ssh/id_ed25519.pub
-    chmod 644 /home/matt/.ssh/id_ed25519.pub
-  '';
-
-  #  services.openssh.hostKeys = [{
-  #    type = "ed25519";
-  #    path = "/etc/ssh/ssh_host_ed25519_key";
-  #  }];
+  services.openssh.hostKeys = lib.mkForce [
+    {
+      type = "ed25519";
+      path = "/persist/etc/ssh/ssh_host_ed25519_key";
+    }
+  ];
 }
