@@ -38,6 +38,7 @@
       };
     };
     identityPaths = [
+      "/persist/etc/ssh/ssh_host_ed25519_key"
       "/persist/deployment_key"
     ];
   };
