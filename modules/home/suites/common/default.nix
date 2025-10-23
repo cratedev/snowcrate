@@ -40,6 +40,7 @@ in {
         obsidian = {enable = true;};
         discord = {enable = true;};
         nautilus = {enable = true;};
+        bambu = {enable = true;};
       };
 
       media = {
