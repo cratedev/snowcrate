@@ -16,12 +16,12 @@ in {
     ${namespace} = {
       desktop = {
         niri = {enable = false;};
-        hyprland = {enable = true;};
+        hyprland = {enable = false;};
         addons = {
           gtk = {enable = true;};
           mako = {enable = true;};
           hyprlock = {enable = false;};
-          caelestia = {enable = true;};
+          caelestia = {enable = false;};
         };
       };
 
