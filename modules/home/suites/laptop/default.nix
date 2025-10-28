@@ -17,7 +17,7 @@ in {
     ${namespace} = {
       desktop = {
         addons = {
-          dank = {enable = false;};
+          dank = {enable = true;};
         };
       };
     };

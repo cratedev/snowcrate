@@ -19,12 +19,12 @@ in {
 
     ${namespace} = {
       desktop = {
-        niri = disabled;
-        hyprland = disabled;
+        niri = enabled;
+        hyprland = enabled;
         display-manager = {
           sddm = {
-            enable = false;
-            wayland = false;
+            enable = true;
+            wayland = true;
           };
         };
       };

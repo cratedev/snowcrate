@@ -13,7 +13,10 @@ in {
     enable = mkBoolOpt false "Whether to enable dank";
   };
 
-  imports = [inputs.dankMaterialShell.homeModules.dankMaterialShell.default];
+  imports = [
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
+    inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
+  ];
 
   config = mkIf cfg.enable {
     programs.dankMaterialShell = {
