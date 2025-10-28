@@ -19,7 +19,7 @@ in {
   config = mkIf cfg.enable {
     nixpkgs.overlays = [inputs.niri.overlays.niri];
     programs.niri = {
-      enable = false;
+      enable = true;
       package = inputs.niri.packages.${pkgs.system}.niri-unstable;
     };
 
