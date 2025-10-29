@@ -17,7 +17,6 @@ in {
 
     ${namespace} = {
       tools = {
-        impermanence = enabled;
         virt = enabled;
       };
 
@@ -27,10 +26,6 @@ in {
 
       services = {
         power = enabled;
-      };
-
-      security = {
-        agenix = enabled;
       };
     };
   };

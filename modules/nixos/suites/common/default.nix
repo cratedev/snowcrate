@@ -30,7 +30,6 @@ in {
       };
 
       apps = {
-        rofi = enabled;
         _1password = enabled;
         managarr = enabled;
       };
@@ -41,6 +40,7 @@ in {
         cliphist = enabled;
         wlclipboard = enabled;
         nh = enabled;
+        impermanence = enabled;
       };
 
       theming = {
@@ -68,6 +68,7 @@ in {
         keyring = enabled;
         pam = enabled;
         sudo = enabled;
+        agenix = enabled;
       };
 
       system = {

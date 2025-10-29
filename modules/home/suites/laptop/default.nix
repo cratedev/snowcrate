@@ -15,11 +15,6 @@ in {
 
   config = mkIf cfg.enable {
     ${namespace} = {
-      desktop = {
-        addons = {
-          dank = {enable = true;};
-        };
-      };
     };
   };
 }

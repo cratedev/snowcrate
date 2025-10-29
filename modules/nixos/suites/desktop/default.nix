@@ -17,10 +17,6 @@ in {
     environment.systemPackages = [];
 
     ${namespace} = {
-      tools = {
-        impermanence = enabled;
-      };
-
       apps = {
         steam = enabled;
       };

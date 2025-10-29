@@ -16,7 +16,6 @@ in {
     stylix = {
       autoEnable = true;
       targets = {
-        waybar.enable = false;
         hyprlock.enable = false;
         firefox.profileNames = ["matt"];
       };

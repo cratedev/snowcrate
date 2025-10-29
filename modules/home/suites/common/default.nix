@@ -22,7 +22,7 @@ in {
           gtk = {enable = true;};
           mako = {enable = false;};
           hyprlock = {enable = false;};
-          caelestia = {enable = false;};
+          dank = {enable = true;};
         };
       };
 
