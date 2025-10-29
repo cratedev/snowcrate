@@ -8,7 +8,7 @@
 with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.tools.git;
-  user = config.${namespace}.user;
+  inherit (config.${namespace}) user;
 in {
   options.${namespace}.tools.git = with types; {
     enable = mkBoolOpt false "Whether or not to install and configure git.";
@@ -22,15 +22,22 @@ in {
     crate.home.extraOptions = {
       programs.git = {
         enable = true;
-        inherit (cfg) userName userEmail;
-        lfs = enabled;
-        extraConfig = {
+        lfs.enable = true;
+
+        settings = {
+          user = {
+            name = cfg.userName;
+            email = cfg.userEmail;
+          };
+
           init = {
             defaultBranch = "master";
           };
+
           pull = {
             rebase = true;
           };
+
           push = {
             autoSetupRemote = true;
           };

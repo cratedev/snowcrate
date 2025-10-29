@@ -20,7 +20,7 @@ in {
     ${namespace} = {
       desktop = {
         niri = enabled;
-        hyprland = enabled;
+        hyprland = disabled;
         display-manager = {
           sddm = {
             enable = true;
@@ -59,7 +59,9 @@ in {
         };
         busybox = enabled;
         fwupd = enabled;
+        portals = enabled;
         beszel = enabled;
+        gvfs = enabled;
       };
 
       security = {

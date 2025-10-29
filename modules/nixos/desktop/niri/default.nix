@@ -30,6 +30,7 @@ in {
 
     # Only enable niri when our option is true
     (mkIf cfg.enable {
+      systemd.user.services.niri-flake-polkit.enable = false;
       programs.niri = {
         enable = true;
         package = inputs.niri.packages.${pkgs.system}.niri-unstable;

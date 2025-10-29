@@ -18,9 +18,18 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = [pkgs.lazygit];
+
     programs.git = {
       enable = true;
-      inherit (cfg) userName userEmail;
+
+      # New way: use settings instead of top-level userName/userEmail
+      settings = {
+        user = {
+          name = cfg.userName;
+          email = cfg.userEmail;
+        };
+      };
+
       ignores = ["result"];
       lfs = enabled;
     };

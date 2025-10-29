@@ -52,9 +52,11 @@ in {
           ".config/1Password"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
+          ".config/DankMaterialShell"
           ".local/share/fish"
           ".local/state/nvf/shada" # MRU History
           ".local/state/caelestia"
+          ".local/state/DankMaterialShell"
           ".cache/zellij" # zellij session
           ".zen"
           {

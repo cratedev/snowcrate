@@ -15,15 +15,16 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [gtk4 swww slurp];
+
     programs.niri = {
       settings = {
         hotkey-overlay.skip-at-startup = true;
 
         spawn-at-startup = [
-          {command = ["plasma-polkit-agent"];}
           {command = ["zen"];}
           {command = ["1password" "--ozone-platform-hint=auto" "--silent"];}
-          {command = ["uwsm app -- dms run"];}
+          {command = ["uwsm" "app" "--" "dms" "run"];}
+          {command = ["uwsm" "app" "--" "dms" "ipc" "call" "lock" "lock"];}
         ];
         prefer-no-csd = true;
 
@@ -120,7 +121,12 @@ in {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
 
           "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
-          "Mod+D".action = spawn "rofi" "-show" "drun" "-run-command" "uwsm app -- {cmd}" "-theme" ".config/rofi/styles/style-16.rasi";
+          #"Mod+D".action = spawn "rofi" "-show" "drun" "-run-command" "uwsm app -- {cmd}" "-theme" ".config/rofi/styles/style-16.rasi";
+          "Mod+D".action = spawn "dms" "ipc" "call" "spotlight" "toggle";
+          "Mod+S".action = spawn "dms" "ipc" "call" "settings" "toggle";
+          "Mod+L".action = spawn "dms" "ipc" "call" "lock" "lock";
+          "Mod+P".action = spawn "dms" "ipc" "call" "powermenu" "toggle";
+          "Mod+C".action = spawn "dms" "ipc" "call" "control-center" "toggle";
           "Mod+Q".action = close-window;
 
           "Mod+Left".action = focus-column-left;
@@ -164,13 +170,13 @@ in {
           "Mod+Ctrl+R".action = reset-window-height;
           "Mod+F".action = maximize-column;
           "Mod+Shift+F".action = fullscreen-window;
-          "Mod+C".action = center-column;
+          #"Mod+C".action = center-column;
 
           "Mod+Minus".action = set-column-width "-10%";
           "Mod+Equal".action = set-column-width "+10%";
 
           "Mod+I".action = sh ''grim -g "$(slurp)" /home/matt/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'';
-          "Mod+L".action = spawn "hyprlock";
+          #"Mod+L".action = spawn "hyprlock";
           "Mod+Shift+E".action = quit;
 
           "XF86AudioMicMute".action = spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";

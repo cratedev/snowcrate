@@ -1,18 +1,10 @@
 {
-  pkgs,
   lib,
   namespace,
   ...
 }:
 with lib;
-with lib.${namespace}; let
-  newUser = name: {
-    isNormalUser = true;
-    createHome = true;
-    home = "/home/${name}";
-    shell = pkgs.zsh;
-  };
-in {
+with lib.${namespace}; {
   imports = [
     ./hardware.nix
     ./disk-config.nix
@@ -23,6 +15,7 @@ in {
     archetypes = {
       laptop = enabled;
     };
+
     user = {
       name = "matt";
       fullName = "Matthew Henderson";
@@ -44,17 +37,6 @@ in {
 
   virtualisation.libvirtd.enable = true;
   hardware.bluetooth.enable = false;
-
-  #  fileSystems."/home/matt/unraid-ssh" = {
-  #device = "root@10.0.0.10:/mnt";
-  #fsType = "fuse.sshfs";
-  #options = [
-  #  "nodev"
-  #  "noatime"
-  #  "allow_other"
-  #  "IdentityFile=/home/matt/.ssh/id_ed25519"
-  #];
-  #};
 
   system.stateVersion = "24.05";
 }

@@ -19,7 +19,7 @@
     };
     nix-ssh.url = "git+ssh://git@github.com/cratedev/nix-ssh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    niri.url = "github:sodiboo/niri-flake"; #?rev=d68e48d09510bc7b0724e25da8eab868189c7084";
+    niri.url = "github:sodiboo/niri-flake";
     hyprland.url = "github:hyprwm/Hyprland";
     determinate.url = "github:DeterminateSystems/determinate";
     agenix.url = "github:ryantm/agenix";
@@ -43,9 +43,11 @@
     };
     dankMaterialShell = {
       url = "github:AvengeMedia/DankMaterialShell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.dgop.follows = "dgop";
-      inputs.dms-cli.follows = "dms-cli";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        dgop.follows = "dgop";
+        dms-cli.follows = "dms-cli";
+      };
     };
   };
 

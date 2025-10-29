@@ -15,17 +15,32 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.kdePackages.polkit-qt-1
+      pkgs.polkit_gnome
     ];
+
     security = {
       polkit.enable = true;
+    };
 
-      pam.services.sddm.text = ''
-        auth      sufficient   pam_fprintd.so
-        auth      required     pam_unix.so try_first_pass
-        account   required     pam_unix.so
-        session   required     pam_unix.so
-      '';
+    security.pam.services = {
+      sddm.fprintAuth = true;
+      login.fprintAuth = true;
+      sudo.fprintAuth = true;
+    };
+
+    # Polkit agent service
+    systemd.user.services.polkit-gnome-authentication-agent-1 = {
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = ["graphical-session.target"];
+      wants = ["graphical-session.target"];
+      after = ["graphical-session.target"];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
     };
   };
 }

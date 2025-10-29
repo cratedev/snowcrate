@@ -16,7 +16,6 @@ in {
   config = mkIf cfg.enable {
     services.fprintd = {
       enable = true;
-      package = pkgs.fprintd-tod;
       tod.enable = true;
       tod.driver = pkgs.libfprint-2-tod1-broadcom;
     };
