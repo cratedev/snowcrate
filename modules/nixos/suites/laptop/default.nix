@@ -14,7 +14,7 @@ in {
 
   config = mkIf cfg.enable {
     ${namespace} = {
-      suites.common.enable = true;
+      suites.base.enable = true;
 
       tools = {
         virt.enable = true;
