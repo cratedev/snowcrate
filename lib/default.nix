@@ -9,4 +9,6 @@
     });
 
   ssh = import ./ssh {inherit lib;};
+  module = import ./module {inherit lib;};
+  file = import ./file {inherit lib;};
 }

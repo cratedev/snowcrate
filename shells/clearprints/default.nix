@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{pkgs, ...}:
 pkgs.mkShell {
   name = "clearprints-dev";
 
