@@ -57,7 +57,7 @@ in {
           ".local/state/nvf/shada" # MRU History
           ".local/state/caelestia"
           ".local/state/DankMaterialShell"
-          ".cache/zellij" # zellij session
+          ".local/cache/zellij" # zellij session
           ".zen"
           {
             directory = "whiskeyvault";
