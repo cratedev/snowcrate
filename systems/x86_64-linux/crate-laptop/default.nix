@@ -32,6 +32,10 @@ with lib.${namespace}; {
     };
   };
 
+  options.${namespace}.suites.laptop = with types; {
+    display-name = mkOpt str "eDP-1" "Primary display name";
+  };
+
   virtualisation.libvirtd.enable = true;
   hardware.bluetooth.enable = false;
 

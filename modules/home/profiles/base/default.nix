@@ -14,7 +14,10 @@ with lib.${namespace}; {
     ${namespace} = {
       desktop = {
         niri.enable = true;
-        addons.dank.enable = true;
+        addons = {
+          dank.enable = true;
+          gtk.enable = true;
+        };
       };
       user.enable = true;
       xdg.enable = true;
@@ -39,6 +42,7 @@ with lib.${namespace}; {
         zellij.enable = true;
         fzf.enable = true;
         just.enable = true;
+        env.enable = true;
         managarr.enable = true;
       };
 
