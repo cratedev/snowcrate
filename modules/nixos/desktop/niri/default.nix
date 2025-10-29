@@ -17,12 +17,10 @@ in {
   imports = [inputs.niri.nixosModules.niri];
 
   config = mkMerge [
-    # Always apply the overlay (unconditional)
     {
       nixpkgs.overlays = [inputs.niri.overlays.niri];
     }
 
-    # Always disable the cache mechanism
     {
       niri-flake.cache.enable = false;
       programs.niri.enable = mkDefault false;
