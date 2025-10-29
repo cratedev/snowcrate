@@ -25,8 +25,8 @@ in {
       # New way: use settings instead of top-level userName/userEmail
       settings = {
         user = {
-          name = cfg.userName;
-          email = cfg.userEmail;
+          name = config.${namespace}.user.fullName;
+          email = config.${namespace}.user.email;
         };
       };
 

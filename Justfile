@@ -1,5 +1,5 @@
 set shell := ["nu", "-c"]
-flake_path := "/home/matt/snowcrate"
+flake_path := justfile_directory()
 hostname := `hostname`
 home_manager_output := "matt@${hostname}"
 

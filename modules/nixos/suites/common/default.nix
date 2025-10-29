@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   lib,
   namespace,
@@ -8,7 +7,6 @@
 with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.suites.common;
-  sharedAuthorizedKeys = builtins.readFile "${inputs.nix-ssh}/ssh/authorized_keys";
 in {
   options.${namespace}.suites.common = with types; {
     enable = mkBoolOpt false "Enable Common module";
@@ -53,10 +51,7 @@ in {
       };
 
       services = {
-        openssh = {
-          enable = true;
-          authorizedKeys = lib.splitString "\n" sharedAuthorizedKeys;
-        };
+        openssh = enabled;
         busybox = enabled;
         fwupd = enabled;
         portals = enabled;

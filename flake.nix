@@ -17,7 +17,6 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-ssh.url = "git+ssh://git@github.com/cratedev/nix-ssh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     niri.url = "github:sodiboo/niri-flake";
     hyprland.url = "github:hyprwm/Hyprland";
@@ -52,7 +51,6 @@
 
       systems.modules.nixos = with inputs; [
         determinate.nixosModules.default
-        nix-ssh.nixosModules.ssh
         disko.nixosModules.disko
       ];
     };
