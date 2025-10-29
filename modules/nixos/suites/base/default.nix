@@ -6,9 +6,9 @@
 }:
 with lib;
 with lib.${namespace}; let
-  cfg = config.${namespace}.suites.common;
+  cfg = config.${namespace}.suites.base;
 in {
-  options.${namespace}.suites.common = {
+  options.${namespace}.suites.base = {
     enable = mkEnableOption "Desktop system configuration";
   };
 
