@@ -8,24 +8,24 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.suites.laptop;
 in {
-  options.${namespace}.suites.laptop = with types; {
-    enable = mkBoolOpt false "Enable Laptop module";
+  options.${namespace}.suites.laptop = {
+    enable = mkEnableOption "Laptop system configuration";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [];
-
     ${namespace} = {
+      suites.common.enable = true;
+
       tools = {
-        virt = enabled;
+        virt.enable = true;
       };
 
       hardware = {
-        fingerprint = enabled;
+        fingerprint.enable = true;
       };
 
       services = {
-        power = enabled;
+        power.enable = true;
       };
     };
   };

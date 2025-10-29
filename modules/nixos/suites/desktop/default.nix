@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs,
   namespace,
   ...
 }:
@@ -9,16 +8,16 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.suites.desktop;
 in {
-  options.${namespace}.suites.desktop = with types; {
-    enable = mkBoolOpt false "Enable Desktop module";
+  options.${namespace}.suites.desktop = {
+    enable = mkEnableOption "Desktop system configuration";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [];
-
     ${namespace} = {
+      suites.common.enable = true;
+
       apps = {
-        steam = enabled;
+        steam.enable = true;
       };
     };
   };

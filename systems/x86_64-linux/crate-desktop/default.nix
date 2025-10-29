@@ -12,9 +12,7 @@ with lib.${namespace}; {
   ];
 
   crate = {
-    archetypes = {
-      desktop = enabled;
-    };
+    suites.desktop.enable = true;
 
     user = {
       name = "matt";

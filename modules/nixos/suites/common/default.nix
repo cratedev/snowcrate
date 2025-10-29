@@ -8,17 +8,15 @@ with lib;
 with lib.${namespace}; let
   cfg = config.${namespace}.suites.common;
 in {
-  options.${namespace}.suites.common = with types; {
-    enable = mkBoolOpt false "Enable Common module";
+  options.${namespace}.suites.common = {
+    enable = mkEnableOption "Desktop system configuration";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [];
-
     ${namespace} = {
       desktop = {
-        niri = enabled;
-        hyprland = disabled;
+        niri.enable = true;
+        hyprland.enable = false;
         display-manager = {
           sddm = {
             enable = true;
@@ -26,54 +24,46 @@ in {
           };
         };
       };
-
       apps = {
-        _1password = enabled;
-        managarr = enabled;
+        _1password.enable = true;
+        managarr.enable = true;
       };
-
       tools = {
-        git = enabled;
-        ripgrep = enabled;
-        cliphist = enabled;
-        wlclipboard = enabled;
-        nh = enabled;
-        impermanence = enabled;
+        git.enable = true;
+        ripgrep.enable = true;
+        cliphist.enable = true;
+        wlclipboard.enable = true;
+        nh.enable = true;
+        impermanence.enable = true;
       };
-
       theming = {
-        stylix = enabled;
+        stylix.enable = true;
       };
-
       hardware = {
-        audio = enabled;
-        networking = enabled;
+        audio.enable = true;
+        networking.enable = true;
       };
-
       services = {
-        openssh = enabled;
-        busybox = enabled;
-        fwupd = enabled;
-        portals = enabled;
-        beszel = enabled;
-        gvfs = enabled;
+        openssh.enable = true;
+        busybox.enable = true;
+        fwupd.enable = true;
+        portals.enable = true;
+        beszel.enable = true;
+        gvfs.enable = true;
       };
-
       security = {
-        keyring = enabled;
-        pam = enabled;
-        sudo = enabled;
-        agenix = enabled;
+        keyring.enable = true;
+        pam.enable = true;
+        sudo.enable = true;
+        agenix.enable = true;
       };
-
       system = {
-        boot = enabled;
-        fonts = enabled;
-        locale = enabled;
-        time = enabled;
+        boot.enable = true;
+        fonts.enable = true;
+        locale.enable = true;
+        time.enable = true;
       };
-
-      nix = enabled;
+      nix.enable = true;
     };
   };
 }
