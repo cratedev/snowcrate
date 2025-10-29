@@ -161,6 +161,8 @@ in {
           "Mod+Shift+Down".action = move-window-down;
           "Mod+Shift+Up".action = move-window-up;
           "Mod+Shift+Right".action = move-column-right;
+          "Mod+Alt+Left".action = focus-workspace-down;
+          "Mod+Alt+Right".action = focus-workspace-up;
 
           "Mod+Home".action = focus-column-first;
           "Mod+End".action = focus-column-last;
