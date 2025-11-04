@@ -1,0 +1,31 @@
+{
+  config,
+  lib,
+  namespace,
+  ...
+}:
+with lib;
+with lib.${namespace}; let
+  cfg = config.${namespace}.apps.bitwarden;
+in {
+  options.${namespace}.apps.bitwarden = with types; {
+    enable = mkBoolOpt false "Whether or not to enable bitwarden.";
+  };
+
+  config = mkIf cfg.enable {
+    environment = {
+      systemPackages = [pkgs.bitwarden-desktop pkgs.bitwarden-cli];
+      etc = {
+        "bitwarden/custom_allowed_browsers" = {
+          text = ''
+            .zen-wrapped
+            .zen-beta-wrapp
+            zen
+            zen-beta
+          '';
+          mode = "0755";
+        };
+      };
+    };
+  };
+}

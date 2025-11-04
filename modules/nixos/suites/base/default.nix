@@ -26,6 +26,7 @@ in {
       };
       apps = {
         _1password.enable = true;
+        bitwarden.enable = true;
         managarr.enable = true;
       };
       tools = {
