@@ -73,7 +73,7 @@ in {
             inactive.color = "#333333";
           };
 
-          default-column-width = {proportion = 0.5;};
+          default-column-width = {}; #proportion = 0.5;};
         };
 
         screenshot-path = null;
