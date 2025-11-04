@@ -19,7 +19,7 @@ in {
       qemu
       libvirt
       spice-gtk
-      win-virtio
+      virtio-win
     ];
   };
 }
