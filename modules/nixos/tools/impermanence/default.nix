@@ -60,6 +60,7 @@ in {
           ".local/state/caelestia"
           ".local/state/DankMaterialShell"
           ".local/cache/zellij" # zellij session
+          ".local/cache/com.bitwarden.desktop"
           ".zen"
           {
             directory = "whiskeyvault";
