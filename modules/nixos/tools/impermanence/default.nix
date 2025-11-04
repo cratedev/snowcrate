@@ -50,6 +50,7 @@ in {
           ".config/vesktop"
           ".config/spotify"
           ".config/1Password"
+          ".config/Bitwarden"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".config/DankMaterialShell"
