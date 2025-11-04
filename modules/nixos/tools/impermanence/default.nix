@@ -51,6 +51,7 @@ in {
           ".config/spotify"
           ".config/1Password"
           ".config/Bitwarden"
+          ".mozilla/native-messaging-hosts"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".config/DankMaterialShell"

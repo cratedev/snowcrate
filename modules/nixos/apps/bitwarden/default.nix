@@ -16,17 +16,6 @@ in {
   config = mkIf cfg.enable {
     environment = {
       systemPackages = [pkgs.bitwarden-desktop pkgs.bitwarden-cli];
-      etc = {
-        "bitwarden/custom_allowed_browsers" = {
-          text = ''
-            .zen-wrapped
-            .zen-beta-wrapp
-            zen
-            zen-beta
-          '';
-          mode = "0755";
-        };
-      };
     };
   };
 }
