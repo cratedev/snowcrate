@@ -22,7 +22,7 @@ in {
 
         spawn-at-startup = [
           {command = ["zen"];}
-          {command = ["1password" "--ozone-platform-hint=auto" "--silent"];}
+          {command = ["bitwarden" "--ozone-platform-hint=auto" "--silent"];}
           {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
           {
             command = [

@@ -12,17 +12,23 @@ in {
   options.${namespace}.security.keyring = with types; {
     enable = mkBoolOpt false "Whether to enable gnome keyring.";
   };
+
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      gnome-keyring
-      seahorse # GUI for managing keyrings (optional but helpful)
+      seahorse # Optional: GUI to manage keyrings
     ];
-    services.gnome.gnome-keyring.enable = true;
-    security.pam.services = {
-      login.enableGnomeKeyring = true;
-      sddm.enableGnomeKeyring = true;
-      sudo.enableGnomeKeyring = true; # Also enable for sudo
-      polkit-1.enableGnomeKeyring = true; # And polkit
+
+    systemd.user.services.gnome-keyring = {
+      description = "GNOME Keyring Daemon";
+      wantedBy = ["graphical-session.target"];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh";
+        Restart = "on-failure";
+      };
+      environment = {
+        XDG_RUNTIME_DIR = "%t";
+      };
     };
   };
 }

@@ -26,6 +26,12 @@ in {
       sddm.fprintAuth = true;
       login.fprintAuth = true;
       sudo.fprintAuth = true;
+      polkit-1.fprintAuth = true;
+      login.enableGnomeKeyring = lib.mkForce false;
+      sddm.enableGnomeKeyring = false;
+      sddm-autologin.enableGnomeKeyring = false;
+      sudo.enableGnomeKeyring = false;
+      polkit-1.enableGnomeKeyring = false;
     };
 
     # Polkit agent service
