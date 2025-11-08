@@ -26,6 +26,8 @@ in {
         warn-dirty = false;
         log-lines = 50;
         sandbox = "relaxed";
+        max-jobs = "auto";
+        cores = 0;
         auto-optimise-store = true;
         substituters = [
           "https://cache.nixos.org/"
