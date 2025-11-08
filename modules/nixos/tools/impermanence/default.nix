@@ -50,7 +50,6 @@ in {
           ".config/vesktop"
           ".config/spotify"
           ".config/1Password"
-          ".config/Bitwarden"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".config/DankMaterialShell"
@@ -59,7 +58,6 @@ in {
           ".local/state/caelestia"
           ".local/state/DankMaterialShell"
           ".local/cache/zellij" # zellij session
-          ".local/cache/com.bitwarden.desktop"
           ".zen"
           {
             directory = "whiskeyvault";

@@ -26,7 +26,6 @@ in {
       };
       apps = {
         _1password.enable = true;
-        bitwarden.enable = true;
         managarr.enable = true;
       };
       tools = {
@@ -53,7 +52,6 @@ in {
         gvfs.enable = true;
       };
       security = {
-        keyring.enable = true;
         pam.enable = true;
         sudo.enable = true;
         agenix.enable = true;

@@ -13,29 +13,31 @@ in {
     enable = mkBoolOpt false "Whether to enable pam.";
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.polkit_gnome
+    environment.systemPackages = with pkgs; [
+      polkit_gnome
+      gnome-keyring # Needed for keyring support
+      libsecret # Provides secret-tool command
+      seahorse # GUI to manage keyrings
     ];
+    services.gnome.gnome-keyring.enable = true;
     security = {
       polkit.enable = true;
-      # This helps ensure PAM modules are properly available
       pam.enableFscrypt = false;
     };
 
     security.pam.services = {
-      # Only enable fingerprint auth where it makes sense
-      # Remove sddm if you don't use it
       login.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
       sudo.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
       polkit-1.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
 
-      # Completely disable gnome keyring in PAM since you're managing it separately
+      sddm-autologin.enableGnomeKeyring = true;
+
       login.enableGnomeKeyring = lib.mkForce false;
       sddm.enableGnomeKeyring = lib.mkForce false;
-      sddm-autologin.enableGnomeKeyring = lib.mkForce false;
       sudo.enableGnomeKeyring = lib.mkForce false;
       polkit-1.enableGnomeKeyring = lib.mkForce false;
     };
+
     # Create symlink for pam_fprintd.so in the PAM security directory
     system.activationScripts.fixPamFprintd = lib.stringAfter ["users"] ''
       ln -sf ${pkgs.fprintd}/lib/security/pam_fprintd.so \
