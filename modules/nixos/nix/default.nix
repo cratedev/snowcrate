@@ -23,11 +23,13 @@ in {
       settings = {
         experimental-features = "nix-command flakes";
         http-connections = 50;
+        connect-timeout = 5;
         warn-dirty = false;
         log-lines = 50;
-        sandbox = "relaxed";
         max-jobs = "auto";
         cores = 0;
+        keep-outputs = true;
+        builders-use-substitutes = true;
         auto-optimise-store = true;
         substituters = [
           "https://cache.nixos.org/"

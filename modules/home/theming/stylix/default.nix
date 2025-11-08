@@ -14,10 +14,19 @@ in {
 
   config = mkIf cfg.enable {
     stylix = {
-      autoEnable = true;
+      autoEnable = false;
       targets = {
-        hyprlock.enable = false;
-        firefox.profileNames = ["matt"];
+        firefox = {
+          enable = true;
+          profileNames = ["matt"];
+        };
+        ghostty.enable = true;
+        btop.enable = true;
+        fzf.enable = true;
+        gtk.enable = true;
+        niri.enable = true;
+        zellij.enable = true;
+        nvf.enable = true;
       };
     };
   };
