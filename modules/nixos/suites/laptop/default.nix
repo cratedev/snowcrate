@@ -16,17 +16,9 @@ in {
     ${namespace} = {
       suites.base.enable = true;
 
-      tools = {
-        virt.enable = true;
-      };
+      hardware.fingerprint.enable = true;
 
-      hardware = {
-        fingerprint.enable = true;
-      };
-
-      services = {
-        power.enable = true;
-      };
+      services.power.enable = true;
     };
   };
 }
