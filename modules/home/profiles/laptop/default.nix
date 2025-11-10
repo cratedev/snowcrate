@@ -12,5 +12,6 @@ with lib.${namespace}; {
 
   config = mkIf config.${namespace}.profiles.laptop.enable {
     ${namespace}.profiles.base.enable = true;
+    media.hypnotix.enable = true;
   };
 }
