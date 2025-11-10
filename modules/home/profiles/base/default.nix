@@ -33,6 +33,7 @@ with lib.${namespace}; {
 
       media = {
         ytmusic.enable = true;
+        hypnotix.enable = true;
       };
 
       cli = {
