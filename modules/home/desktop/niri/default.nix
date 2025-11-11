@@ -11,6 +11,7 @@ with lib.${namespace}; let
 in {
   options.${namespace}.desktop.niri = with types; {
     enable = mkBoolOpt false "Whether or not to turn on niri config.";
+    outputs = mkOpt attrs {} "Output configuration for displays";
   };
 
   config = mkIf cfg.enable {
@@ -18,6 +19,7 @@ in {
 
     programs.niri = {
       settings = {
+        inherit (cfg) outputs;
         hotkey-overlay.skip-at-startup = true;
 
         spawn-at-startup = [
@@ -73,7 +75,7 @@ in {
             inactive.color = "#333333";
           };
 
-          default-column-width = {}; #proportion = 0.5;};
+          default-column-width = {proportion = 0.5;};
         };
 
         screenshot-path = null;
