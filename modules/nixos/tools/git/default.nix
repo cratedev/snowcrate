@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  pkgs,
   ...
 }:
 with lib;
@@ -13,6 +14,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      git-crypt
+    ];
     crate.home.extraOptions = {
       programs.git = {
         enable = true;
