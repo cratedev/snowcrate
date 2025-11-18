@@ -15,7 +15,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [gtk4 swww slurp];
+    home.packages = with pkgs; [gtk4 swww slurp grim];
 
     programs.niri = {
       settings = {
