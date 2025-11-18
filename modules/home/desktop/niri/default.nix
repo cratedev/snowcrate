@@ -154,6 +154,11 @@ in {
           "Mod+C".action = spawn "dms" "ipc" "call" "control-center" "toggle";
           "Mod+Q".action = close-window;
 
+          "Mod+WheelScrollDown".action = focus-column-right;
+          "Mod+WheelScrollUp".action = focus-column-left;
+          "Mod+Alt+WheelScrollDown".action = focus-workspace-down;
+          "Mod+Alt+WheelScrollUp".action = focus-workspace-up;
+
           "Mod+Left".action = focus-column-left;
           "Mod+Down".action = focus-window-down;
           "Mod+Up".action = focus-window-up;
