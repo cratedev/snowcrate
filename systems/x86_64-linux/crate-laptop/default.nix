@@ -33,7 +33,7 @@ with lib.${namespace}; {
   };
 
   virtualisation.libvirtd.enable = true;
-  hardware.bluetooth.enable = false;
+  hardware.bluetooth.enable = true;
 
   system.stateVersion = "24.05";
 }
