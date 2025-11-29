@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   namespace,
   ...
 }:
@@ -14,7 +13,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.nix-index-database.comma.enable = true;
-    programs.command-not-found.enable = false;
+    programs = {
+      nix-index = {
+        enable = true;
+        enableFishIntegration = true;
+      };
+      command-not-found.enable = false;
+    };
   };
 }
