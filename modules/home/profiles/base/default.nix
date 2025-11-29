@@ -45,6 +45,7 @@ with lib.${namespace}; {
         just.enable = true;
         env.enable = true;
         managarr.enable = true;
+        nix-index.enable = true;
       };
 
       theming.stylix.enable = true;
