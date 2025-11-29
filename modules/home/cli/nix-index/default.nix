@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -12,13 +13,15 @@ in {
     enable = mkBoolOpt false "Enable/disable nix-index";
   };
 
+  imports = [inputs.nix-index-database.homeModules.nix-index];
+
   config = mkIf cfg.enable {
     programs = {
       nix-index = {
         enable = true;
-        enableFishIntegration = true;
+        #enableFishIntegration = true;
       };
-      command-not-found.enable = false;
+      #command-not-found.enable = false;
     };
   };
 }
