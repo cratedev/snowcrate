@@ -4,7 +4,10 @@
       url = "git+ssh://git@github.com/cratedev/nix-secrets";
       flake = false;
     };
-    disko.url = "github:nix-community/disko";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     snowfall-lib = {
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,12 +23,22 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     niri.url = "github:sodiboo/niri-flake";
     hyprland.url = "github:hyprwm/Hyprland";
-    determinate.url = "github:DeterminateSystems/determinate";
-    agenix.url = "github:ryantm/agenix";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    determinate = {
+      url = "github:DeterminateSystems/determinate";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    impermanence.url = "github:nix-community/impermanence";
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,22 +52,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
-  outputs =
-    inputs:
-    let
-      lib = inputs.snowfall-lib.mkLib {
-        inherit inputs;
-        src = ./.;
-        snowfall = {
-          namespace = "crate";
-          meta = {
-            name = "crate";
-            title = "crate";
-          };
+  outputs = inputs: let
+    lib = inputs.snowfall-lib.mkLib {
+      inherit inputs;
+      src = ./.;
+      snowfall = {
+        namespace = "crate";
+        meta = {
+          name = "crate";
+          title = "crate";
         };
       };
-    in
+    };
+  in
     lib.mkFlake {
       channels-config.allowUnfree = true;
 
