@@ -21,37 +21,52 @@ in {
         theme = {
           enable = true;
         };
+
         options = {
           tabstop = 2;
           shiftwidth = 2;
           softtabstop = 2;
           expandtab = false;
         };
-        maps = {
-          normal."<leader><Left>" = {
-            silent = true;
+
+        keymaps = [
+          {
+            key = "<leader><Left>";
+            mode = "n";
             action = "<cmd>bprev<CR>";
-          };
-          normal."<leader><Right>" = {
             silent = true;
+          }
+          {
+            key = "<leader><Right>";
+            mode = "n";
             action = "<cmd>bnext<CR>";
-          };
-          visual."<" = {
+            silent = true;
+          }
+          {
+            key = "<";
+            mode = "v";
             action = "<gv";
             desc = "Unindent and reselect";
-          };
-          visual.">" = {
+          }
+          {
+            key = ">";
+            mode = "v";
             action = ">gv";
             desc = "Indent and reselect";
-          };
+          }
+        ];
+
+        globals = {
+          mapleader = " "; # Set your preferred leader key
         };
+
         viAlias = true;
         vimAlias = true;
 
-        # Debug Mode (optional)
-        debugMode = {enable = false;};
+        debugMode = {
+          enable = false;
+        };
 
-        # Language Server Protocol (LSP) settings
         lsp = {
           enable = true;
           formatOnSave = true;
@@ -60,7 +75,6 @@ in {
           lspSignature.enable = true;
         };
 
-        # Debugger
         debugger = {
           nvim-dap = {
             enable = true;
@@ -68,13 +82,17 @@ in {
           };
         };
 
-        # Languages and Formatters
         languages = {
           enableFormat = true;
           enableTreesitter = true;
           enableExtraDiagnostics = true;
-          nix.enable = true; # Enable Nix LSP (Note: Nim LSP disabled on Darwin)
-          # Language modules that are not as common.
+          nix = {
+            enable = true;
+            lsp = {
+              enable = true;
+              server = "nixd";
+            };
+          };
           assembly.enable = false;
           astro.enable = false;
           nu.enable = false;
@@ -92,64 +110,88 @@ in {
 
           tailwind.enable = false;
           svelte.enable = false;
-
-          # Nim LSP is broken on Darwin and therefore
-          # should be disabled by default. Users may still enable
-          # `vim.languages.vim` to enable it, this does not restrict
-          # that.
-          # See: <https://github.com/PMunch/nimlsp/issues/178#issue-2128106096>
           nim.enable = false;
         };
 
-        # Visuals and UI
         visuals = {
           nvim-web-devicons.enable = true;
           cinnamon-nvim.enable = true;
           fidget-nvim.enable = true;
           highlight-undo.enable = false;
-          indent-blankline.enable = true;
+          indent-blankline = {
+            enable = true;
+            setupOpts = {
+            };
+          };
           nvim-cursorline = {
             enable = true;
             setupOpts.line_timeout = 0;
           };
         };
 
-        # Statusline & Theme
         statusline = {
           lualine = {
             enable = true;
-            #          theme = "catppuccin";
-            #          theme = "base16";
-            #          theme = "auto";
           };
         };
-        # General features
-        autopairs.nvim-autopairs.enable = true;
-        autocomplete.nvim-cmp.enable = true;
-        filetree = {nvimTree = {enable = true;};};
-        tabline = {nvimBufferline.enable = true;};
+
+        autopairs.nvim-autopairs = {
+          enable = true;
+          setupOpts = {};
+        };
+
+        autocomplete.nvim-cmp = {
+          enable = true;
+          setupOpts = {};
+        };
+
+        snippets.luasnip.enable = true;
+
+        filetree = {
+          nvimTree = {
+            enable = true;
+            setupOpts = {};
+          };
+        };
+
+        tabline = {
+          nvimBufferline = {
+            enable = true;
+            setupOpts = {};
+          };
+        };
+
         treesitter.context.enable = true;
 
-        # Miscellaneous Features
         binds = {
           whichKey.enable = true;
           cheatsheet.enable = true;
         };
+
         telescope.enable = true;
 
-        # Git & Version Control
         git = {
           enable = true;
-          gitsigns.enable = true;
-          gitsigns.codeActions.enable = false;
+          gitsigns = {
+            enable = true;
+            codeActions.enable = false;
+          };
         };
 
-        # Minimap & Dashboard
-        minimap = {minimap-vim.enable = false;};
-        dashboard = {startify.enable = true;};
+        minimap = {
+          minimap-vim.enable = false;
+        };
+        dashboard = {
+          startify.enable = true;
+        };
 
-        # Notifications & Utility
-        notify = {nvim-notify.enable = true;};
+        notify = {
+          nvim-notify = {
+            enable = true;
+            setupOpts = {};
+          };
+        };
+
         utility = {
           diffview-nvim.enable = true;
           motion = {
@@ -159,49 +201,68 @@ in {
           };
         };
 
-        # Notes & Comments
-        notes = {todo-comments.enable = true;};
-        comments = {comment-nvim.enable = true;};
+        notes = {
+          todo-comments.enable = true;
+        };
+        comments = {
+          comment-nvim.enable = true;
+        };
 
-        # Terminal & Session Management
         terminal = {
           toggleterm = {
             enable = true;
             lazygit.enable = true;
+            setupOpts = {};
           };
         };
 
-        # UI Enhancements
         ui = {
           borders.enable = true;
-          noice.enable = true;
+          noice = {
+            enable = true;
+            setupOpts = {};
+          };
           colorizer.enable = true;
           illuminate.enable = true;
           modes-nvim.enable = false;
           smartcolumn = {
             enable = false;
-            setupOpts.custom_colorcolumn = {
-              nix = "110";
-              ruby = "120";
-              java = "130";
-              go = ["90" "130"];
+            setupOpts = {
+              custom_colorcolumn = {
+                nix = "110";
+                ruby = "120";
+                java = "130";
+                go = [
+                  "90"
+                  "130"
+                ];
+              };
             };
           };
-          fastaction.enable = true;
+
+          fastaction.enable = true; # Replaces nvim-code-action-menu
+
           breadcrumbs = {
             enable = true;
             navbuddy.enable = true;
+            lualine.winbar = {
+              enable = true; # Controls navic integration with lualine
+              alwaysRender = false;
+            };
           };
         };
 
-        # Disable unnecessary features
         assistant = {
           chatgpt.enable = false;
           copilot.enable = false;
         };
-        session = {nvim-session-manager.enable = false;};
-        gestures = {gesture-nvim.enable = false;};
-        presence = {neocord.enable = false;};
+
+        session = {
+          nvim-session-manager.enable = false;
+        };
+        gestures = {
+          gesture-nvim.enable = false;
+        };
       };
     };
   };

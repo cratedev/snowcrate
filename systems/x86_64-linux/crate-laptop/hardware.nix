@@ -3,19 +3,28 @@
   lib,
   modulesPath,
   inputs,
+  pkgs,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.nixos-hardware.nixosModules.dell-xps-15-9510
   ];
 
   boot = {
-    kernelModules = [];
-    extraModulePackages = [];
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ ];
+    extraModulePackages = [ ];
     initrd = {
-      availableKernelModules = ["xhci_pci" "thunderbolt" "vmd" "nvme" "rtsx_pci_sdmmc"];
-      kernelModules = [];
+      availableKernelModules = [
+        "xhci_pci"
+        "thunderbolt"
+        "vmd"
+        "nvme"
+        "rtsx_pci_sdmmc"
+      ];
+      kernelModules = [ ];
       postResumeCommands = lib.mkAfter ''
         mkdir -p /btrfs_tmp
         mount -o subvol=/ /dev/disk/by-uuid/72eab434-9628-4d22-ae0f-b08318622b22 /btrfs_tmp

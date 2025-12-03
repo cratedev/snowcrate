@@ -2,6 +2,7 @@
   config,
   lib,
   modulesPath,
+  pkgs,
   ...
 }: {
   imports = [
@@ -9,6 +10,7 @@
   ];
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = ["kvm-amd"];
     extraModulePackages = [];
     initrd = {
