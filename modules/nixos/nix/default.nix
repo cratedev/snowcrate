@@ -28,6 +28,7 @@ in {
         log-lines = 50;
         max-jobs = "auto";
         cores = 0;
+        eval-cores = 0;
         keep-outputs = true;
         builders-use-substitutes = true;
         auto-optimise-store = true;
