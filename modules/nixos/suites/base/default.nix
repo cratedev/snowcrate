@@ -16,7 +16,6 @@ in {
     ${namespace} = {
       desktop = {
         niri.enable = true;
-        hyprland.enable = false;
         display-manager = {
           sddm = {
             enable = true;

@@ -10,7 +10,7 @@ default:
 # Rebuilds
 [group('nix')]
 switch:
-    nh os switch --hostname {{hostname}} {{flake_path}}
+    nh os switch --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0 --eval-jobs 4
 
 # Flake Update
 [group('nix')]
@@ -20,8 +20,7 @@ update:
 # Test
 [group('nix')]
 test:
-    nh os test --hostname {{hostname}} {{flake_path}}
-
+    nh os test --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0 --eval-jobs 4
 
 # Update specific input
 # Usage: just upp nixpkgs
