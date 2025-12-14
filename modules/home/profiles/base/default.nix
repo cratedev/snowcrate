@@ -29,6 +29,7 @@ with lib.${namespace}; {
         obsidian.enable = true;
         discord.enable = true;
         nautilus.enable = true;
+        orca.enable = true;
       };
 
       media = {

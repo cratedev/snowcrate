@@ -46,6 +46,7 @@ in {
           "unraid"
           "snowcrate"
           "documents"
+          ".steam"
           ".config/chromium"
           ".config/vesktop"
           ".config/spotify"
