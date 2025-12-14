@@ -47,6 +47,7 @@ in {
           "snowcrate"
           "documents"
           ".steam"
+          ".games"
           ".config/chromium"
           ".config/vesktop"
           ".config/spotify"

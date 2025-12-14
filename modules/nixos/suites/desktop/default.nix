@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  pkgs,
   ...
 }:
 with lib;
@@ -20,5 +21,9 @@ in {
         steam.enable = true;
       };
     };
+    programs.xwayland.enable = true;
+    environment.systemPackages = with pkgs; [
+      xwayland-satellite
+    ];
   };
 }
