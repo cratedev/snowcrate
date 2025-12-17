@@ -25,6 +25,7 @@ in {
         "/var/lib/bluetooth"
         "/var/lib/fprint"
         "/etc/NetworkManager/system-connections"
+        "/var/lib/tailscale"
         {
           directory = "/var/lib/colord";
           user = "colord";
@@ -50,14 +51,13 @@ in {
           "games"
           ".config/chromium"
           ".config/vesktop"
-          ".config/spotify"
           ".config/1Password"
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".config/DankMaterialShell"
           ".local/share/fish"
+          ".config/fish"
           ".local/state/nvf/shada" # MRU History
-          ".local/state/caelestia"
           ".local/state/DankMaterialShell"
           ".local/cache/zellij" # zellij session
           ".zen"

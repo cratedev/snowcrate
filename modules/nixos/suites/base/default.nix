@@ -49,6 +49,7 @@ in {
         portals.enable = true;
         beszel.enable = true;
         gvfs.enable = true;
+        tailscale.enable = true;
       };
       security = {
         pam.enable = true;

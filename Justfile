@@ -1,4 +1,4 @@
-set shell := ["nu", "-c"]
+set shell := ["fish", "-c"]
 flake_path := justfile_directory()
 hostname := `hostname`
 home_manager_output := "matt@${hostname}"
@@ -10,7 +10,7 @@ default:
 # Rebuilds
 [group('nix')]
 switch:
-    nh os switch --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0 --eval-jobs 4
+    nh os switch --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
 
 # Flake Update
 [group('nix')]
@@ -20,18 +20,17 @@ update:
 # Test
 [group('nix')]
 test:
-    nh os test --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0 --eval-jobs 4
+    nh os test --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
 
 # Remote Test
 [group('nix')]
-rtest:
-    nh os test --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0 --eval-jobs 4
+remotetest:
+    nh os test --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
 
 # Remote Switch
 [group('nix')]
-rswitch:
-    nh os switch --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0 --eval-jobs 4
-
+remoteswitch:
+    nh os switch --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
 
 # Update specific input
 # Usage: just upp nixpkgs

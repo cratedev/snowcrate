@@ -19,11 +19,13 @@ in {
         interactiveShellInit = ''
           set fish_greeting # Disable greeting
         '';
-        shellAliases = {
-          ntest = "nh os test";
-          nswitch = "nh os switch";
-          rtest = "nh os rtest";
-          rswitch = "nh os rswitch";
+        functions = {
+          jf = "just -f ~/snowcrate/Justfile $argv";
+          ntest = "jf test";
+          nswitch = "jf switch";
+          rtest = "jf remotetest";
+          rswitch = "jf remoteswitch";
+          ts = "sudo tailscale up --accept-routes";
         };
       };
     };
