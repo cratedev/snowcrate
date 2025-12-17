@@ -22,6 +22,8 @@ in {
         shellAliases = {
           ntest = "nh os test";
           nswitch = "nh os switch";
+          rtest = "nh os rtest";
+          rswitch = "nh os rswitch";
         };
       };
     };
