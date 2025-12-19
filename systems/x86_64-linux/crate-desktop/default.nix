@@ -31,6 +31,11 @@ with lib.${namespace}; {
       enable = false;
       checkReversePath = "loose";
     };
+    interfaces = {
+      enp5s0 = {
+        wakeOnLan.enable = true;
+      };
+    };
   };
 
   system.stateVersion = "24.05";
