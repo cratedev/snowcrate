@@ -18,9 +18,10 @@ in {
         niri.enable = true;
         display-manager = {
           sddm = {
-            enable = true;
+            enable = false;
             wayland = true;
           };
+          dms-greeter.enable = true;
         };
       };
       apps = {

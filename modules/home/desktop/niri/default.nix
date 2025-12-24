@@ -26,24 +26,7 @@ in {
           {command = ["zen"];}
           {command = ["uwsm" "app" "--" "1password" "--silent"];}
           {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
-          {
-            command = [
-              "bash"
-              "-c"
-              ''
-                uwsm app -- dms run &
-                # wait until dms socket appears before calling IPC
-                for i in $(seq 1 10); do
-                  if uwsm app -- dms ipc ping >/dev/null 2>&1; then
-                    uwsm app -- dms ipc call lock lock
-                    exit 0
-                  fi
-                  sleep 0.5
-                done
-                echo "dms did not start in time" >&2
-              ''
-            ];
-          }
+          {command = ["uwsm" "app" "--" "dms" "run"];}
         ];
         prefer-no-csd = true;
 

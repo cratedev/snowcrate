@@ -59,7 +59,7 @@ in {
           ".config/fish"
           ".local/state/nvf/shada" # MRU History
           ".local/state/DankMaterialShell"
-          ".local/cache/zellij" # zellij session
+          ".cache/zellij" # zellij session
           ".zen"
           {
             directory = "whiskeyvault";
