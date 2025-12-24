@@ -90,7 +90,9 @@ in {
             enable = true;
             lsp = {
               enable = true;
-              server = "nixd";
+              servers = [
+                "nixd"
+              ];
             };
           };
           assembly.enable = false;
