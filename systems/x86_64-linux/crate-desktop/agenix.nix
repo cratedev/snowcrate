@@ -36,6 +36,12 @@
         owner = "matt";
         group = "users";
       };
+      beszel-env = {
+        file = "${inputs.mysecrets}/secrets/env/beszel.age";
+        mode = "400";
+        owner = "matt";
+        group = "users";
+      };
     };
     identityPaths = [
       "/persist/etc/ssh/ssh_host_ed25519_key"

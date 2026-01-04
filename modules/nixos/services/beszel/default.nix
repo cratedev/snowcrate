@@ -15,15 +15,9 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [beszel];
-    systemd.services.beszel-agent = {
-      description = "Beszel Agent";
-      wantedBy = ["multi-user.target"];
-      after = ["network.target"];
-      serviceConfig = {
-        ExecStart = "${pkgs.beszel}/bin/beszel-agent --key='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINojBy0FFGbrpw85MQMPGFx3s1p+hSmkMP0QSXVfDPxB'";
-        Environment = "HUB_URL=https://monitor.crate.dev";
-        Restart = "always";
-      };
+    services.beszel.agent = {
+      enable = true;
+      environmentFile = config.age.secrets.beszel-env.path;
     };
   };
 }

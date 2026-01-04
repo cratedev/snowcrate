@@ -534,11 +534,11 @@
     "mysecrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1762846770,
-        "narHash": "sha256-mvcnPWG9s34NBGU3wEYJsIuvAcNxp/VSbZJTTZ5zJzo=",
+        "lastModified": 1767502475,
+        "narHash": "sha256-uKrtQOev9oRejTg1fmOAu3/tnR/YZYINZWsG57fpBTI=",
         "ref": "refs/heads/master",
-        "rev": "336b084e9593a5520077c1fcc489f903a44b2599",
-        "revCount": 16,
+        "rev": "99a98d08e85209e81838c4b14ae1172d360ab5a3",
+        "revCount": 18,
         "type": "git",
         "url": "ssh://git@github.com/cratedev/nix-secrets"
       },
@@ -1104,11 +1104,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1767471827,
-        "narHash": "sha256-72DL50LDA7X/p+08EMdOkJ14huxy3NAfgp6QbR7m214=",
+        "lastModified": 1767502237,
+        "narHash": "sha256-rRrn9I4H692troUl5pBtE3Y5mG2msSMU/2ro7+ZQrFM=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "9215d4e7c0b470cfe97ee791bbf52ce6522b51c0",
+        "rev": "e3efa5e2b53982f985044062c98426ec75d6695b",
         "type": "github"
       },
       "original": {
