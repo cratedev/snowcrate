@@ -27,7 +27,7 @@ with lib.${namespace}; {
         ghostty.enable = true;
         zen.enable = true;
         obsidian.enable = true;
-        discord.enable = true;
+        discord.enable = false;
         nautilus.enable = true;
         orca.enable = true;
       };
