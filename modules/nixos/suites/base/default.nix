@@ -16,17 +16,12 @@ in {
     ${namespace} = {
       desktop = {
         niri.enable = true;
-        display-manager = {
-          sddm = {
-            enable = false;
-            wayland = true;
-          };
-          dms-greeter.enable = true;
-        };
+        addons.dms.enable = true;
+        display-manager.dms-greeter.enable = true;
       };
       apps = {
         _1password.enable = true;
-        managarr.enable = true;
+        managarr.enable = false;
       };
       tools = {
         git.enable = true;
@@ -36,9 +31,7 @@ in {
         nh.enable = true;
         impermanence.enable = true;
       };
-      theming = {
-        stylix.enable = true;
-      };
+      theming.stylix.enable = true;
       hardware = {
         audio.enable = true;
         networking.enable = true;

@@ -14,10 +14,7 @@ with lib.${namespace}; {
     ${namespace} = {
       desktop = {
         niri.enable = true;
-        addons = {
-          dank.enable = true;
-          gtk.enable = true;
-        };
+        addons.gtk.enable = true;
       };
       user.enable = true;
       xdg.enable = true;
@@ -29,12 +26,12 @@ with lib.${namespace}; {
         obsidian.enable = true;
         discord.enable = false;
         nautilus.enable = true;
-        orca.enable = true;
+        orca.enable = false;
       };
 
       media = {
         ytmusic.enable = true;
-        hypnotix.enable = true;
+        hypnotix.enable = false;
       };
 
       cli = {
@@ -45,7 +42,7 @@ with lib.${namespace}; {
         fzf.enable = true;
         just.enable = true;
         env.enable = true;
-        managarr.enable = true;
+        managarr.enable = false;
         nix-index.enable = true;
       };
 

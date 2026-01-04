@@ -22,29 +22,7 @@ in {
     services.gnome.gnome-keyring.enable = true;
     security = {
       polkit.enable = true;
-      pam.enableFscrypt = false;
     };
-
-    security.pam.services = {
-      login.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
-      sudo.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
-      polkit-1.fprintAuth = lib.mkIf config.${namespace}.hardware.fingerprint.enable true;
-
-      sddm-autologin.enableGnomeKeyring = true;
-
-      login.enableGnomeKeyring = lib.mkForce false;
-      sddm.enableGnomeKeyring = lib.mkForce false;
-      sudo.enableGnomeKeyring = lib.mkForce false;
-      polkit-1.enableGnomeKeyring = lib.mkForce false;
-    };
-
-    # Create symlink for pam_fprintd.so in the PAM security directory
-    system.activationScripts.fixPamFprintd = lib.stringAfter ["users"] ''
-      ln -sf ${pkgs.fprintd}/lib/security/pam_fprintd.so \
-             /run/current-system/sw/lib/security/pam_fprintd.so 2>/dev/null || true
-    '';
-
-    # Ensure the directory exists
     environment.pathsToLink = ["/lib/security"];
 
     # Polkit agent service

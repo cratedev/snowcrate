@@ -44,7 +44,6 @@ in {
 
       users.matt = {
         directories = [
-          "unraid"
           "snowcrate"
           "documents"
           ".steam"
@@ -55,10 +54,10 @@ in {
           ".config/obsidian"
           ".config/YouTube Music Desktop App"
           ".config/DankMaterialShell"
+          ".local/state/DankMaterialShell"
           ".local/share/fish"
           ".config/fish"
           ".local/state/nvf/shada" # MRU History
-          ".local/state/DankMaterialShell"
           ".cache/zellij" # zellij session
           ".zen"
           {
