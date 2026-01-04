@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEMP_KEYS_DIR="$HOME/temp-deployment-keys"
 PERSIST_DIR="$TEMP_KEYS_DIR/persist/etc/ssh"
 SECRETS_DIR="$HOME/nix-secrets/secrets"
-TARGET_HOST="nixos@10.0.0.50"
+TARGET_HOST="nixos@10.0.0.155"
 FLAKE_TARGET="$HOME/snowcrate/.#crate-laptop"
 SECRETS_REPO="git@github.com:cratedev/nix-secrets"
 

@@ -5,8 +5,7 @@
   inputs,
   pkgs,
   ...
-}:
-{
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.nixos-hardware.nixosModules.dell-xps-15-9510
@@ -14,8 +13,8 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = [ ];
-    extraModulePackages = [ ];
+    kernelModules = [];
+    extraModulePackages = [];
     initrd = {
       availableKernelModules = [
         "xhci_pci"
@@ -24,10 +23,10 @@
         "nvme"
         "rtsx_pci_sdmmc"
       ];
-      kernelModules = [ ];
+      kernelModules = [];
       postResumeCommands = lib.mkAfter ''
         mkdir -p /btrfs_tmp
-        mount -o subvol=/ /dev/disk/by-uuid/72eab434-9628-4d22-ae0f-b08318622b22 /btrfs_tmp
+        mount -o subvol=/ /dev/nvme1n1p2 /btrfs_tmp
 
         delete_subvolume_recursively() {
         	IFS=$'\n'
