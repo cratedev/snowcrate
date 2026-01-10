@@ -1,6 +1,4 @@
-{ lib, ... }:
-
-rec {
+{lib, ...}: rec {
   ## Known SSH host keys
   knownHosts = {
     ## unRAID
@@ -9,9 +7,9 @@ rec {
     };
 
     ## UDM-P
-    "10.0.0.1" = {
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1PtjF5nlFA9cdU+PWZ1tA88MdaoXJmwvoT83WSyj1u";
-    };
+    #"10.0.0.1" = {
+    #  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1PtjF5nlFA9cdU+PWZ1tA88MdaoXJmwvoT83WSyj1u";
+    #};
 
     ## crate-desktop system key
     "10.0.1.19" = {
