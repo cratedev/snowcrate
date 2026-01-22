@@ -20,7 +20,7 @@ in {
   config = mkIf cfg.enable {
     stylix = {
       enable = true;
-      autoEnable = true;
+      autoEnable = false;
       polarity = "dark";
       fonts.sizes = {applications = 10;};
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${stylixTheme}.yaml";

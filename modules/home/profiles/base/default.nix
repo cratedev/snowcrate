@@ -14,7 +14,7 @@ with lib.${namespace}; {
     ${namespace} = {
       desktop = {
         niri.enable = true;
-        addons.gtk.enable = true;
+        addons.gtk.enable = false;
       };
       user.enable = true;
       xdg.enable = true;
@@ -23,6 +23,7 @@ with lib.${namespace}; {
         firefox.enable = true;
         ghostty.enable = true;
         zen.enable = true;
+        zen.enableDankMaterialShell = true;
         obsidian.enable = true;
         discord.enable = false;
         nautilus.enable = true;

@@ -16,17 +16,8 @@ in {
     stylix = {
       autoEnable = false;
       targets = {
-        firefox = {
-          enable = true;
-          profileNames = ["matt"];
-        };
-        ghostty.enable = true;
-        btop.enable = true;
-        fzf.enable = true;
-        gtk.enable = true;
-        niri.enable = true;
         zellij.enable = true;
-        nvf.enable = true;
+        gtk.enable = false;
       };
     };
   };

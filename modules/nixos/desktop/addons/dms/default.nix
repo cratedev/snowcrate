@@ -20,7 +20,7 @@ in {
       enable = true;
       plugins = {
         dankBatteryAlerts.enable = true;
-        danClight.enable = true;
+        dankClight.enable = true;
         webSearch.enable = true;
         dankLauncherKeys.enable = true;
         nixMonitor.enable = true;

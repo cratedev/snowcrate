@@ -20,6 +20,7 @@ in {
       settings.vim = {
         theme = {
           enable = true;
+          transparent = true;
         };
 
         options = {

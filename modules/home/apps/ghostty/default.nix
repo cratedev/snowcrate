@@ -28,6 +28,7 @@ in {
           window-padding-balance = "true";
           shell-integration = "detect";
           confirm-close-surface = "false";
+          theme = "dankcolors";
         };
       };
     };
