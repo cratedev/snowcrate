@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  inputs,
   ...
 }:
 with lib;
@@ -12,9 +13,18 @@ in {
     enable = mkBoolOpt false "Whether or not to enable dms";
   };
 
+  imports = [inputs.dms-plugin-registry.modules.default];
+
   config = mkIf cfg.enable {
     programs.dms-shell = {
       enable = true;
+      plugins = {
+        dankBatteryAlerts.enable = true;
+        danClight.enable = true;
+        webSearch.enable = true;
+        dankLauncherKeys.enable = true;
+        nixMonitor.enable = true;
+      };
     };
   };
 }

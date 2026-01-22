@@ -23,7 +23,7 @@ with lib.${namespace}; {
       name = "matt";
       fullName = "Matthew Henderson";
       email = "matt@crate.dev";
-      extraGroups = ["wheel" "docker"];
+      extraGroups = ["wheel" "docker" "input"];
       hashedPassword = "$6$0hEDoOmgboCsWYUO$pvKuFdpVIyJYNeLE.Eqg.eGed5ixdvjgDbkdjcpY93XM4aPNj68lyM1yR//7PXNV4Mzz841QII4DYl2.iHo6z.";
     };
   };

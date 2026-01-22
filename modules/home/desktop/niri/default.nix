@@ -20,7 +20,7 @@ in {
     programs.niri = {
       settings = {
         environment = {
-          "DMS_DISABLE_MATUGEN" = "1";
+          #  "DMS_DISABLE_MATUGEN" = "1";
         };
         inherit (cfg) outputs;
         hotkey-overlay.skip-at-startup = true;

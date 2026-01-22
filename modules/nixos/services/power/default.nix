@@ -17,6 +17,7 @@ in {
       power-profiles-daemon.enable = false;
       thermald.enable = false;
       tlp.enable = false;
+      upower.enable = true;
 
       auto-cpufreq = {
         enable = true;

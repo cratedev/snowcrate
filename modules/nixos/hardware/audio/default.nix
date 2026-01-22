@@ -22,17 +22,9 @@ in {
       jack.enable = true;
     };
 
+    security.rtkit.enable = true;
     environment.systemPackages = with pkgs; [pulsemixer pavucontrol];
 
     crate.user.extraGroups = ["audio"];
-
-    #    crate.home.extraOptions = {
-    #      systemd.user.services.mpris-proxy = {
-    #        Unit.Description = "Mpris proxy";
-    #        Unit.After = [ "network.target" "sound.target" ];
-    #        Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-    #        Install.WantedBy = [ "default.target" ];
-    #      };
-    #    };
   };
 }
