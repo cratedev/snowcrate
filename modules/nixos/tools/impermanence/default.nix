@@ -26,12 +26,6 @@ in {
         "/var/lib/fprint"
         "/etc/NetworkManager/system-connections"
         "/var/lib/tailscale"
-        {
-          directory = "/var/lib/colord";
-          user = "colord";
-          group = "colord";
-          mode = "u=rwx,g=rx,o=";
-        }
       ];
 
       files = [

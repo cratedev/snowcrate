@@ -1,6 +1,8 @@
 show_startup_tips false
 show_release_notes false
 
+theme "catppuccin-mocha-lavender"
+
 keybinds clear-defaults=true {
   normal { }
   pane {

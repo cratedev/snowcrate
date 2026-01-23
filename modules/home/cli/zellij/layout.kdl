@@ -2,48 +2,75 @@ layout {
   default_tab_template {
     pane size=1 borderless=true {
       plugin location="file:$HOME/.config/zellij/plugins/zjstatus.wasm" {
-        format_left   "{mode}#[bg=default] {session}"
+        // Da One Ocean theme (base16)
+        color_base00 "#171726"
+        color_base01 "#22273d"
+        color_base02 "#525866"
+        color_base03 "#878d96"
+        color_base04 "#c8c8c8"
+        color_base05 "#ffffff"
+        color_base06 "#ffffff"
+        color_base07 "#ffffff"
+        color_base08 "#fa7883"
+        color_base09 "#ffc387"
+        color_base0A "#ff9470"
+        color_base0B "#98c379"
+        color_base0C "#8af5ff"
+        color_base0D "#6bb8ff"
+        color_base0E "#e799ff"
+        color_base0F "#b3684f"
+
+        format_left   "#[fg={color_base00},bold]{session}"
         format_center "{tabs}"
         format_right  "{command_git_branch} {datetime}"
         format_space  ""
 
+        border_enabled  "false"
+        border_char     "─"
+        border_format   "#[fg={color_base00}]{char}"
+        border_position "top"
+
         hide_frame_for_single_pane "false"
 
-        mode_normal        "{name}"
-        mode_locked        "{name}"
-        mode_resize        "{name}"
-        mode_pane          "{name}"
-        mode_tab           "{name}"
-        mode_scroll        "{name}"
-        mode_enter_search  "{name}"
-        mode_search        "{name}"
-        mode_rename_tab    "{name}"
-        mode_rename_pane   "{name}"
-        mode_session       "{name}"
-        mode_move          "{name}"
-        mode_prompt        "{name}"
-        mode_tmux          "{name}"
+        mode_normal        "#[bg={color_base0B},fg={color_base02},bold] NORMAL#[bg={color_base03},fg={color_base0B}]█"
+        mode_locked        "#[bg={color_base04},fg={color_base02},bold] LOCKED #[bg={color_base03},fg={color_base04}]█"
+        mode_resize        "#[bg={color_base08},fg={color_base02},bold] RESIZE#[bg={color_base03},fg={color_base08}]█"
+        mode_pane          "#[bg={color_base0D},fg={color_base02},bold] PANE#[bg={color_base03},fg={color_base0D}]█"
+        mode_tab           "#[bg={color_base07},fg={color_base02},bold] TAB#[bg={color_base03},fg={color_base07}]█"
+        mode_scroll        "#[bg={color_base0A},fg={color_base02},bold] SCROLL#[bg={color_base03},fg={color_base0A}]█"
+        mode_enter_search  "#[bg={color_base0D},fg={color_base02},bold] ENT-SEARCH#[bg={color_base03},fg={color_base0D}]█"
+        mode_search        "#[bg={color_base0D},fg={color_base02},bold] SEARCHARCH#[bg={color_base03},fg={color_base0D}]█"
+        mode_rename_tab    "#[bg={color_base07},fg={color_base02},bold] RENAME-TAB#[bg={color_base03},fg={color_base07}]█"
+        mode_rename_pane   "#[bg={color_base0D},fg={color_base02},bold] RENAME-PANE#[bg={color_base03},fg={color_base0D}]█"
+        mode_session       "#[bg={color_base0E},fg={color_base02},bold] SESSION#[bg={color_base03},fg={color_base0E}]█"
+        mode_move          "#[bg={color_base0F},fg={color_base02},bold] MOVE#[bg={color_base03},fg={color_base0F}]█"
+        mode_prompt        "#[bg={color_base0D},fg={color_base02},bold] PROMPT#[bg={color_base03},fg={color_base0D}]█"
+        mode_tmux          "#[bg={color_base09},fg={color_base02},bold] TMUX#[bg={color_base03},fg={color_base09}]█"
 
-        tab_normal              " {index}  {name}{floating_indicator} "
-        tab_normal_fullscreen   " {index}  {name}{fullscreen_indicator} "
-        tab_normal_sync         " {index}  {name}{sync_indicator} "
+        // formatting for inactive tabs
+        tab_normal              "#[bg={color_base01},fg={color_base02}] #[bg={color_base01},fg={color_base05},bold]{index} #[bg={color_base00},fg={color_base05},bold] {name}{floating_indicator}#[bg={color_base00},fg={color_base05},bold] "
+        tab_normal_fullscreen   "#[bg={color_base03},fg={color_base0D}] #[bg={color_base0D},fg={color_base02},bold]{index} #[bg={color_base02},fg={color_base05},bold] {name}{fullscreen_indicator}#[bg={color_base09},fg={color_base02},bold] "
+        tab_normal_sync         "#[bg={color_base03},fg={color_base0D}] #[bg={color_base0D},fg={color_base02},bold]{index} #[bg={color_base02},fg={color_base05},bold] {name}{sync_indicator}#[bg={color_base09},fg={color_base02},bold] "
 
-        tab_active              " {index}  {name}{floating_indicator} "
-        tab_active_fullscreen   " {index}  {name}{fullscreen_indicator} "
-        tab_active_sync         " {index}  {name}{sync_indicator} "
+        // formatting for the current active tab
+        tab_active              "#[bg={color_base0D},fg={color_base02}] #[bg={color_base0D},fg={color_base02},bold]{index} #[bg={color_base02},fg={color_base05},bold] {name}{floating_indicator}#[bg={color_base02},fg={color_base05},bold] "
+        tab_active_fullscreen   "#[bg={color_base0D},fg={color_base09}] #[bg={color_base09},fg={color_base02},bold]{index} #[bg={color_base02},fg={color_base05},bold] {name}{fullscreen_indicator}#[bg={color_base0D},fg={color_base02},bold] "
+        tab_active_sync         "#[bg={color_base0D},fg={color_base09}] #[bg={color_base09},fg={color_base02},bold]{index} #[bg={color_base02},fg={color_base05},bold] {name}{sync_indicator}#[bg={color_base0D},fg={color_base02},bold] "
 
-        tab_separator           " "
+        // separator between the tabs
+        tab_separator           "#[bg={color_base00}] "
 
+        // indicators
         tab_sync_indicator       " "
         tab_fullscreen_indicator " 󰊓"
         tab_floating_indicator   " 󰹙"
 
         command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
-        command_git_branch_format      " {stdout} "
+        command_git_branch_format      "#[fg=blue] {stdout} "
         command_git_branch_interval    "10"
         command_git_branch_rendermode  "static"
 
-        datetime        " {format} "
+        datetime        "#[fg=#6C7086,bold] {format} "
         datetime_format "%A, %d %b %Y %H:%M"
         datetime_timezone "America/Toronto"
       }
