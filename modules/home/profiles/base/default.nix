@@ -46,9 +46,6 @@ with lib.${namespace}; {
         managarr.enable = false;
         nix-index.enable = true;
       };
-
-      theming.stylix.enable = true;
-
       tools = {
         nvf.enable = true;
         git.enable = true;

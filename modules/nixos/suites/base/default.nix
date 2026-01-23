@@ -31,7 +31,6 @@ in {
         nh.enable = true;
         impermanence.enable = true;
       };
-      theming.stylix.enable = true;
       hardware = {
         audio.enable = true;
         networking.enable = true;
