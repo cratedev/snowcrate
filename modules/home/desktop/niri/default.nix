@@ -26,6 +26,7 @@ in {
         hotkey-overlay.skip-at-startup = true;
 
         spawn-at-startup = [
+          {command = ["systemctl" "--user" "import-environment"];}
           {command = ["zen"];}
           {command = ["uwsm" "app" "--" "1password" "--silent"];}
           {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
