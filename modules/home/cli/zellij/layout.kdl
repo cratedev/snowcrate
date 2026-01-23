@@ -1,0 +1,60 @@
+layout {
+  default_tab_template {
+    pane size=1 borderless=true {
+      plugin location="file:$HOME/.config/zellij/plugins/zjstatus.wasm" {
+        format_left   "{mode}#[bg=default] {session}"
+        format_center "{tabs}"
+        format_right  "{command_git_branch} {datetime}"
+        format_space  ""
+
+        hide_frame_for_single_pane "false"
+
+        mode_normal        "{name}"
+        mode_locked        "{name}"
+        mode_resize        "{name}"
+        mode_pane          "{name}"
+        mode_tab           "{name}"
+        mode_scroll        "{name}"
+        mode_enter_search  "{name}"
+        mode_search        "{name}"
+        mode_rename_tab    "{name}"
+        mode_rename_pane   "{name}"
+        mode_session       "{name}"
+        mode_move          "{name}"
+        mode_prompt        "{name}"
+        mode_tmux          "{name}"
+
+        tab_normal              " {index}  {name}{floating_indicator} "
+        tab_normal_fullscreen   " {index}  {name}{fullscreen_indicator} "
+        tab_normal_sync         " {index}  {name}{sync_indicator} "
+
+        tab_active              " {index}  {name}{floating_indicator} "
+        tab_active_fullscreen   " {index}  {name}{fullscreen_indicator} "
+        tab_active_sync         " {index}  {name}{sync_indicator} "
+
+        tab_separator           " "
+
+        tab_sync_indicator       " "
+        tab_fullscreen_indicator " 󰊓"
+        tab_floating_indicator   " 󰹙"
+
+        command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+        command_git_branch_format      " {stdout} "
+        command_git_branch_interval    "10"
+        command_git_branch_rendermode  "static"
+
+        datetime        " {format} "
+        datetime_format "%A, %d %b %Y %H:%M"
+        datetime_timezone "America/Toronto"
+      }
+    }
+    pane split_direction="horizontal" {
+      borderless false
+    }
+    pane {
+      borderless true
+      size 1
+      plugin location="zellij:status-bar"
+    }
+  }
+}

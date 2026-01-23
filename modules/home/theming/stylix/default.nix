@@ -16,8 +16,7 @@ in {
     stylix = {
       autoEnable = false;
       targets = {
-        zellij.enable = true;
-        gtk.enable = false;
+        #zellij.enable = true;
       };
     };
   };
