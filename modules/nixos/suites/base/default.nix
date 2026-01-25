@@ -21,7 +21,6 @@ in {
       };
       apps = {
         _1password.enable = true;
-        managarr.enable = false;
       };
       tools = {
         git.enable = true;

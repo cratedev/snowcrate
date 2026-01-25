@@ -20,36 +20,34 @@ with lib.${namespace}; {
       xdg.enable = true;
 
       apps = {
-        firefox.enable = true;
+        firefox.enable = false;
         ghostty.enable = true;
         zen.enable = true;
-        zen.enableDankMaterialShell = true;
         obsidian.enable = true;
-        discord.enable = false;
+        discord.enable = true;
         nautilus.enable = true;
         orca.enable = false;
       };
 
       media = {
         ytmusic.enable = true;
-        hypnotix.enable = false;
       };
 
       cli = {
-        nushell.enable = true;
+        nushell.enable = false;
         fish.enable = true;
+        starship.enable = true;
+        zoxide.enable = true;
         btop.enable = true;
         zellij.enable = true;
         fzf.enable = true;
         just.enable = true;
         env.enable = true;
-        managarr.enable = false;
         nix-index.enable = true;
       };
       tools = {
         nvf.enable = true;
         git.enable = true;
-        wlsunset.enable = true;
       };
     };
   };

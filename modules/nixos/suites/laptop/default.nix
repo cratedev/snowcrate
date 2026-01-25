@@ -2,7 +2,6 @@
   config,
   lib,
   namespace,
-  pkgs,
   ...
 }:
 with lib;
@@ -16,18 +15,8 @@ in {
   config = mkIf cfg.enable {
     ${namespace} = {
       suites.base.enable = true;
-
       hardware.fingerprint.enable = true;
-
       services.power.enable = true;
-
-      apps = {
-        steam.enable = true;
-      };
     };
-    programs.xwayland.enable = true;
-    environment.systemPackages = with pkgs; [
-      xwayland-satellite
-    ];
   };
 }
