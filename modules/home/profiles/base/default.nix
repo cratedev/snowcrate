@@ -31,6 +31,7 @@ with lib.${namespace}; {
 
       media = {
         ytmusic.enable = true;
+        mpv.enable = true;
       };
 
       cli = {

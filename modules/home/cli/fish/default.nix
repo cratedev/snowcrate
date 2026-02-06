@@ -20,11 +20,11 @@ in {
           set fish_greeting # Disable greeting
         '';
         functions = {
-          jf = "just -f ~/snowcrate/Justfile $argv";
-          ntest = "jf test";
-          nswitch = "jf switch";
-          rtest = "jf remotetest";
-          rswitch = "jf remoteswitch";
+          #jf = "just -f ~/snowcrate/Justfile $argv";
+          ntest = "cd $NH_FLAKE && just test";
+          nswitch = "cd $NH_FLAKE && just switch";
+          rtest = "cd $NH_FLAKE && just remotetest";
+          rswitch = "cd $NH_FLAKE && just remoteswitch";
           ts = "sudo tailscale up --accept-routes";
         };
       };

@@ -21,5 +21,9 @@ in {
         configHome = "/home/${user}";
       };
     };
+
+    environment.etc."dms-greeter/config.toml".text = ''
+      default_user = "${user}"
+    '';
   };
 }

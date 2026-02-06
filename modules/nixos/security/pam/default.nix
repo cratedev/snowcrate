@@ -12,31 +12,54 @@ in {
   options.${namespace}.security.pam = with types; {
     enable = mkBoolOpt false "Whether to enable pam.";
   };
+
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       polkit_gnome
-      gnome-keyring # Needed for keyring support
-      libsecret # Provides secret-tool command
-      seahorse # GUI to manage keyrings
+      gnome-keyring
+      libsecret
+      seahorse
     ];
+
     services.gnome.gnome-keyring.enable = true;
+
     security = {
       polkit.enable = true;
-    };
-    environment.pathsToLink = ["/lib/security"];
 
-    # Polkit agent service
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = ["graphical-session.target"];
-      wants = ["graphical-session.target"];
-      after = ["graphical-session.target"];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
+      pam.services = {
+        login.fprintAuth = true;
+
+        greetd = {
+          fprintAuth = true;
+          text = mkDefault ''
+            auth       sufficient   pam_fprintd.so
+            auth       include      login
+
+            account    include      login
+            password   include      login
+            session    include      login
+          '';
+        };
+
+        login = {
+          text = mkForce ''
+            auth       sufficient   pam_fprintd.so
+            auth       required     pam_unix.so try_first_pass nullok
+            auth       optional     pam_permit.so
+
+            account    required     pam_unix.so
+
+            password   include     pam_unix.so nullok shadow
+
+            session    required     pam_env.so conffile=/etc/pam/environment readenv=0
+            session    required     pam_unix.so
+            session    required     pam_loginuid.so
+            session    optional     ${pkgs.systemd}/lib/security/pam_systemd.so
+          '';
+        };
+
+        sudo.fprintAuth = true;
+        polkit-1.fprintAuth = true;
       };
     };
   };

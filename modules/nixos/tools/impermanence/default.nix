@@ -40,6 +40,7 @@ in {
         directories = [
           "snowcrate"
           "documents"
+          "media"
           ".steam"
           "games"
           ".config/chromium"

@@ -91,6 +91,14 @@ in {
             symbol = "⊛ ";
             format = "nix [$symbol$state $name]($style) ";
           };
+          memory_usage = {
+            disabled = false;
+            threshold = 75;
+          };
+          status = {
+            disabled = false;
+            format = "[$symbol$status]($style) ";
+          };
         };
       };
     };

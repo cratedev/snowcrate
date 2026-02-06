@@ -193,7 +193,7 @@ in {
           "Mod+Minus".action = set-column-width "-10%";
           "Mod+Equal".action = set-column-width "+10%";
 
-          "Mod+I".action = sh ''grim -g "$(slurp)" /home/matt/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'';
+          "Mod+I".action = sh ''grim -g "$(slurp)" ${config.home.homeDirectory}/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'';
           "Mod+Shift+E".action = quit;
 
           "XF86AudioMicMute".action = spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
