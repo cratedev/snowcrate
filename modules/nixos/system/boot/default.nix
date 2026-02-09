@@ -14,11 +14,12 @@ in {
 
   config = mkIf cfg.enable {
     boot.loader = {
-      systemd-boot.enable = true;
-      systemd-boot.configurationLimit = 10;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+      };
       efi.canTouchEfiVariables = true;
+      systemd-boot.editor = false;
     };
-
-    boot.loader.systemd-boot.editor = false;
   };
 }

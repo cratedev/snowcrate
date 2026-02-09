@@ -28,17 +28,9 @@ in {
             email = config.${namespace}.user.email;
           };
 
-          init = {
-            defaultBranch = "master";
-          };
-
-          pull = {
-            rebase = true;
-          };
-
-          push = {
-            autoSetupRemote = true;
-          };
+          init.defaultBranch = "master";
+          pull.rebase = true;
+          push.autoSetupRemote = true;
         };
       };
     };

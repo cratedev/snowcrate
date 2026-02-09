@@ -17,16 +17,13 @@ in {
   imports = [inputs.niri.nixosModules.niri];
 
   config = mkMerge [
-    {
-      nixpkgs.overlays = [inputs.niri.overlays.niri];
-    }
+    {nixpkgs.overlays = [inputs.niri.overlays.niri];}
 
     {
       niri-flake.cache.enable = false;
       programs.niri.enable = mkDefault false;
     }
 
-    # Only enable niri when our option is true
     (mkIf cfg.enable {
       systemd.user.services.niri-flake-polkit.enable = false;
       programs.niri = {

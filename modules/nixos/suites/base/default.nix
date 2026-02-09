@@ -28,7 +28,7 @@ in {
         cliphist.enable = true;
         wlclipboard.enable = true;
         nh.enable = true;
-        impermanence.enable = true;
+        impermanence.enable = true; # probably enable per-system
       };
       hardware = {
         audio.enable = true;
