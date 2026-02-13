@@ -15,7 +15,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [gtk4 swww slurp grim];
+    home.packages = with pkgs; [xwayland-satellite gtk4 swww slurp grim];
 
     programs.niri = {
       settings = {
