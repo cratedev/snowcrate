@@ -15,7 +15,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      systemd-tui-manager
+      systemd-manager-tui
     ];
   };
 }
