@@ -15,12 +15,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [xwayland-satellite gtk4 swww slurp grim];
+    home.packages = with pkgs; [xwayland-satellite gtk4 swww slurp grim pkgs.${namespace}.dropdown-terminal-toggle];
 
     programs.niri = {
       settings = {
         environment = {
-          #  "DMS_DISABLE_MATUGEN" = "1";
         };
         inherit (cfg) outputs;
         hotkey-overlay.skip-at-startup = true;
@@ -30,7 +29,6 @@ in {
           {command = ["zen"];}
           {command = ["uwsm" "app" "--" "1password" "--silent"];}
           {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
-          #          {command = ["uwsm" "app" "--" "dms" "run"];}
         ];
         prefer-no-csd = true;
 
@@ -127,6 +125,17 @@ in {
             matches = [{app-id = "1Password";}];
             open-maximized = false;
           }
+          {
+            matches = [{title = "dropdown-terminal";}];
+            open-floating = true;
+            default-column-width = {proportion = 1.0;}; # Full width
+            default-window-height = {proportion = 0.50;}; # Half screen height
+            default-floating-position = {
+              x = 0; # Distance from left edge
+              y = 0; # Distance from top edge
+              relative-to = "bottom-left"; # Position relative to top-left corner
+            };
+          }
         ];
         binds = with config.lib.niri.actions; let
           sh = spawn "sh" "-c";
@@ -134,6 +143,8 @@ in {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
 
           "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
+          #"Mod+grave".action = spawn "ghostty" "--title=dropdown-terminal" "-e" "zellij" "attach" "--create" "dropdown";
+          "Mod+grave".action = spawn "dropdown-terminal-toggle";
           "Mod+D".action = spawn "dms" "ipc" "call" "spotlight" "toggle";
           "Mod+S".action = spawn "dms" "ipc" "call" "settings" "toggle";
           "Mod+L".action = spawn "dms" "ipc" "call" "lock" "lock";

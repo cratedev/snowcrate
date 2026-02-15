@@ -191,7 +191,9 @@ in {
         notify = {
           nvim-notify = {
             enable = true;
-            setupOpts = {};
+            setupOpts = {
+              background_colour = "#000000";
+            };
           };
         };
 
