@@ -21,6 +21,7 @@ in {
       };
       apps = {
         _1password.enable = true;
+        systemd-manager.enable = true;
       };
       tools = {
         git.enable = true;
