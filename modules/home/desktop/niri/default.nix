@@ -66,7 +66,7 @@ in {
         screenshot-path = null;
 
         animations = {
-          slowdown = 2.0;
+          slowdown = 1.5;
           window-open.kind.easing = {
             duration-ms = 250;
             curve = "ease-out-expo";
