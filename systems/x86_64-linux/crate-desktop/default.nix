@@ -18,7 +18,7 @@ with lib.${namespace}; {
       name = "matt";
       fullName = "Matthew Henderson";
       email = "matt@crate.dev";
-      extraGroups = ["wheel" "input"];
+      extraGroups = ["wheel" "docker" "input"];
       hashedPassword = "$6$0hEDoOmgboCsWYUO$pvKuFdpVIyJYNeLE.Eqg.eGed5ixdvjgDbkdjcpY93XM4aPNj68lyM1yR//7PXNV4Mzz841QII4DYl2.iHo6z.";
     };
   };
@@ -35,6 +35,15 @@ with lib.${namespace}; {
       enp5s0 = {
         wakeOnLan.enable = true;
       };
+    };
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
     };
   };
 
