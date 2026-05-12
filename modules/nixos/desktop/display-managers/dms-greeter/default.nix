@@ -19,6 +19,11 @@ in {
         enable = true;
         compositor.name = "niri";
         configHome = "/home/${user}";
+        # Save the logs to a file
+        logs = {
+          save = true;
+          path = "/tmp/dms-greeter.log";
+        };
       };
     };
 
