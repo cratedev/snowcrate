@@ -13,7 +13,7 @@ in {
     enable = mkBoolOpt false "Whether or not to enable dms";
   };
 
-  imports = [inputs.dms-plugin-registry.modules.default];
+  imports = [inputs.dms-plugin-registry.nixosModules.default];
 
   config = mkIf cfg.enable {
     programs.dms-shell = {

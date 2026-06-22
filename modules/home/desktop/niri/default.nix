@@ -25,8 +25,9 @@ in {
         hotkey-overlay.skip-at-startup = true;
 
         spawn-at-startup = [
+          {command = ["niri-session"];}
           {command = ["systemctl" "--user" "import-environment"];}
-          {command = ["zen"];}
+          {command = ["zen-beta"];}
           {command = ["uwsm" "app" "--" "1password" "--silent"];}
           {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
         ];
