@@ -17,7 +17,24 @@ in {
     services.displayManager = {
       dms-greeter = {
         enable = true;
-        compositor.name = "niri";
+        compositor = {
+          name = "niri";
+          # DMS's bundled default niri config for the greeter references a
+          # `debug { keep-max-bpc-unchanged; }` KDL node that this niri
+          # build doesn't recognize, which fails to parse and leaves the
+          # greeter's compositor unable to render (see /tmp/dms-greeter.log
+          # and `journalctl -b | grep dms-greeter/niri`). Supplying an
+          # explicit minimal config avoids that broken default entirely.
+          customConfig = ''
+            input {
+                keyboard {
+                    xkb {
+                        layout "us"
+                    }
+                }
+            }
+          '';
+        };
         configHome = "/home/${user}";
         # Save the logs to a file
         logs = {
