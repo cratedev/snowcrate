@@ -37,11 +37,6 @@
         owner = "matt";
         group = "users";
       };
-      # suite-base (pulled in via suite-server) unconditionally references
-      # this via the beszel aspect. Was missing here entirely on the old
-      # branch too -- crate-server was never build-tested before this
-      # migration. Shared file, same as crate-desktop/crate-laptop's
-      # agenix.nix (not host-specific, unlike the ssh secrets above).
       beszel-env = {
         file = "${inputs.mysecrets}/secrets/env/beszel.age";
         mode = "400";

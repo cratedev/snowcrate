@@ -1,8 +1,7 @@
 {self, ...}: {
-  # Everything every crate-* host gets, regardless of role. Mirrors the old
-  # modules/nixos/suites/base -- one file, imported, instead of ~25 separate
-  # `crate.X.enable = true;` lines repeated per host.
-  flake.modules.nixos.suite-base = {
+  flake.modules.nixos.role-base = {
+    nixpkgs.config.allowUnfree = true;
+
     imports =
       [self.modules.nixos."1password"]
       ++ (with self.modules.nixos; [
@@ -11,6 +10,7 @@
         dms-shell
         dms-greeter
         git
+        zellij
         systemd-manager
         networking
         audio
@@ -35,5 +35,32 @@
         wlclipboard
         ripgrep
       ]);
+  };
+
+  flake.modules.homeManager.role-base = {
+    imports = with self.modules.homeManager; [
+      user
+      niri
+      git
+      xdg
+      env
+      obsidian
+      ghostty
+      nautilus
+      zen
+      discord
+      carapace
+      btop
+      fzf
+      just
+      nix-index
+      starship
+      zoxide
+      zellij
+      ytmusic
+      mpv
+      nvf
+      fish
+    ];
   };
 }

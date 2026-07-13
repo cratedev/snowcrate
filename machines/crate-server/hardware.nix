@@ -17,12 +17,6 @@
       availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
       kernelModules = [];
 
-      # Was boot.initrd.postResumeCommands, which systemd stage 1 no longer
-      # supports ("Refusing to evaluate..."/hard assertion failure on
-      # current nixpkgs) -- this host was never actually build-tested
-      # before, so the break predates this migration. Converted to the same
-      # boot.initrd.systemd.services pattern crate-desktop's hardware.nix
-      # already uses for the identical rollback script.
       systemd = {
         enable = true;
         services.rollback = {

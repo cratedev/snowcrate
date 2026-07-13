@@ -1,10 +1,8 @@
-{...}: {
-  # Static config (config.kdl, layout.kdl) lives alongside this file in
-  # ./zellij/ -- safe there since import-tree only globs *.nix files.
-  # Theme data is inlined below rather than kept as a separate themes.nix:
-  # any .nix file nested under dendritic/, even in a subdirectory, would
-  # get swept up by import-tree and misinterpreted as its own flake-parts
-  # module (the same class of bug fixed earlier in this migration).
+{inputs, ...}: {
+  flake.modules.nixos.zellij = {...}: {
+    nixpkgs.overlays = [(import ../../../overlays/zellij-plugins {})];
+  };
+
   flake.modules.homeManager.zellij = {
     config,
     pkgs,
@@ -12,8 +10,7 @@
   }: {
     programs.zellij = {
       enable = true;
-      # Slightly modified official catppuccin theme -- green replaced with
-      # lavender.
+      # slightly modified official catppuccin theme, green replaced with lavender
       themes.catppuccin = {
         themes.catppuccin-mocha-lavender = {
           text_unselected = {

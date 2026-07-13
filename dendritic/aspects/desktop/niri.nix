@@ -1,10 +1,8 @@
 {inputs, ...}: {
-  # System-level compositor enablement and the user's actual KDL settings
-  # used to be two separately-toggled modules (modules/nixos/desktop/niri
-  # and modules/home/desktop/niri). Output config (eDP-1 mode) is hardcoded
-  # here since this migration currently covers only crate-laptop.
   flake.modules.nixos.niri = {pkgs, ...}: {
     imports = [inputs.niri.nixosModules.niri];
+
+    nixpkgs.overlays = [inputs.niri.overlays.niri];
 
     niri-flake.cache.enable = false;
     systemd.user.services.niri-flake-polkit.enable = false;
@@ -36,21 +34,14 @@
       pkgs.awww
       pkgs.slurp
       pkgs.grim
-      (import ../../packages/dropdown-terminal-toggle {inherit pkgs;})
+      (import ../../../packages/dropdown-terminal-toggle {inherit pkgs;})
     ];
 
     programs.niri.settings = {
       environment = {};
 
-      # Output config is host-specific -- each host's home-manager import
-      # list adds its own `programs.niri.settings.outputs.<name> = {...}`
-      # inline module (or none at all, for headless hosts).
-
       hotkey-overlay.skip-at-startup = true;
 
-      # NOTE: does not include a `niri-session` spawn-at-startup entry --
-      # that was a genuine bug on the old branch (spawning niri's own
-      # session launcher from inside an already-running niri session).
       spawn-at-startup = [
         {command = ["systemctl" "--user" "import-environment"];}
         {command = ["zen-beta"];}

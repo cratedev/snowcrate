@@ -1,8 +1,4 @@
 {inputs, ...}: {
-  # Was auto-discovered by snowfall-lib from shells/clearprints/; that
-  # convention is gone now, so it's wired up explicitly as a perSystem
-  # devShell instead. The helper script lives alongside this file in
-  # ./clearprints/ (safe there since import-tree only globs *.nix files).
   systems = ["x86_64-linux"];
 
   perSystem = {system, ...}: let
@@ -22,7 +18,7 @@
 
       shellHook = ''
         echo "Fingerprint management shell"
-        echo "Run: python dendritic/aspects/clearprints/fprint_clear_storage.py"
+        echo "Run: python dendritic/shells/clearprints/fprint_clear_storage.py"
       '';
     };
   };

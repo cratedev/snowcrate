@@ -11,21 +11,15 @@
       inputs.disko.nixosModules.disko
       inputs.home-manager.nixosModules.home-manager
 
-      # Host-specific raw config reused as-is from the pre-existing
-      # (snowfall-lib) system definition -- unchanged, not duplicated.
       ../../machines/crate-laptop/hardware.nix
       ../../machines/crate-laptop/disk-config.nix
       ../../machines/crate-laptop/agenix.nix
 
-      self.modules.nixos.suite-laptop
+      self.modules.nixos.role-laptop
+      self.modules.nixos.bluetooth
+      self.modules.nixos.libvirtd
 
       {
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.overlays = [
-          inputs.niri.overlays.niri
-          (import ../../overlays/zellij-plugins {})
-        ];
-
         users.users.matt.extraGroups = ["wheel" "input"];
 
         networking = {
@@ -38,8 +32,6 @@
           };
         };
 
-        virtualisation.libvirtd.enable = true;
-        hardware.bluetooth.enable = true;
         system.stateVersion = "24.05";
 
         home-manager = {
@@ -48,7 +40,7 @@
           extraSpecialArgs = {inherit inputs;};
 
           users.matt.imports = [
-            self.modules.homeManager.profile-laptop
+            self.modules.homeManager.role-laptop
             {
               programs.niri.settings.outputs."eDP-1" = {
                 mode = {

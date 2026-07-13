@@ -3,12 +3,6 @@
   self,
   ...
 }: {
-  # NOTE: this host was already marked "TEST CONFIGURATION" on the old
-  # branch and explicitly out of scope for fixing beyond obvious eval
-  # bugs (see storage.nix's duplicate OnCalendar fix, applied to the
-  # source file directly). disk-config.nix's `/dev/sda111` placeholder is
-  # carried over unchanged -- it still needs a real device path filled in
-  # before this host is deployable.
   flake.nixosConfigurations.crate-server = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = {inherit inputs;};
@@ -22,16 +16,10 @@
       ../../machines/crate-server/storage.nix
       ../../machines/crate-server/agenix.nix
 
-      self.modules.nixos.suite-server
+      self.modules.nixos.role-server
       self.modules.nixos.docker
 
       {
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.overlays = [
-          inputs.niri.overlays.niri
-          (import ../../overlays/zellij-plugins {})
-        ];
-
         users.users.matt.extraGroups = ["wheel" "docker" "input"];
 
         networking = {
@@ -52,7 +40,7 @@
           useUserPackages = true;
           extraSpecialArgs = {inherit inputs;};
 
-          users.matt.imports = [self.modules.homeManager.profile-server];
+          users.matt.imports = [self.modules.homeManager.role-server];
         };
       }
     ];

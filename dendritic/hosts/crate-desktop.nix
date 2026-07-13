@@ -15,16 +15,10 @@
       ../../machines/crate-desktop/disk-config.nix
       ../../machines/crate-desktop/agenix.nix
 
-      self.modules.nixos.suite-desktop
+      self.modules.nixos.role-desktop
       self.modules.nixos.docker
 
       {
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.overlays = [
-          inputs.niri.overlays.niri
-          (import ../../overlays/zellij-plugins {})
-        ];
-
         users.users.matt.extraGroups = ["wheel" "docker" "input"];
 
         networking = {
@@ -46,7 +40,7 @@
           extraSpecialArgs = {inherit inputs;};
 
           users.matt.imports = [
-            self.modules.homeManager.profile-desktop
+            self.modules.homeManager.role-desktop
             {
               programs.niri.settings.outputs."HDMI-A-1" = {
                 mode = {

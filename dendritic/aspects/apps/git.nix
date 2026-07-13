@@ -1,7 +1,4 @@
 {...}: {
-  # Previously split across modules/nixos/tools/git and modules/home/tools/git
-  # with two independent `enable` options that had to be flipped in sync,
-  # and overlapping programs.git config declared in both places.
   flake.modules.nixos.git = {pkgs, ...}: {
     environment.systemPackages = [pkgs.git-crypt];
   };
