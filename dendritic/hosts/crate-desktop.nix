@@ -3,7 +3,7 @@
   self,
   ...
 }: {
-  flake.nixosConfigurations.crate-laptop = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.crate-desktop = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = {inherit inputs;};
     modules = [
@@ -11,13 +11,12 @@
       inputs.disko.nixosModules.disko
       inputs.home-manager.nixosModules.home-manager
 
-      # Host-specific raw config reused as-is from the pre-existing
-      # (snowfall-lib) system definition -- unchanged, not duplicated.
-      ../../systems/x86_64-linux/crate-laptop/hardware.nix
-      ../../systems/x86_64-linux/crate-laptop/disk-config.nix
-      ../../systems/x86_64-linux/crate-laptop/agenix.nix
+      ../../systems/x86_64-linux/crate-desktop/hardware.nix
+      ../../systems/x86_64-linux/crate-desktop/disk-config.nix
+      ../../systems/x86_64-linux/crate-desktop/agenix.nix
 
-      self.modules.nixos.suite-laptop
+      self.modules.nixos.suite-desktop
+      self.modules.nixos.docker
 
       {
         nixpkgs.config.allowUnfree = true;
@@ -26,20 +25,19 @@
           (import ../../overlays/zellij-plugins {})
         ];
 
-        users.users.matt.extraGroups = ["wheel" "input"];
+        users.users.matt.extraGroups = ["wheel" "docker" "input"];
 
         networking = {
-          hostName = "crate-laptop";
+          hostName = "crate-desktop";
           domain = "crate.dev";
           networkmanager.enable = true;
           firewall = {
             enable = false;
             checkReversePath = "loose";
           };
+          interfaces.enp5s0.wakeOnLan.enable = true;
         };
 
-        virtualisation.libvirtd.enable = true;
-        hardware.bluetooth.enable = true;
         system.stateVersion = "24.05";
 
         home-manager = {
@@ -48,13 +46,13 @@
           extraSpecialArgs = {inherit inputs;};
 
           users.matt.imports = [
-            self.modules.homeManager.profile-laptop
+            self.modules.homeManager.profile-desktop
             {
-              programs.niri.settings.outputs."eDP-1" = {
+              programs.niri.settings.outputs."HDMI-A-1" = {
                 mode = {
-                  width = 1920;
-                  height = 1200;
-                  refresh = 60.0;
+                  width = 3840;
+                  height = 2160;
+                  refresh = 120.0;
                 };
                 scale = 1.0;
               };

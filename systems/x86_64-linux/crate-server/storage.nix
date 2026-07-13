@@ -120,7 +120,6 @@
       description = "Run NixOS mover daily";
       wantedBy = ["timers.target"];
       timerConfig = {
-        OnCalendar = "daily";
         OnCalendar = "03:00";
         Persistent = true;
       };

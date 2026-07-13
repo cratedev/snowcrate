@@ -42,14 +42,9 @@
     programs.niri.settings = {
       environment = {};
 
-      outputs."eDP-1" = {
-        mode = {
-          width = 1920;
-          height = 1200;
-          refresh = 60.0;
-        };
-        scale = 1.0;
-      };
+      # Output config is host-specific -- each host's home-manager import
+      # list adds its own `programs.niri.settings.outputs.<name> = {...}`
+      # inline module (or none at all, for headless hosts).
 
       hotkey-overlay.skip-at-startup = true;
 
