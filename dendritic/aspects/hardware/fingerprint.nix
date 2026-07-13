@@ -10,6 +10,8 @@
       tod.driver = pkgs.libfprint-2-tod1-broadcom;
     };
 
+    environment.persistence."/persist".directories = ["/var/lib/fprint"];
+
     services.udev.extraRules = ''
       # Fix fprintd USB persist issue for Broadcom fingerprint reader
       # This allows fprintd to manage USB power settings

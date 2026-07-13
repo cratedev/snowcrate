@@ -8,8 +8,6 @@
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
         "/var/log"
-        "/var/lib/bluetooth"
-        "/var/lib/fprint"
         "/etc/NetworkManager/system-connections"
         "/var/lib/tailscale"
       ];
@@ -27,9 +25,6 @@
           "snowcrate"
           "documents"
           "media"
-          ".steam"
-          "games"
-          ".config/chromium"
           ".config/vesktop"
           ".config/1Password"
           ".config/obsidian"
@@ -41,6 +36,8 @@
           ".local/state/nvf/shada"
           ".cache/zellij"
           ".zen"
+          ".config/dconf"
+          ".local/share/zoxide"
           {
             directory = "whiskeyvault";
             mode = "0700";
