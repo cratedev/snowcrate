@@ -50,6 +50,7 @@
       self.modules.nixos.ripgrep
 
       {
+        nixpkgs.config.allowUnfree = true;
         nixpkgs.overlays = [
           inputs.niri.overlays.niri
           (import ../../overlays/zellij-plugins {})
