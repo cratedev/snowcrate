@@ -43,7 +43,6 @@ with lib.${namespace}; {
         zellij.enable = true;
         fzf.enable = true;
         just.enable = true;
-        env.enable = true;
         nix-index.enable = true;
       };
       tools = {
