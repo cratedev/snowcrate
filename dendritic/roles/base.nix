@@ -11,6 +11,7 @@
 
       git
       onepassword
+      zellij
 
       networking
       audio
