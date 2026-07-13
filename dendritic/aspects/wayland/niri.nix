@@ -44,7 +44,8 @@
 
       spawn-at-startup = [
         {command = ["systemctl" "--user" "import-environment"];}
-        {command = ["zen-beta"];}
+        {command = ["${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"];}
+        {command = ["uwsm" "app" "--" "zen-beta"];}
         {command = ["uwsm" "app" "--" "1password" "--silent"];}
         {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
       ];
