@@ -16,39 +16,23 @@
     security = {
       polkit.enable = true;
 
-      pam.services = {
-        login.fprintAuth = true;
+      # Plain password-only login stack. Hosts with a fingerprint reader
+      # (hardware/fingerprint.nix) override this with mkForce to add
+      # pam_fprintd.so -- mkDefault here lets that happen cleanly without
+      # a conflicting-definitions error on hosts that don't.
+      pam.services.login.text = lib.mkDefault ''
+        auth       required     pam_unix.so try_first_pass nullok
+        auth       optional     pam_permit.so
 
-        greetd = {
-          fprintAuth = true;
-          text = lib.mkDefault ''
-            auth       sufficient   pam_fprintd.so
-            auth       include      login
+        account    required     pam_unix.so
 
-            account    include      login
-            password   include      login
-            session    include      login
-          '';
-        };
+        password   include     pam_unix.so nullok shadow
 
-        login.text = lib.mkForce ''
-          auth       sufficient   pam_fprintd.so
-          auth       required     pam_unix.so try_first_pass nullok
-          auth       optional     pam_permit.so
-
-          account    required     pam_unix.so
-
-          password   include     pam_unix.so nullok shadow
-
-          session    required     pam_env.so conffile=/etc/pam/environment readenv=0
-          session    required     pam_unix.so
-          session    required     pam_loginuid.so
-          session    optional     ${pkgs.systemd}/lib/security/pam_systemd.so
-        '';
-
-        sudo.fprintAuth = true;
-        polkit-1.fprintAuth = true;
-      };
+        session    required     pam_env.so conffile=/etc/pam/environment readenv=0
+        session    required     pam_unix.so
+        session    required     pam_loginuid.so
+        session    optional     ${pkgs.systemd}/lib/security/pam_systemd.so
+      '';
     };
   };
 }
