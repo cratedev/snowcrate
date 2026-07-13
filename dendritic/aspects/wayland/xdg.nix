@@ -9,6 +9,11 @@
       userDirs = {
         enable = true;
         createDirectories = false;
+        # Explicit rather than relying on the stateVersion<26.05 legacy
+        # default -- env.nix's home.sessionVariables entries for these
+        # same XDG paths use mkDefault specifically because this exports
+        # them too; keeping it true preserves that.
+        setSessionVariables = true;
         download = "$HOME";
         documents = "$HOME";
         desktop = "$HOME";
