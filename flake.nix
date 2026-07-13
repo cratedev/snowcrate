@@ -1,5 +1,9 @@
 {
   inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+
     mysecrets = {
       url = "git+ssh://git@github.com/cratedev/nix-secrets";
       flake = false;
@@ -8,15 +12,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     niri.url = "github:sodiboo/niri-flake";
     determinate = {
       url = "github:DeterminateSystems/determinate";
@@ -31,9 +30,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    impermanence = {
-      url = "github:nix-community/impermanence";
-    };
+    impermanence.url = "github:nix-community/impermanence";
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,25 +44,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs: let
-    lib = inputs.snowfall-lib.mkLib {
-      inherit inputs;
-      src = ./.;
-      snowfall = {
-        namespace = "crate";
-        meta = {
-          name = "crate";
-          title = "crate";
-        };
-      };
-    };
-  in
-    lib.mkFlake {
-      channels-config.allowUnfree = true;
 
-      systems.modules.nixos = with inputs; [
-        determinate.nixosModules.default
-        disko.nixosModules.disko
-      ];
-    };
+  outputs = inputs @ {flake-parts, import-tree, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} (import-tree ./dendritic);
 }
