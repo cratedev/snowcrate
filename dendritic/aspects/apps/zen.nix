@@ -1,5 +1,14 @@
 {inputs, ...}: {
   flake.modules.homeManager.zen = {...}: {
-    home.packages = [inputs.zen-browser.packages.x86_64-linux.default];
+    imports = [inputs.zen-browser.homeModules.default];
+
+    programs.zen-browser = {
+      enable = true;
+      profiles.matt = {
+        isDefault = true;
+        path = "deuteqrr.Default Profile";
+        settings = {};
+      };
+    };
   };
 }
