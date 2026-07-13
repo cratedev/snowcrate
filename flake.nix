@@ -46,5 +46,14 @@
   };
 
   outputs = inputs @ {flake-parts, import-tree, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} (import-tree ./dendritic);
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        # Declares the flake.modules.<class>.<aspect> option (deferredModule,
+        # merges values contributed from multiple files) that every file
+        # under ./dendritic relies on. Without this, flake-parts has no
+        # declared option to merge those definitions into.
+        inputs.flake-parts.flakeModules.modules
+        (import-tree ./dendritic)
+      ];
+    };
 }
