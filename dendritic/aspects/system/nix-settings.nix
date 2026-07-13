@@ -1,6 +1,9 @@
 {...}: {
   flake.modules.nixos.nix-settings = {pkgs, ...}: {
-    environment.systemPackages = [pkgs.nix-index pkgs.nix-prefetch-scripts];
+    # nix-index itself comes from the home-manager aspect (cli/nix-index.nix),
+    # which sets it up properly with the prebuilt database -- installing the
+    # raw package here too would just be a database-less duplicate.
+    environment.systemPackages = [pkgs.nix-prefetch-scripts];
 
     nix = {
       settings = {
