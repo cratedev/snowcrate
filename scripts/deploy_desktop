@@ -2,7 +2,6 @@
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEMP_KEYS_DIR="$HOME/temp-deployment-keys"
 PERSIST_DIR="$TEMP_KEYS_DIR/persist/etc/ssh"
 SECRETS_DIR="$HOME/nix-secrets/secrets"

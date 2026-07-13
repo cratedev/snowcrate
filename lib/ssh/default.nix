@@ -6,11 +6,6 @@
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHphh6FhB7vSYn4s04wY5UE9GvfCprZfzbb2D5XEB2RE";
     };
 
-    ## UDM-P
-    #"10.0.0.1" = {
-    #  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1PtjF5nlFA9cdU+PWZ1tA88MdaoXJmwvoT83WSyj1u";
-    #};
-
     ## crate-desktop system key
     "10.0.1.19" = {
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQg2lXOJPjxn5tVURFT4MG6k8+zYQdwE5nG/WSvrcKb";
