@@ -2,39 +2,37 @@
   flake.modules.nixos.role-base = {
     nixpkgs.config.allowUnfree = true;
 
-    imports =
-      [self.modules.nixos."1password"]
-      ++ (with self.modules.nixos; [
-        user
-        niri
-        dms-shell
-        dms-greeter
-        git
-        zellij
-        systemd-manager
-        networking
-        audio
-        nix-settings
-        sudo
-        agenix-cli
-        pam
-        fwupd
-        beszel
-        busybox
-        openssh
-        gvfs
-        tailscale
-        portals
-        boot
-        locale
-        fonts
-        time
-        impermanence
-        cliphist
-        nh
-        wlclipboard
-        ripgrep
-      ]);
+    imports = with self.modules.nixos; [
+      user
+      niri
+      dms-shell
+      dms-greeter
+      git
+      onepassword
+      systemd-manager
+      networking
+      audio
+      nix-settings
+      sudo
+      agenix-cli
+      pam
+      fwupd
+      beszel
+      busybox
+      openssh
+      gvfs
+      tailscale
+      portals
+      boot
+      locale
+      fonts
+      time
+      impermanence
+      cliphist
+      nh
+      wlclipboard
+      ripgrep
+    ];
   };
 
   flake.modules.homeManager.role-base = {
