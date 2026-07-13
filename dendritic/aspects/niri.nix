@@ -33,7 +33,7 @@
     home.packages = [
       pkgs.xwayland-satellite
       pkgs.gtk4
-      pkgs.swww
+      pkgs.awww
       pkgs.slurp
       pkgs.grim
       (import ../../packages/scripts/dropdown-terminal-toggle {inherit pkgs;})
