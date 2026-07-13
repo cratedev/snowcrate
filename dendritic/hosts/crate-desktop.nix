@@ -11,9 +11,9 @@
       inputs.disko.nixosModules.disko
       inputs.home-manager.nixosModules.home-manager
 
-      ../../systems/x86_64-linux/crate-desktop/hardware.nix
-      ../../systems/x86_64-linux/crate-desktop/disk-config.nix
-      ../../systems/x86_64-linux/crate-desktop/agenix.nix
+      ../../machines/crate-desktop/hardware.nix
+      ../../machines/crate-desktop/disk-config.nix
+      ../../machines/crate-desktop/agenix.nix
 
       self.modules.nixos.suite-desktop
       self.modules.nixos.docker

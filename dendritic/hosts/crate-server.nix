@@ -17,10 +17,10 @@
       inputs.disko.nixosModules.disko
       inputs.home-manager.nixosModules.home-manager
 
-      ../../systems/x86_64-linux/crate-server/hardware.nix
-      ../../systems/x86_64-linux/crate-server/disk-config.nix
-      ../../systems/x86_64-linux/crate-server/storage.nix
-      ../../systems/x86_64-linux/crate-server/agenix.nix
+      ../../machines/crate-server/hardware.nix
+      ../../machines/crate-server/disk-config.nix
+      ../../machines/crate-server/storage.nix
+      ../../machines/crate-server/agenix.nix
 
       self.modules.nixos.suite-server
       self.modules.nixos.docker

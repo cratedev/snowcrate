@@ -36,7 +36,7 @@
       pkgs.awww
       pkgs.slurp
       pkgs.grim
-      (import ../../packages/scripts/dropdown-terminal-toggle {inherit pkgs;})
+      (import ../../packages/dropdown-terminal-toggle {inherit pkgs;})
     ];
 
     programs.niri.settings = {

@@ -13,9 +13,9 @@
 
       # Host-specific raw config reused as-is from the pre-existing
       # (snowfall-lib) system definition -- unchanged, not duplicated.
-      ../../systems/x86_64-linux/crate-laptop/hardware.nix
-      ../../systems/x86_64-linux/crate-laptop/disk-config.nix
-      ../../systems/x86_64-linux/crate-laptop/agenix.nix
+      ../../machines/crate-laptop/hardware.nix
+      ../../machines/crate-laptop/disk-config.nix
+      ../../machines/crate-laptop/agenix.nix
 
       self.modules.nixos.suite-laptop
 
