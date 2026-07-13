@@ -4,61 +4,74 @@
 
     imports = with self.modules.nixos; [
       user
+
       niri
       dms-shell
       dms-greeter
+
       git
       onepassword
-      systemd-manager
+
       networking
       audio
-      nix-settings
+
       sudo
       agenix-cli
       pam
-      fwupd
+
       beszel
       busybox
-      openssh
+      fwupd
       gvfs
-      tailscale
+      openssh
       portals
+      tailscale
+
       boot
-      locale
       fonts
+      locale
+      nix-settings
       time
-      impermanence
+
       cliphist
+      impermanence
       nh
-      wlclipboard
       ripgrep
+      systemd-manager
+      wlclipboard
     ];
   };
 
   flake.modules.homeManager.role-base = {
     imports = with self.modules.homeManager; [
       user
+
       niri
-      git
       xdg
-      env
-      obsidian
+
+      git
+
+      discord
       ghostty
       nautilus
+      obsidian
       zen
-      discord
-      carapace
+
       btop
+      carapace
+      fish
       fzf
       just
       nix-index
-      starship
-      zoxide
-      zellij
-      ytmusic
-      mpv
       nvf
-      fish
+      starship
+      zellij
+      zoxide
+
+      mpv
+      ytmusic
+
+      env
     ];
   };
 }

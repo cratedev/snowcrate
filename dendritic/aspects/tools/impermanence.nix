@@ -61,7 +61,6 @@
 
         files = [
           ".git-credentials"
-          ".config/nushell/history.txt"
         ];
       };
     };
