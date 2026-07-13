@@ -17,22 +17,5 @@ in {
     environment.systemPackages = with pkgs; [
       git-crypt
     ];
-    crate.home.extraOptions = {
-      programs.git = {
-        enable = true;
-        lfs.enable = true;
-
-        settings = {
-          user = {
-            name = config.${namespace}.user.fullName;
-            email = config.${namespace}.user.email;
-          };
-
-          init.defaultBranch = "master";
-          pull.rebase = true;
-          push.autoSetupRemote = true;
-        };
-      };
-    };
   };
 }

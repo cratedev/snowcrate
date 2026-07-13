@@ -8,23 +8,11 @@ with lib;
 with lib.${namespace}; let
   cfg-user = config.${namespace}.user;
 
-  # aliases = import ./aliases.nix { inherit pkgs; };
   home-directory =
     if cfg-user.name == null
     then null
     else "/home/${cfg-user.name}";
 in {
-  options.${namespace}.cli.env = with types;
-    mkOption {
-      type = attrsOf (oneOf [str path (listOf (either str path))]);
-      apply = mapAttrs (_n: v:
-        if isList v
-        then concatMapStringsSep ":" (x: toString x) v
-        else (toString v));
-      default = {};
-      description = "A set of environment variables to set.";
-    };
-
   config = {
     home.sessionVariables = {
       EDITOR = "nvim";

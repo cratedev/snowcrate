@@ -25,7 +25,6 @@ in {
         hotkey-overlay.skip-at-startup = true;
 
         spawn-at-startup = [
-          {command = ["niri-session"];}
           {command = ["systemctl" "--user" "import-environment"];}
           {command = ["zen-beta"];}
           {command = ["uwsm" "app" "--" "1password" "--silent"];}
@@ -144,7 +143,6 @@ in {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
 
           "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
-          #"Mod+grave".action = spawn "ghostty" "--title=dropdown-terminal" "-e" "zellij" "attach" "--create" "dropdown";
           "Mod+grave".action = spawn "dropdown-terminal-toggle";
           "Mod+D".action = spawn "dms" "ipc" "call" "spotlight" "toggle";
           "Mod+S".action = spawn "dms" "ipc" "call" "settings" "toggle";

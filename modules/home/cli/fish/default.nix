@@ -20,7 +20,6 @@ in {
           set fish_greeting # Disable greeting
         '';
         functions = {
-          #jf = "just -f ~/snowcrate/Justfile $argv";
           ntest = "cd $NH_FLAKE && just test";
           nswitch = "cd $NH_FLAKE && just switch";
           rtest = "cd $NH_FLAKE && just remotetest";
