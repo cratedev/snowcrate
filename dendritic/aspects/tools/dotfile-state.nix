@@ -12,9 +12,18 @@
       ".config/YouTube Music Desktop App"
     ];
 
+    # Paths dotfile-state-check should never flag, because they're known
+    # to be regenerated deterministically from something that's already
+    # persisted/captured elsewhere -- not because they're unimportant.
+    ignoredPaths = [
+      # DMS writes these fresh every boot from its own settings.json,
+      # which lives under .config/DankMaterialShell (already captured).
+      ".config/niri/dms"
+    ];
+
     capture = import ../../../packages/dotfile-state-capture {inherit pkgs capturedPaths;};
     restore = import ../../../packages/dotfile-state-restore {inherit pkgs;};
-    check = import ../../../packages/dotfile-state-check {inherit pkgs capturedPaths;};
+    check = import ../../../packages/dotfile-state-check {inherit pkgs capturedPaths ignoredPaths;};
   in {
     home.packages = [capture restore check];
 

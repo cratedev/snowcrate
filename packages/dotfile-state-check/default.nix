@@ -1,6 +1,7 @@
 {
   pkgs,
   capturedPaths,
+  ignoredPaths,
 }:
 pkgs.writeShellScriptBin "dotfile-state-check" ''
   #!/usr/bin/env bash
@@ -8,6 +9,10 @@ pkgs.writeShellScriptBin "dotfile-state-check" ''
 
   captured=(
     ${pkgs.lib.concatMapStringsSep "\n    " (p: ''"${p}"'') capturedPaths}
+  )
+
+  ignored=(
+    ${pkgs.lib.concatMapStringsSep "\n    " (p: ''"${p}"'') ignoredPaths}
   )
 
   is_captured() {
@@ -37,8 +42,13 @@ pkgs.writeShellScriptBin "dotfile-state-check" ''
   # without -L never matches symlinks-to-files, only genuine on-disk
   # regular files, which is exactly the distinction needed here.
   has_undeclared_content() {
-    [ -f "$1" ] && return 0
-    [ -n "$(find "$1" -type f -print -quit 2>/dev/null)" ]
+    local target="$1" prune_args=() ig igpath
+    [ -f "$target" ] && return 0
+    for ig in "''${ignored[@]}"; do
+      igpath="$HOME/$ig"
+      prune_args+=(-not -path "$igpath" -not -path "$igpath/*")
+    done
+    [ -n "$(find "$target" "''${prune_args[@]}" -type f -print -quit 2>/dev/null)" ]
   }
 
   not_persisted=()
