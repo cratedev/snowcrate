@@ -23,6 +23,8 @@
   }: {
     imports = [inputs.niri-nix.homeModules.default];
 
+    wayland.windowManager.niri.enable = true;
+
     # niri is already installed system-wide via the NixOS module
     # (programs.niri.package = pkgs.niri-unstable); this option's own
     # default (pkgs.niri) would otherwise install a second, separate
