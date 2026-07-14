@@ -21,6 +21,14 @@
     pkgs,
     ...
   }: {
+    imports = [inputs.niri-nix.homeModules.default];
+
+    # niri is already installed system-wide via the NixOS module
+    # (programs.niri.package = pkgs.niri-unstable); this option's own
+    # default (pkgs.niri) would otherwise install a second, separate
+    # niri binary alongside it.
+    wayland.windowManager.niri.package = null;
+
     home.packages = [
       pkgs.xwayland-satellite-unstable
       pkgs.gtk4
