@@ -1,5 +1,6 @@
 {...}: {
   flake.modules.nixos.fingerprint = {
+    config,
     pkgs,
     lib,
     ...
@@ -20,11 +21,12 @@
       SUBSYSTEM=="usb", DRIVER=="usb", ATTR{power/persist}="0"
     '';
 
-    security.pam.services = {
+    security.pam.services = let
+      fprintdModule = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
+    in {
       login = {
-        fprintAuth = true;
         text = lib.mkForce ''
-          auth       sufficient   pam_fprintd.so
+          auth       sufficient   ${fprintdModule}
           auth       required     pam_unix.so try_first_pass nullok
           auth       optional     pam_permit.so
 
@@ -39,11 +41,12 @@
         '';
       };
 
+      # Fingerprint-only at the greeter -- no password fallback. If the
+      # reader ever fails, TTY login (the "login" service above) still
+      # accepts fingerprint-or-password as a recovery path.
       greetd = {
-        fprintAuth = true;
         text = lib.mkDefault ''
-          auth       sufficient   pam_fprintd.so
-          auth       include      login
+          auth       required     ${fprintdModule}
 
           account    include      login
           password   include      login
