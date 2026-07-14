@@ -1,4 +1,7 @@
-{pkgs}:
+{
+  pkgs,
+  capturedPaths,
+}:
 pkgs.writeShellScriptBin "dotfile-state-capture" ''
   #!/usr/bin/env bash
   set -euo pipefail
@@ -6,11 +9,7 @@ pkgs.writeShellScriptBin "dotfile-state-capture" ''
   repo="git@github.com:cratedev/dotfile-state.git"
   host="matt@$HOSTNAME"
   paths=(
-    ".config/DankMaterialShell"
-    ".local/state/DankMaterialShell"
-    ".config/vesktop"
-    ".config/obsidian"
-    ".config/YouTube Music Desktop App"
+    ${pkgs.lib.concatMapStringsSep "\n    " (p: ''"${p}"'') capturedPaths}
   )
 
   tmpdir=$(mktemp -d)

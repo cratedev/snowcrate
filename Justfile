@@ -52,6 +52,13 @@ restore-dotfiles:
 capture-dotfiles:
     dotfile-state-capture
 
+# Scan ~/.config, ~/.local/share, ~/.local/state for app config that's
+# either not persisted at all (wiped next reboot) or persisted but not
+# covered by dotfile-state-capture (lost on a fresh deploy).
+[group('nix')]
+check-dotfiles:
+    dotfile-state-check
+
 # Test
 [group('nix')]
 ft:
