@@ -85,7 +85,7 @@
       layout = {
         shadow = {
           on = [];
-          draw-behind-window = [];
+          draw-behind-window = true;
         };
         gaps = 15;
         center-focused-column = "on-overflow";
@@ -106,7 +106,7 @@
 
       animations = {
         slowdown = 1.5;
-        window-open.easing._props = {
+        window-open = {
           duration-ms = 250;
           curve = "ease-out-expo";
         };
