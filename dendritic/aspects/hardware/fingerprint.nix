@@ -41,18 +41,13 @@
         '';
       };
 
-      # Fingerprint-only at the greeter -- no password fallback. Uses the
+      # Fingerprint tried first at the greeter, password still works as a
+      # fallback at the same prompt if the reader fails. Uses the
       # structured options (not a hand-written `text`) because `text` is
       # `types.lines`, which *concatenates* same-priority mkDefault values
       # instead of replacing them -- a hand-written mkDefault text here
-      # would merge with, not replace, NixOS's own auto-generated stack
-      # (which already includes a sufficient password check by default).
-      # If the reader ever fails, TTY login (the "login" service above)
-      # still accepts fingerprint-or-password as a recovery path.
-      greetd = {
-        fprintAuth = true;
-        unixAuth = false;
-      };
+      # would merge with, not replace, NixOS's own auto-generated stack.
+      greetd.fprintAuth = true;
 
       sudo.fprintAuth = true;
       polkit-1.fprintAuth = true;
