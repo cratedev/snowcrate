@@ -25,11 +25,14 @@
 
     wayland.windowManager.niri.enable = true;
 
-    # niri is already installed system-wide via the NixOS module
-    # (programs.niri.package = pkgs.niri-unstable); this option's own
-    # default (pkgs.niri) would otherwise install a second, separate
-    # niri binary alongside it.
-    wayland.windowManager.niri.package = null;
+    # Match the NixOS module's package exactly (rather than nulling this
+    # out): niri-nix's own config validation always calls cfg.package.system
+    # unconditionally (no null-guard), unlike home.packages, which does
+    # correctly skip installing when null. Using the same derivation here
+    # as the NixOS side means home.packages ends up with a redundant but
+    # harmless reference to the already-installed niri-unstable, not a
+    # second, different niri.
+    wayland.windowManager.niri.package = pkgs.niri-unstable;
 
     # DMS generates these at runtime under ~/.config/niri/dms/ (not
     # Nix-managed) and expects them included so its own binds/layout/
