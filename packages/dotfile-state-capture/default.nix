@@ -29,6 +29,14 @@ pkgs.writeShellScriptBin "dotfile-state-capture" ''
     fi
   done
 
+  # Some apps' plugin systems git-clone things into their own config dir
+  # (DMS's plugin manager does this). Left alone, `git add -A` would treat
+  # those nested .git dirs as submodule gitlinks -- just a commit hash, no
+  # actual file contents -- so they'd come back empty on restore. Strip
+  # the nested .git metadata so the plugin code gets vendored as plain
+  # files instead.
+  find "$dest" -name .git -type d -prune -exec rm -rf {} +
+
   cd "$tmpdir"
   ${pkgs.git}/bin/git add -A
 
