@@ -28,6 +28,19 @@ pkgs.writeShellScriptBin "dotfile-state-check" ''
     return 1
   }
 
+  # A directory not being a symlink doesn't mean it's undeclared --
+  # home-manager typically symlinks individual *files* within a real
+  # parent directory (e.g. ~/.config/zellij/ is a real dir, but every
+  # file inside it is its own symlink). So: skip an entry only if it's
+  # a symlink itself, OR (when it's a directory) it contains zero
+  # regular, non-symlink files anywhere underneath it. `find -type f`
+  # without -L never matches symlinks-to-files, only genuine on-disk
+  # regular files, which is exactly the distinction needed here.
+  has_undeclared_content() {
+    [ -f "$1" ] && return 0
+    [ -n "$(find "$1" -type f -print -quit 2>/dev/null)" ]
+  }
+
   not_persisted=()
   persisted_uncaptured=()
 
@@ -37,6 +50,7 @@ pkgs.writeShellScriptBin "dotfile-state-check" ''
     while IFS= read -r -d $'\0' entry; do
       rel="''${entry#"$HOME"/}"
       [ -L "$entry" ] && continue
+      has_undeclared_content "$entry" || continue
       if is_persisted "$rel"; then
         is_captured "$rel" || persisted_uncaptured+=("$rel")
       else
