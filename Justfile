@@ -38,6 +38,20 @@ remoteswitch:
 upp input:
     nix flake update {{input}}
 
+# Restore persisted-but-not-declared app config (DMS, vesktop, etc.) from
+# github.com/cratedev/dotfile-state. Run after a fresh deploy.
+[group('nix')]
+restore-dotfiles:
+    dotfile-state-restore
+
+# Capture persisted-but-not-declared app config and push it to
+# github.com/cratedev/dotfile-state. Runs automatically weekly too
+# (see dendritic/aspects/tools/dotfile-state.nix); this is for an
+# on-demand checkpoint.
+[group('nix')]
+capture-dotfiles:
+    dotfile-state-capture
+
 # Test
 [group('nix')]
 ft:

@@ -72,6 +72,8 @@
       mpv
       ytmusic
 
+      dotfile-state
+
       env
     ];
   };
