@@ -1,24 +1,17 @@
 {inputs, ...}: {
   flake.modules.nixos.niri = {pkgs, ...}: {
-    imports = [inputs.niri.nixosModules.niri];
+    imports = [inputs.niri-nix.nixosModules.default];
 
-    nixpkgs.overlays = [inputs.niri.overlays.niri];
-
-    niri-flake.cache.enable = false;
-    systemd.user.services.niri-flake-polkit.enable = false;
+    nixpkgs.overlays = [inputs.niri-nix.overlays.niri-nix];
 
     programs.niri = {
       enable = true;
-      package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
-    };
-
-    programs.uwsm = {
-      enable = true;
-      waylandCompositors.niri = {
-        prettyName = "niri";
-        comment = "Niri compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/niri-session";
-      };
+      package = pkgs.niri-unstable;
+      withUWSM = true;
+      # xdg.portal is already fully configured in aspects/services/portals.nix;
+      # niri-nix's own withXDG default would add xdg-desktop-portal-gnome on
+      # top of that, so it's left off here to avoid double-managing it.
+      withXDG = false;
     };
   };
 
@@ -29,7 +22,7 @@
     ...
   }: {
     home.packages = [
-      pkgs.xwayland-satellite
+      pkgs.xwayland-satellite-unstable
       pkgs.gtk4
       pkgs.awww
       pkgs.slurp
@@ -37,56 +30,53 @@
       (import ../../../packages/dropdown-terminal-toggle {inherit pkgs;})
     ];
 
-    programs.niri.settings = {
-      environment = {};
-
-      hotkey-overlay.skip-at-startup = true;
+    wayland.windowManager.niri.settings = {
+      hotkey-overlay.skip-at-startup = [];
 
       spawn-at-startup = [
-        {command = ["systemctl" "--user" "import-environment"];}
-        {command = ["${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"];}
-        {command = ["uwsm" "app" "--" "zen-beta"];}
-        {command = ["uwsm" "app" "--" "1password" "--silent"];}
-        {command = ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"];}
+        ["systemctl" "--user" "import-environment"]
+        ["${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"]
+        ["uwsm" "app" "--" "zen-beta"]
+        ["uwsm" "app" "--" "1password" "--silent"]
+        ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"]
       ];
 
-      prefer-no-csd = true;
+      prefer-no-csd = [];
 
       input = {
         keyboard.xkb.layout = "us";
         touchpad = {
-          tap = true;
-          natural-scroll = true;
+          tap = [];
+          natural-scroll = [];
         };
-        focus-follows-mouse.enable = true;
+        focus-follows-mouse = [];
       };
 
       layout = {
         shadow = {
-          enable = true;
-          draw-behind-window = true;
+          on = [];
+          draw-behind-window = [];
         };
         gaps = 15;
         center-focused-column = "on-overflow";
         focus-ring = {
-          enable = false;
+          off = [];
           width = 1;
-          active.color = "#fff";
+          active-color = "#fff";
         };
         border = {
-          enable = true;
           width = 1;
-          active.color = "#344e66";
-          inactive.color = "#333333";
+          active-color = "#344e66";
+          inactive-color = "#333333";
         };
-        default-column-width = {proportion = 0.5;};
+        default-column-width.proportion = 0.5;
       };
 
       screenshot-path = null;
 
       animations = {
         slowdown = 1.5;
-        window-open.kind.easing = {
+        window-open.easing._props = {
           duration-ms = 250;
           curve = "ease-out-expo";
         };
@@ -118,28 +108,28 @@
         '';
       };
 
-      layer-rules = [
+      layer-rule = [
         {
-          matches = [{namespace = "dms:blurwallpaper";}];
+          match._props.namespace = "dms:blurwallpaper";
           place-within-backdrop = true;
         }
       ];
 
-      window-rules = [
+      window-rule = [
         {
-          matches = [{title = "PolicyKit1";}];
+          match._props.title = "PolicyKit1";
           open-floating = true;
         }
         {
-          matches = [{app-id = "1Password";}];
+          match._props.app-id = "1Password";
           open-maximized = false;
         }
         {
-          matches = [{title = "dropdown-terminal";}];
+          match._props.title = "dropdown-terminal";
           open-floating = true;
-          default-column-width = {proportion = 1.0;};
-          default-window-height = {proportion = 0.50;};
-          default-floating-position = {
+          default-column-width.proportion = 1.0;
+          default-window-height.proportion = 0.50;
+          default-floating-position._props = {
             x = 0;
             y = 0;
             relative-to = "bottom-left";
@@ -147,80 +137,78 @@
         }
       ];
 
-      binds = with config.lib.niri.actions; let
-        sh = spawn "sh" "-c";
-      in {
-        "Mod+Shift+Slash".action = show-hotkey-overlay;
+      binds = {
+        "Mod+Shift+Slash".show-hotkey-overlay = [];
 
-        "Mod+Return".action = spawn "ghostty" "-e" "zellij" "attach" "--create" "main";
-        "Mod+grave".action = spawn "dropdown-terminal-toggle";
-        "Mod+D".action = spawn "dms" "ipc" "call" "spotlight" "toggle";
-        "Mod+S".action = spawn "dms" "ipc" "call" "settings" "toggle";
-        "Mod+L".action = spawn "dms" "ipc" "call" "lock" "lock";
-        "Mod+P".action = spawn "dms" "ipc" "call" "powermenu" "toggle";
-        "Mod+C".action = spawn "dms" "ipc" "call" "control-center" "toggle";
-        "Mod+Q".action = close-window;
+        "Mod+Return".spawn = ["ghostty" "-e" "zellij" "attach" "--create" "main"];
+        "Mod+grave".spawn = "dropdown-terminal-toggle";
+        "Mod+D".spawn = ["dms" "ipc" "call" "spotlight" "toggle"];
+        "Mod+S".spawn = ["dms" "ipc" "call" "settings" "toggle"];
+        "Mod+L".spawn = ["dms" "ipc" "call" "lock" "lock"];
+        "Mod+P".spawn = ["dms" "ipc" "call" "powermenu" "toggle"];
+        "Mod+C".spawn = ["dms" "ipc" "call" "control-center" "toggle"];
+        "Mod+Q".close-window = [];
 
-        "Mod+WheelScrollDown".action = focus-column-right;
-        "Mod+WheelScrollUp".action = focus-column-left;
-        "Mod+Alt+WheelScrollDown".action = focus-workspace-down;
-        "Mod+Alt+WheelScrollUp".action = focus-workspace-up;
+        "Mod+WheelScrollDown".focus-column-right = [];
+        "Mod+WheelScrollUp".focus-column-left = [];
+        "Mod+Alt+WheelScrollDown".focus-workspace-down = [];
+        "Mod+Alt+WheelScrollUp".focus-workspace-up = [];
 
-        "Mod+Left".action = focus-column-left;
-        "Mod+Down".action = focus-window-down;
-        "Mod+Up".action = focus-window-up;
-        "Mod+Right".action = focus-column-right;
+        "Mod+Left".focus-column-left = [];
+        "Mod+Down".focus-window-down = [];
+        "Mod+Up".focus-window-up = [];
+        "Mod+Right".focus-column-right = [];
 
-        "Mod+Shift+Left".action = move-column-left;
-        "Mod+Shift+Down".action = move-window-down;
-        "Mod+Shift+Up".action = move-window-up;
-        "Mod+Shift+Right".action = move-column-right;
-        "Mod+Alt+Left".action = focus-workspace-down;
-        "Mod+Alt+Right".action = focus-workspace-up;
+        "Mod+Shift+Left".move-column-left = [];
+        "Mod+Shift+Down".move-window-down = [];
+        "Mod+Shift+Up".move-window-up = [];
+        "Mod+Shift+Right".move-column-right = [];
+        "Mod+Alt+Left".focus-workspace-down = [];
+        "Mod+Alt+Right".focus-workspace-up = [];
 
-        "Mod+Home".action = focus-column-first;
-        "Mod+End".action = focus-column-last;
-        "Mod+Shift+Home".action = move-column-to-first;
-        "Mod+Shift+End".action = move-column-to-last;
+        "Mod+Home".focus-column-first = [];
+        "Mod+End".focus-column-last = [];
+        "Mod+Shift+Home".move-column-to-first = [];
+        "Mod+Shift+End".move-column-to-last = [];
 
-        "Mod+Page_Down".action = focus-workspace-down;
-        "Mod+Page_Up".action = focus-workspace-up;
-        "Mod+Shift+2".action = move-column-to-workspace-down;
-        "Mod+Shift+1".action = move-column-to-workspace-up;
+        "Mod+Page_Down".focus-workspace-down = [];
+        "Mod+Page_Up".focus-workspace-up = [];
+        "Mod+Shift+2".move-column-to-workspace-down = [];
+        "Mod+Shift+1".move-column-to-workspace-up = [];
 
-        "Mod+1".action = focus-workspace 1;
-        "Mod+2".action = focus-workspace 2;
-        "Mod+3".action = focus-workspace 3;
-        "Mod+4".action = focus-workspace 4;
-        "Mod+5".action = focus-workspace 5;
-        "Mod+6".action = focus-workspace 6;
-        "Mod+7".action = focus-workspace 7;
-        "Mod+8".action = focus-workspace 8;
-        "Mod+9".action = focus-workspace 9;
+        "Mod+1".focus-workspace = 1;
+        "Mod+2".focus-workspace = 2;
+        "Mod+3".focus-workspace = 3;
+        "Mod+4".focus-workspace = 4;
+        "Mod+5".focus-workspace = 5;
+        "Mod+6".focus-workspace = 6;
+        "Mod+7".focus-workspace = 7;
+        "Mod+8".focus-workspace = 8;
+        "Mod+9".focus-workspace = 9;
 
-        "Mod+Comma".action = consume-window-into-column;
-        "Mod+Period".action = expel-window-from-column;
+        "Mod+Comma".consume-window-into-column = [];
+        "Mod+Period".expel-window-from-column = [];
 
-        "Mod+BracketLeft".action = consume-or-expel-window-left;
-        "Mod+BracketRight".action = consume-or-expel-window-right;
+        "Mod+BracketLeft".consume-or-expel-window-left = [];
+        "Mod+BracketRight".consume-or-expel-window-right = [];
 
-        "Mod+R".action = switch-preset-column-width;
-        "Mod+Shift+R".action = switch-preset-window-height;
-        "Mod+Ctrl+R".action = reset-window-height;
-        "Mod+F".action = maximize-column;
-        "Mod+Shift+F".action = fullscreen-window;
+        "Mod+R".switch-preset-column-width = [];
+        "Mod+Shift+R".switch-preset-window-height = [];
+        "Mod+Ctrl+R".reset-window-height = [];
+        "Mod+F".maximize-column = [];
+        "Mod+Shift+F".fullscreen-window = [];
 
-        "Mod+Minus".action = set-column-width "-10%";
-        "Mod+Equal".action = set-column-width "+10%";
+        "Mod+Minus".set-column-width = "-10%";
+        "Mod+Equal".set-column-width = "+10%";
 
-        "Mod+I".action = sh ''grim -g "$(slurp)" ${config.home.homeDirectory}/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png'';
-        "Mod+Shift+E".action = quit;
+        "Mod+I".spawn = ["sh" "-c" ''grim -g "$(slurp)" ${config.home.homeDirectory}/images/screenshots/$(date +%y.%m.%d-%H:%M:%S).png''];
+        "Mod+Shift+E".quit = [];
 
-        "XF86AudioMicMute".action = spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
-        "XF86AudioRaiseVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";
-        "XF86AudioLowerVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-";
-        "XF86MonBrightnessUp".action = spawn (lib.getExe pkgs.brightnessctl) "s" "+5%";
-        "XF86MonBrightnessDown".action = spawn (lib.getExe pkgs.brightnessctl) "s" "5%-";
+        "XF86AudioMicMute".spawn = ["wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"];
+        "XF86AudioRaiseVolume".spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"];
+        "XF86AudioLowerVolume".spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"];
+        "XF86MonBrightnessUp".spawn = ["${lib.getExe pkgs.brightnessctl}" "s" "+5%"];
+        "XF86MonBrightnessDown".spawn = ["${lib.getExe pkgs.brightnessctl}" "s" "5%-"];
       };
     };
   };

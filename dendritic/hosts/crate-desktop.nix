@@ -42,14 +42,13 @@
           users.matt.imports = [
             self.modules.homeManager.role-desktop
             {
-              programs.niri.settings.outputs."HDMI-A-1" = {
-                mode = {
-                  width = 3840;
-                  height = 2160;
-                  refresh = 120.0;
-                };
-                scale = 1.0;
-              };
+              wayland.windowManager.niri.settings.output = [
+                {
+                  _args = ["HDMI-A-1"];
+                  mode = "3840x2160@120";
+                  scale = 1.0;
+                }
+              ];
             }
           ];
         };

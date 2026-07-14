@@ -42,14 +42,13 @@
           users.matt.imports = [
             self.modules.homeManager.role-laptop
             {
-              programs.niri.settings.outputs."eDP-1" = {
-                mode = {
-                  width = 1920;
-                  height = 1200;
-                  refresh = 60.0;
-                };
-                scale = 1.0;
-              };
+              wayland.windowManager.niri.settings.output = [
+                {
+                  _args = ["eDP-1"];
+                  mode = "1920x1200@60";
+                  scale = 1.0;
+                }
+              ];
             }
           ];
         };
