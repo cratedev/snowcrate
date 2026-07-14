@@ -31,6 +31,23 @@
     # niri binary alongside it.
     wayland.windowManager.niri.package = null;
 
+    # DMS generates these at runtime under ~/.config/niri/dms/ (not
+    # Nix-managed) and expects them included so its own binds/layout/
+    # colors/etc. apply on top of this config. extraConfig is appended
+    # after the whole settings-derived config (regardless of key
+    # ordering within `settings`), so these are guaranteed to be
+    # parsed last.
+    wayland.windowManager.niri.extraConfig = ''
+      include "dms/alttab.kdl"
+      include "dms/binds.kdl"
+      include "dms/colors.kdl"
+      include "dms/cursor.kdl"
+      include "dms/layout.kdl"
+      include "dms/outputs.kdl"
+      include "dms/windowrules.kdl"
+      include "dms/wpblur.kdl"
+    '';
+
     home.packages = [
       pkgs.xwayland-satellite-unstable
       pkgs.gtk4
