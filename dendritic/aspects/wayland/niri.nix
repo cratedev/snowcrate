@@ -81,7 +81,6 @@
 
       spawn-at-startup = [
         ["systemctl" "--user" "import-environment"]
-        ["${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"]
         ["uwsm" "app" "--" "zen-beta"]
         ["uwsm" "app" "--" "1password" "--silent"]
         ["uwsm" "app" "--" "wl-paste" "--watch" "cliphist" "store"]
@@ -162,10 +161,6 @@
       ];
 
       window-rule = [
-        {
-          match._props.title = "PolicyKit1";
-          open-floating = true;
-        }
         {
           match._props.app-id = "1Password";
           open-maximized = false;

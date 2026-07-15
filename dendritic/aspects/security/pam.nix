@@ -5,7 +5,6 @@
     ...
   }: {
     environment.systemPackages = [
-      pkgs.polkit_gnome
       pkgs.gnome-keyring
       pkgs.libsecret
       pkgs.seahorse
