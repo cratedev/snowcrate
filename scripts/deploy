@@ -2,12 +2,38 @@
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
-TEMP_KEYS_DIR="$HOME/temp-deployment-keys"
-PERSIST_DIR="$TEMP_KEYS_DIR/persist/etc/ssh"
+usage() {
+    echo "Usage: $0 <crate-laptop|crate-desktop|crate-server>" >&2
+    exit 1
+}
+
+HOST="${1:-}"
+[[ -z "$HOST" ]] && usage
+
+case "$HOST" in
+    crate-laptop)
+        TARGET_HOST="nixos@10.0.0.155"
+        ;;
+    crate-desktop)
+        TARGET_HOST="nixos@10.0.0.50"
+        ;;
+    crate-server)
+        TARGET_HOST="nixos@10.0.0.55"
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+FLAKE_TARGET="$HOME/snowcrate/.#${HOST}"
 SECRETS_DIR="$HOME/nix-secrets/secrets"
-TARGET_HOST="nixos@10.0.0.155"
-FLAKE_TARGET="$HOME/snowcrate/.#crate-laptop"
 SECRETS_REPO="git@github.com:cratedev/nix-secrets"
+
+# tmpfs-backed rather than a regular disk-backed directory: decrypted
+# key material never touches persistent storage, and is gone on reboot
+# even if cleanup below somehow doesn't run.
+TEMP_KEYS_DIR="$(mktemp -d /dev/shm/deploy-keys.XXXXXX)"
+PERSIST_DIR="$TEMP_KEYS_DIR/persist/etc/ssh"
 
 # Colors for output
 RED='\033[0;31m'
@@ -40,10 +66,10 @@ ensure_dir() {
 # Function to clone secrets repo if it doesn't exist
 clone_secrets() {
     local secrets_parent="$HOME/nix-secrets"
-    
+
     if [[ ! -d "$SECRETS_DIR" ]]; then
         log "Secrets directory not found. Checking parent directory..."
-        
+
         # Clone into parent directory
         log "Cloning from $SECRETS_REPO..."
         if ! git clone "$SECRETS_REPO" "$secrets_parent"; then
@@ -56,7 +82,7 @@ clone_secrets() {
 }
 
 main() {
-    log "Starting NixOS deployment script..."
+    log "Starting NixOS deployment script for $HOST..."
 
     # Clone secrets if directory doesn't exist
     clone_secrets
@@ -97,18 +123,19 @@ main() {
     fi
 }
 
-# Cleanup function (runs on exit)
+# Cleanup function (runs on exit) -- always removes decrypted key
+# material, on success or failure, since it's only ever meant to be
+# transient.
 cleanup() {
     local exit_code=$?
     if [[ $exit_code -ne 0 ]]; then
         warn "Script failed with exit code $exit_code"
     fi
-    # Uncomment next line if you want to auto-cleanup temp files on exit
-    # rm -rf "$TEMP_KEYS_DIR"
+    rm -rf "$TEMP_KEYS_DIR"
 }
 
 # Trap exit to run cleanup
 trap cleanup EXIT
 
 # Run main function
-main "$@"
+main
