@@ -13,12 +13,9 @@
       };
     };
 
-    environment.persistence."/persist".users.matt = {
-      directories = [
-        ".config/DankMaterialShell"
-        ".local/state/DankMaterialShell"
-      ];
-      files = [".local/cache/DankMaterialShell/dms-colors.json"];
-    };
+    environment.persistence."/persist".users.matt.directories = [
+      ".config/DankMaterialShell"
+      ".local/state/DankMaterialShell"
+    ];
   };
 }
