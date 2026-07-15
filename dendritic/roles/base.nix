@@ -13,6 +13,15 @@
       onepassword
       zellij
 
+      discord
+      obsidian
+      ytmusic
+      zen
+
+      fish
+      nvf
+      zoxide
+
       networking
       audio
 

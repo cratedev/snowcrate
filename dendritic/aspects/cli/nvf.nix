@@ -1,4 +1,8 @@
 {inputs, ...}: {
+  flake.modules.nixos.nvf = {...}: {
+    environment.persistence."/persist".users.matt.directories = [".local/state/nvf/shada"];
+  };
+
   flake.modules.homeManager.nvf = {...}: {
     imports = [inputs.nvf.homeManagerModules.default];
 

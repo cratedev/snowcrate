@@ -25,19 +25,7 @@
           "snowcrate"
           "documents"
           "media"
-          ".config/vesktop"
-          ".config/1Password"
-          ".config/obsidian"
-          ".config/YouTube Music Desktop App"
-          ".config/DankMaterialShell"
-          ".local/state/DankMaterialShell"
-          ".local/share/fish"
-          ".config/fish"
-          ".local/state/nvf/shada"
-          ".cache/zellij"
-          ".zen"
           ".config/dconf"
-          ".local/share/zoxide"
           {
             directory = "whiskeyvault";
             mode = "0700";

@@ -1,6 +1,8 @@
 {inputs, ...}: {
   flake.modules.nixos.zellij = {...}: {
     nixpkgs.overlays = [(import ../../../overlays/zellij-plugins {})];
+
+    environment.persistence."/persist".users.matt.directories = [".cache/zellij"];
   };
 
   flake.modules.homeManager.zellij = {

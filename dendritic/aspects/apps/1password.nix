@@ -15,5 +15,7 @@
       '';
       mode = "0755";
     };
+
+    environment.persistence."/persist".users.matt.directories = [".config/1Password"];
   };
 }
