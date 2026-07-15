@@ -12,12 +12,12 @@
         "/var/lib/tailscale"
       ];
 
+      # SSH host key persistence is handled directly by
+      # services.openssh.hostKeys pointing at /persist/etc/ssh/... paths
+      # (see openssh.nix), not via bind-mounting the conventional
+      # /etc/ssh/... paths -- so no host-key entries belong here.
       files = [
         "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-        "/etc/ssh/ssh_host_rsa_key"
-        "/etc/ssh/ssh_host_rsa_key.pub"
       ];
 
       users.matt = {

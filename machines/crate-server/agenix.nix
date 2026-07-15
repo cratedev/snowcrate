@@ -1,5 +1,4 @@
 {
-  lib,
   inputs,
   ...
 }: {
@@ -50,7 +49,11 @@
     ];
   };
 
-  system.activationScripts.deploySshKeys = lib.stringAfter ["users"] ''
-    chown -R matt:users /home/matt
-  '';
+  # agenix places sshUserKey at /persist/home/matt/.ssh/id_ed25519 during
+  # activation, mkdir -p'ing parent directories as root along the way --
+  # that doesn't retroactively fix ownership on the dirs it creates, so
+  # /persist/home/matt (and therefore the bind-mounted /home/matt) ends
+  # up root-owned. tmpfiles' Z type recursively corrects ownership and
+  # runs very early in boot, before agenix's own activation script.
+  systemd.tmpfiles.rules = ["Z /persist/home/matt 0755 matt users -"];
 }
