@@ -51,6 +51,22 @@
       include "dms/wpblur.kdl"
     '';
 
+    # niri starts (and reads config.kdl, including the includes above)
+    # before DMS has connected to its IPC socket and generated the
+    # dms/*.kdl files -- confirmed via journalctl: niri fails 8 "No such
+    # file or directory" errors on first parse, then DMS creates the
+    # files a few seconds later and niri reloads successfully. Pre-seed
+    # empty placeholders (only if missing, so real DMS-generated content
+    # is never clobbered) so the very first parse always finds something
+    # valid to include.
+    home.activation.dmsNiriPlaceholders = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      run mkdir -p "$HOME/.config/niri/dms"
+      for f in alttab binds colors cursor layout outputs windowrules wpblur; do
+        target="$HOME/.config/niri/dms/$f.kdl"
+        [ -e "$target" ] || run touch "$target"
+      done
+    '';
+
     home.packages = [
       pkgs.xwayland-satellite-unstable
       pkgs.gtk4
