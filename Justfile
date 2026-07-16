@@ -7,29 +7,35 @@ utils_nu := absolute_path("utils.nu")
 
 default:
     @just --list
+
+# Pulls latest master before any rebuild, so a flake-lock-update PR
+# merged since your last pull gets picked up automatically.
+_sync:
+    cd {{flake_path}}; git pull
+
 # Rebuilds
 [group('nix')]
-switch:
+switch: _sync
     nh os switch --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
 
 # Flake Update
 [group('nix')]
-update:
+update: _sync
     nh os switch  --hostname {{hostname}} --update {{flake_path}}
 
 # Test
 [group('nix')]
-test:
+test: _sync
     nh os test --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
 
 # Remote Test
 [group('nix')]
-remotetest:
+remotetest: _sync
     nh os test --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
 
 # Remote Switch
 [group('nix')]
-remoteswitch:
+remoteswitch: _sync
     nh os switch --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
 
 # Update specific input
@@ -61,7 +67,7 @@ check-dotfiles:
 
 # Test
 [group('nix')]
-ft:
+ft: _sync
     nh os test --hostname {{hostname}} {{flake_path}}
 # Collect Garbage
 [group('nix')]

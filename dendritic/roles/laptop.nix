@@ -4,6 +4,6 @@
   };
 
   flake.modules.homeManager.role-laptop = {
-    imports = [self.modules.homeManager.role-base];
+    imports = with self.modules.homeManager; [role-base git-sync-check];
   };
 }

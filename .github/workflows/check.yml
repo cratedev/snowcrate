@@ -1,0 +1,31 @@
+name: check
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH access to nix-secrets
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.NIX_SECRETS_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            extra-substituters = https://notashelf.cachix.org https://nix-community.cachix.org https://niri-nix.cachix.org
+            extra-trusted-public-keys = notashelf.cachix.org-1:VTTBFNQWbfyLuRzgm2VHAW2aH7iuDQfFh1OqFn5shZc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= niri-nix.cachix.org-1:SvFtqpDcf7Sm1SMJdby1/+Y+6f3Yt3/3PMcSTKPJNJ0=
+
+      - name: Build crate-desktop
+        run: nix build .#nixosConfigurations.crate-desktop.config.system.build.toplevel --no-link --print-build-logs
+
+      - name: Build crate-laptop
+        run: nix build .#nixosConfigurations.crate-laptop.config.system.build.toplevel --no-link --print-build-logs
