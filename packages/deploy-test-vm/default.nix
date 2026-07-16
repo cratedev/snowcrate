@@ -9,6 +9,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   dummy_img="$state_dir/dummy-nvme0.qcow2"
   ovmf_vars="$state_dir/OVMF_VARS.fd"
   pidfile="$state_dir/qemu.pid"
+  console_log="$state_dir/console.log"
   ssh_port=2222
   disk_size="40G"
   ram_mb=8192
@@ -106,7 +107,9 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       -boot order=d \
       -netdev user,id=net0,hostfwd=tcp::''${ssh_port}-:22 \
       -device virtio-net-pci,netdev=net0 \
-      -nographic \
+      -display none \
+      -serial file:"$console_log" \
+      -monitor none \
       -pidfile "$pidfile" \
       -daemonize
 
@@ -116,7 +119,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       sleep 5
       waited=$((waited + 5))
       if [ "$waited" -ge 300 ]; then
-        echo "Timed out waiting for SSH after 5 minutes. Check 'deploy-test-vm status', or stop and retry." >&2
+        echo "Timed out waiting for SSH after 5 minutes. Check boot output at $console_log, or 'deploy-test-vm status', then stop and retry." >&2
         exit 1
       fi
     done
