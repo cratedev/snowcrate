@@ -17,6 +17,7 @@
 
       self.modules.nixos.role-desktop
       self.modules.nixos.docker
+      self.modules.nixos.deploy-test-vm
 
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input"];

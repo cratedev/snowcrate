@@ -3,12 +3,21 @@
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
 usage() {
-    echo "Usage: $0 <crate-laptop|crate-desktop|crate-server>" >&2
+    echo "Usage: $0 <crate-laptop|crate-desktop|crate-server> [--target <ssh-target>]" >&2
+    echo "  --target overrides the default host address, e.g. for testing" >&2
+    echo "  against a local VM: --target ssh://nixos@localhost:2222" >&2
     exit 1
 }
 
 HOST="${1:-}"
 [[ -z "$HOST" ]] && usage
+shift
+
+TARGET_OVERRIDE=""
+if [[ "${1:-}" == "--target" ]]; then
+    TARGET_OVERRIDE="${2:-}"
+    [[ -z "$TARGET_OVERRIDE" ]] && usage
+fi
 
 case "$HOST" in
     crate-laptop)
@@ -24,6 +33,10 @@ case "$HOST" in
         usage
         ;;
 esac
+
+if [[ -n "$TARGET_OVERRIDE" ]]; then
+    TARGET_HOST="$TARGET_OVERRIDE"
+fi
 
 FLAKE_TARGET="$HOME/snowcrate/.#${HOST}"
 SECRETS_DIR="$HOME/nix-secrets/secrets"
