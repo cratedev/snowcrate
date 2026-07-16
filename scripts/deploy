@@ -34,8 +34,21 @@ case "$HOST" in
         ;;
 esac
 
+EXTRA_SSH_PORT_ARGS=()
 if [[ -n "$TARGET_OVERRIDE" ]]; then
     TARGET_HOST="$TARGET_OVERRIDE"
+
+    # nixos-anywhere's initial connection accepts ssh://user@host:port
+    # fine, but its disko-formatting step copies closures over Nix's
+    # ssh-ng:// store protocol, which -- unlike OpenSSH's ssh:// URL
+    # scheme -- doesn't split a trailing :port back out: it takes
+    # "host:port" literally as one unresolvable hostname. Strip the port
+    # out and pass it via nixos-anywhere's own -p/--post-kexec-ssh-port
+    # flags instead, which it threads through correctly everywhere.
+    if [[ "$TARGET_HOST" =~ ^ssh://([^@]+)@([^:/]+):([0-9]+)$ ]]; then
+        TARGET_HOST="${BASH_REMATCH[1]}@${BASH_REMATCH[2]}"
+        EXTRA_SSH_PORT_ARGS=(-p "${BASH_REMATCH[3]}" --post-kexec-ssh-port "${BASH_REMATCH[3]}")
+    fi
 fi
 
 FLAKE_TARGET="$HOME/snowcrate/.#${HOST}"
@@ -129,6 +142,7 @@ main() {
     if nix run github:nix-community/nixos-anywhere \
         -- --flake "$FLAKE_TARGET" \
         --target-host "$TARGET_HOST" \
+        "${EXTRA_SSH_PORT_ARGS[@]}" \
         --extra-files "$TEMP_KEYS_DIR"; then
         log "Deployment completed successfully!"
     else
