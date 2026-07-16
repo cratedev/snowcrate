@@ -19,6 +19,7 @@
       self.modules.nixos.docker
       self.modules.nixos.deploy
       self.modules.nixos.deploy-test-vm
+      self.modules.nixos.cachix-push
 
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input"];

@@ -38,6 +38,12 @@ shortName: {inputs, ...}: {
         owner = "matt";
         group = "users";
       };
+      cachix-env = {
+        file = "${inputs.mysecrets}/secrets/env/cachix.age";
+        mode = "400";
+        owner = "matt";
+        group = "users";
+      };
     };
     identityPaths = [
       "/persist/etc/ssh/ssh_host_ed25519_key"
