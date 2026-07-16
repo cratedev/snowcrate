@@ -15,8 +15,6 @@
       functions = {
         ntest = "cd $NH_FLAKE && just test";
         nswitch = "cd $NH_FLAKE && just switch";
-        rtest = "cd $NH_FLAKE && just remotetest";
-        rswitch = "cd $NH_FLAKE && just remoteswitch";
         ts = "sudo tailscale up --accept-routes";
       };
     };

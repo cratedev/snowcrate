@@ -13,30 +13,32 @@ default:
 _sync:
     cd {{flake_path}}; git pull
 
-# Rebuilds
+# Builds locally on crate-desktop. Elsewhere, builds remotely on
+# crate-desktop over Tailscale if it answers, otherwise builds locally.
 [group('nix')]
 switch: _sync
-    nh os switch --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
+    #!/usr/bin/env fish
+    set build_host_args
+    if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
+        set build_host_args --build-host matt@10.0.0.50
+    end
+    nh os switch --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
 
 # Flake Update
 [group('nix')]
 update: _sync
     nh os switch  --hostname {{hostname}} --update {{flake_path}}
 
-# Test
+# Same build-host logic as switch, but tests the config instead of
+# making it the boot default.
 [group('nix')]
 test: _sync
-    nh os test --hostname {{hostname}} {{flake_path}} -- --max-jobs auto --cores 0
-
-# Remote Test
-[group('nix')]
-remotetest: _sync
-    nh os test --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
-
-# Remote Switch
-[group('nix')]
-remoteswitch: _sync
-    nh os switch --hostname {{hostname}} {{flake_path}} --build-host matt@10.0.0.50 -- --max-jobs auto --cores 0
+    #!/usr/bin/env fish
+    set build_host_args
+    if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
+        set build_host_args --build-host matt@10.0.0.50
+    end
+    nh os test --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
 
 # Update specific input
 # Usage: just upp nixpkgs
