@@ -108,15 +108,26 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
         -drive file="$dummy_img",if=none,id=nvme0,format=qcow2
         -device nvme,drive=nvme0,serial=deadbeef00
         -drive file="$disk_img",if=none,id=nvme1,format=qcow2
-        -device nvme,drive=nvme1,serial=deadbeef01
+        -device nvme,drive=nvme1,serial=deadbeef01,bootindex=1
       )
     else
       extra_disk_args=(
         -drive file="$disk_img",if=none,id=nvme0,format=qcow2
-        -device nvme,drive=nvme0,serial=deadbeef00
+        -device nvme,drive=nvme0,serial=deadbeef00,bootindex=1
       )
     fi
 
+    # bootindex, not -boot order/once: OVMF only consumes the legacy
+    # -boot letter-based hint once, to seed its NVRAM boot order, and
+    # that seeded order then persists across every reset within this
+    # QEMU session -- including nixos-anywhere's own post-install
+    # reboot. That made the VM boot the installer ISO every time,
+    # install or no. bootindex is re-evaluated on every boot instead:
+    # the real disk (bootindex=1) is tried first and has nothing
+    # bootable on it until nixos-anywhere installs a bootloader there,
+    # so the firmware falls through to the installer ISO
+    # (bootindex=2) on the first boot, then boots straight from disk
+    # once it's actually bootable.
     echo "Starting VM for $host (RAM: ''${ram_mb}MB, CPUs: $cpus, disk: $disk_size)..."
     ${pkgs.qemu}/bin/qemu-system-x86_64 \
       -enable-kvm \
@@ -126,8 +137,9 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       -drive if=pflash,format=raw,readonly=on,file="$ovmf_code_template" \
       -drive if=pflash,format=raw,file="$ovmf_vars" \
       "''${extra_disk_args[@]}" \
-      -cdrom "$iso_path" \
-      -boot order=c,once=d \
+      -drive file="$iso_path",if=none,id=installcd,media=cdrom,readonly=on \
+      -device ide-cd,drive=installcd,bootindex=2 \
+      -boot menu=off \
       -netdev user,id=net0,hostfwd=tcp::''${ssh_port}-:22 \
       -device virtio-net-pci,netdev=net0 \
       -display none \
