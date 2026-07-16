@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - run: nix run nixpkgs#statix -- check . --config statix.toml
-      - run: nix run nixpkgs#deadnix -- --fail .
+      - run: nix run nixpkgs#deadnix -- --fail --no-underscore .
 
   build:
     runs-on: ubuntu-latest

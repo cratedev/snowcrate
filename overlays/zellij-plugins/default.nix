@@ -1,4 +1,4 @@
-{...}: final: prev: {
+{...}: _final: prev: {
   zellij-plugins = {
     zjstatus = prev.fetchurl {
       url = "https://github.com/dj95/zjstatus/releases/download/v0.22.0/zjstatus.wasm";

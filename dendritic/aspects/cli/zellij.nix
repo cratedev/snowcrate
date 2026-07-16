@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{...}: {
   flake.modules.nixos.zellij = {...}: {
     nixpkgs.overlays = [(import ../../../overlays/zellij-plugins {})];
 
