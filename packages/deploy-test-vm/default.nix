@@ -9,8 +9,8 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   dummy_img="$state_dir/dummy-nvme0.qcow2"
   ovmf_vars="$state_dir/OVMF_VARS.fd"
   pidfile="$state_dir/qemu.pid"
+  portfile="$state_dir/ssh_port"
   console_log="$state_dir/console.log"
-  ssh_port=2222
   disk_size="40G"
   ram_mb=8192
   cpus=2
@@ -29,7 +29,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
 
   cmd_status() {
     if is_running; then
-      echo "VM running (pid $(cat "$pidfile")), SSH forwarded to localhost:$ssh_port"
+      echo "VM running (pid $(cat "$pidfile")), SSH forwarded to localhost:$(cat "$portfile")"
     else
       echo "VM not running"
     fi
@@ -39,7 +39,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     if is_running; then
       echo "Stopping VM (pid $(cat "$pidfile"))..."
       kill "$(cat "$pidfile")"
-      rm -f "$pidfile"
+      rm -f "$pidfile" "$portfile"
     else
       echo "VM not running"
     fi
@@ -58,6 +58,14 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     fi
 
     mkdir -p "$state_dir"
+
+    # Pick a genuinely free port rather than hardcoding one -- a fixed
+    # port risks colliding with something else already using it (as
+    # opposed to another instance of this tool, which is_running above
+    # already guards against).
+    local ssh_port
+    ssh_port="$(${pkgs.python3}/bin/python3 -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
+    echo "$ssh_port" > "$portfile"
 
     if [ ! -f "$iso_path" ]; then
       echo "Downloading NixOS minimal installer ISO (cached at $iso_path for future runs)..."
