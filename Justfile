@@ -9,9 +9,18 @@ default:
     @just --list
 
 # Pulls latest master before any rebuild, so a flake-lock-update PR
-# merged since your last pull gets picked up automatically.
+# merged since your last pull gets picked up automatically. Skips the
+# pull if there are uncommitted changes (e.g. a local `nix flake
+# update` you haven't committed yet) rather than failing outright --
+# this is a convenience, not something that should block real work.
 _sync:
-    cd {{flake_path}}; git pull
+    #!/usr/bin/env fish
+    cd {{flake_path}}
+    if git diff --quiet; and git diff --cached --quiet
+        git pull
+    else
+        echo "Skipping git pull -- uncommitted changes present."
+    end
 
 # Builds locally on crate-desktop. Elsewhere, builds remotely on
 # crate-desktop over Tailscale if it answers, otherwise builds locally.
