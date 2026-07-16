@@ -6,6 +6,14 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix run nixpkgs#statix -- check .
+      - run: nix run nixpkgs#deadnix -- --fail .
+
   build:
     runs-on: ubuntu-latest
     steps:
