@@ -21,27 +21,7 @@
   }: {
     imports = [inputs.niri-nix.homeModules.default];
 
-    wayland.windowManager.niri.enable = true;
-
-    # Matches the NixOS module's package; niri-nix's config validation
-    # requires cfg.package.system to be non-null.
-    wayland.windowManager.niri.package = pkgs.niri-unstable;
-
-    # DMS generates these under ~/.config/niri/dms/ at runtime.
-    # extraConfig is appended after the settings-derived config, so
-    # these parse last.
-    wayland.windowManager.niri.extraConfig = ''
-      include "dms/alttab.kdl"
-      include "dms/binds.kdl"
-      include "dms/colors.kdl"
-      include "dms/cursor.kdl"
-      include "dms/layout.kdl"
-      include "dms/outputs.kdl"
-      include "dms/windowrules.kdl"
-      include "dms/wpblur.kdl"
-    '';
-
-    # Pre-seeds empty placeholders for the dms/*.kdl includes above,
+    # Pre-seeds empty placeholders for the dms/*.kdl includes below,
     # since niri parses config.kdl before DMS generates them. Only
     # creates missing files, so real DMS-generated content is kept.
     home.activation.dmsNiriPlaceholders = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -61,7 +41,28 @@
       (import ../../../packages/dropdown-terminal-toggle {inherit pkgs;})
     ];
 
-    wayland.windowManager.niri.settings = {
+    wayland.windowManager.niri = {
+      enable = true;
+
+      # Matches the NixOS module's package; niri-nix's config validation
+      # requires cfg.package.system to be non-null.
+      package = pkgs.niri-unstable;
+
+      # DMS generates these under ~/.config/niri/dms/ at runtime.
+      # extraConfig is appended after the settings-derived config, so
+      # these parse last.
+      extraConfig = ''
+        include "dms/alttab.kdl"
+        include "dms/binds.kdl"
+        include "dms/colors.kdl"
+        include "dms/cursor.kdl"
+        include "dms/layout.kdl"
+        include "dms/outputs.kdl"
+        include "dms/windowrules.kdl"
+        include "dms/wpblur.kdl"
+      '';
+
+      settings = {
       hotkey-overlay.skip-at-startup = [];
 
       spawn-at-startup = [
@@ -237,5 +238,6 @@
         "XF86MonBrightnessDown".spawn = ["${lib.getExe pkgs.brightnessctl}" "s" "5%-"];
       };
     };
+  };
   };
 }

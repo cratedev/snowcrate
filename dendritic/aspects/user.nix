@@ -13,9 +13,11 @@
   };
 
   flake.modules.homeManager.user = {...}: {
-    home.username = "matt";
-    home.homeDirectory = "/home/matt";
-    home.stateVersion = "24.05";
-    home.file."images/screenshots/.keep".text = "";
+    home = {
+      username = "matt";
+      homeDirectory = "/home/matt";
+      stateVersion = "24.05";
+      file."images/screenshots/.keep".text = "";
+    };
   };
 }

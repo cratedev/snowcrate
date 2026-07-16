@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix run nixpkgs#statix -- check .
+      - run: nix run nixpkgs#statix -- check . --config statix.toml
       - run: nix run nixpkgs#deadnix -- --fail .
 
   build:
