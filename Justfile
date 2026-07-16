@@ -115,6 +115,22 @@ repair-store *paths:
 vm:
     sudo nixos-rebuild build-vm
 
+# Start a fresh throwaway QEMU VM and test the deploy script against it
+# (see packages/deploy-test-vm). Prints the ./scripts/deploy command to
+# run next once the VM is ready.
+# Usage: just test-deploy crate-laptop
+[group('nix')]
+test-deploy host:
+    deploy-test-vm start {{host}}
+
+[group('nix')]
+test-deploy-status:
+    deploy-test-vm status
+
+[group('nix')]
+test-deploy-stop:
+    deploy-test-vm stop
+
 
 system-info:
      "This is an {{arch()}} machine"

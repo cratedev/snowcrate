@@ -35,6 +35,7 @@ case "$HOST" in
 esac
 
 EXTRA_SSH_PORT_ARGS=()
+TEST_PORT=""
 if [[ -n "$TARGET_OVERRIDE" ]]; then
     TARGET_HOST="$TARGET_OVERRIDE"
 
@@ -47,7 +48,8 @@ if [[ -n "$TARGET_OVERRIDE" ]]; then
     # flags instead, which it threads through correctly everywhere.
     if [[ "$TARGET_HOST" =~ ^ssh://([^@]+)@([^:/]+):([0-9]+)$ ]]; then
         TARGET_HOST="${BASH_REMATCH[1]}@${BASH_REMATCH[2]}"
-        EXTRA_SSH_PORT_ARGS=(-p "${BASH_REMATCH[3]}" --post-kexec-ssh-port "${BASH_REMATCH[3]}")
+        TEST_PORT="${BASH_REMATCH[3]}"
+        EXTRA_SSH_PORT_ARGS=(-p "$TEST_PORT" --post-kexec-ssh-port "$TEST_PORT")
     fi
 fi
 
@@ -145,6 +147,14 @@ main() {
         "${EXTRA_SSH_PORT_ARGS[@]}" \
         --extra-files "$TEMP_KEYS_DIR"; then
         log "Deployment completed successfully!"
+        log ""
+        if [[ -n "$TEST_PORT" ]]; then
+            log "SSH into the freshly installed system with:"
+            log "  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p $TEST_PORT matt@localhost"
+        else
+            log "SSH into $HOST with:"
+            log "  ssh matt@${TARGET_HOST#*@}"
+        fi
     else
         error "Deployment failed"
     fi
