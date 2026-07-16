@@ -12,10 +12,8 @@
         max-jobs = "auto";
         max-substitution-jobs = "128";
         cores = 0;
-        eval-cores = 0;
         keep-outputs = true;
         builders-use-substitutes = true;
-        auto-optimise-store = true;
         substituters = [
           "https://notashelf.cachix.org"
           "https://cache.nixos.org/"
