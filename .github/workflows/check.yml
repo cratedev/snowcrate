@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
       - run: nix run nixpkgs#statix -- check . --config statix.toml
       - run: nix run nixpkgs#deadnix -- --fail --no-underscore .
 
@@ -33,6 +34,8 @@ jobs:
           extra-conf: |
             extra-substituters = https://notashelf.cachix.org https://nix-community.cachix.org https://niri-nix.cachix.org
             extra-trusted-public-keys = notashelf.cachix.org-1:VTTBFNQWbfyLuRzgm2VHAW2aH7iuDQfFh1OqFn5shZc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= niri-nix.cachix.org-1:SvFtqpDcf7Sm1SMJdby1/+Y+6f3Yt3/3PMcSTKPJNJ0=
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
 
       - name: Build crate-desktop
         run: nix build .#nixosConfigurations.crate-desktop.config.system.build.toplevel --no-link --print-build-logs
