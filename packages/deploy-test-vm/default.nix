@@ -4,7 +4,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   set -euo pipefail
 
   state_dir="$HOME/.local/state/deploy-test-vm"
-  iso_path="$state_dir/nixos-installer.iso"
+  installer_result="$state_dir/installer-result"
   disk_img="$state_dir/disk.qcow2"
   dummy_img="$state_dir/dummy-nvme0.qcow2"
   ovmf_vars="$state_dir/OVMF_VARS.fd"
@@ -67,17 +67,32 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     ssh_port="$(${pkgs.python3}/bin/python3 -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
     echo "$ssh_port" > "$portfile"
 
-    if [ ! -f "$iso_path" ]; then
-      echo "Downloading NixOS minimal installer ISO (cached at $iso_path for future runs)..."
-      ${pkgs.curl}/bin/curl -L -o "$iso_path" \
-        "https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso"
+    # Build (rather than download) the installer ISO: the stock minimal
+    # ISO's "nixos" user has no password set at all (expected NixOS
+    # behavior, not a bug), which nixos-anywhere can't authenticate
+    # against non-interactively. This custom ISO bakes in matt's own SSH
+    # key instead, matching how the real deploy flow authenticates
+    # against actual hardware. Nix caches the build, so repeat runs are
+    # fast unless the flake changes.
+    echo "Building custom installer ISO with SSH key baked in (cached by Nix after first build)..."
+    ${pkgs.nix}/bin/nix build "$HOME/snowcrate#nixosConfigurations.deploy-test-installer.config.system.build.isoImage" \
+      --out-link "$installer_result" \
+      --extra-experimental-features 'nix-command flakes'
+    local iso_path
+    iso_path="$(find "$installer_result/iso" -name '*.iso' | head -n1)"
+    if [ -z "$iso_path" ]; then
+      echo "Failed to locate built installer ISO in $installer_result/iso" >&2
+      exit 1
     fi
 
     echo "Creating fresh $disk_size disk image (sparse, so real usage stays low)..."
     rm -f "$disk_img"
     ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$disk_img" "$disk_size" >/dev/null
 
+    # cp preserves the nix store source's read-only permission bits, but
+    # QEMU needs to write UEFI variable changes back to this file.
     cp "$ovmf_vars_template" "$ovmf_vars"
+    chmod u+w "$ovmf_vars"
 
     local extra_disk_args=()
     if [ "$host" = "crate-laptop" ]; then
