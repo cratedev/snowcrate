@@ -116,8 +116,8 @@ vm:
     sudo nixos-rebuild build-vm
 
 # Start a fresh throwaway QEMU VM and test the deploy script against it
-# (see packages/deploy-test-vm). Prints the ./scripts/deploy command to
-# run next once the VM is ready.
+# (see packages/deploy-test-vm). Prints the deploy command to run next
+# once the VM is ready.
 # Usage: just test-deploy crate-laptop
 [group('nix')]
 test-deploy host:

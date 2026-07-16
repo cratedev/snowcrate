@@ -162,7 +162,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     echo ""
     echo "VM ready. Test the deploy script against it with:"
     echo ""
-    echo "  ./scripts/deploy $host --target ssh://nixos@localhost:$ssh_port"
+    echo "  deploy $host --target ssh://nixos@localhost:$ssh_port"
     echo ""
     echo "Stop the VM afterward with: deploy-test-vm stop"
   }
