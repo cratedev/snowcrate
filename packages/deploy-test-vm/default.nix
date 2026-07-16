@@ -127,7 +127,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       -drive if=pflash,format=raw,file="$ovmf_vars" \
       "''${extra_disk_args[@]}" \
       -cdrom "$iso_path" \
-      -boot order=d \
+      -boot order=c,once=d \
       -netdev user,id=net0,hostfwd=tcp::''${ssh_port}-:22 \
       -device virtio-net-pci,netdev=net0 \
       -display none \
