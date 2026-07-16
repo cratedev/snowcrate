@@ -14,6 +14,10 @@
         cores = 0;
         keep-outputs = true;
         builders-use-substitutes = true;
+        # matt already has unrestricted root via wheel/sudo on every host;
+        # this just lets --build-host copy-back skip a signature check
+        # that was never a real trust boundary for this single-user setup.
+        trusted-users = ["root" "matt"];
         substituters = [
           "https://notashelf.cachix.org"
           "https://cache.nixos.org/"
