@@ -47,6 +47,7 @@
       impermanence
       nh
       ripgrep
+      snowcrate-status
       systemd-manager
       wlclipboard
     ];
