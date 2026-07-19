@@ -23,10 +23,19 @@
       requires = ["docker.service"];
       wantedBy = ["multi-user.target"];
 
+      # Retries on failure: network-online.target doesn't guarantee DNS is
+      # actually usable yet (seen at boot with DHCP/NetworkManager still
+      # settling), and this shouldn't have to wait a full hour to recover
+      # from a transient failure like that.
+      startLimitIntervalSec = 600;
+      startLimitBurst = 6;
+
       serviceConfig = {
         Type = "oneshot";
         User = "matt";
         Environment = "GIT_SSH_COMMAND=${pkgs.openssh}/bin/ssh -i ${config.age.secrets.deployKey.path} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new";
+        Restart = "on-failure";
+        RestartSec = "20s";
       };
 
       script = ''
