@@ -8,25 +8,14 @@
     imports = with self.modules.nixos; [
       user
 
-      niri
-      dms-shell
-      dms-greeter
-
       git
-      onepassword
       zellij
-
-      discord
-      obsidian
-      ytmusic
-      zen
 
       fish
       nvf
       zoxide
 
       networking
-      audio
 
       sudo
       agenix-cli
@@ -35,24 +24,19 @@
       beszel
       busybox
       fwupd
-      gvfs
       openssh
-      portals
       tailscale
 
       boot
-      fonts
       locale
       nix-settings
       time
 
-      cliphist
       impermanence
       nh
       ripgrep
       snowcrate-status
       systemd-manager
-      wlclipboard
     ];
   };
 
@@ -60,16 +44,7 @@
     imports = with self.modules.homeManager; [
       user
 
-      niri
-      xdg
-
       git
-
-      discord
-      ghostty
-      nautilus
-      obsidian
-      zen
 
       btop
       carapace
@@ -81,11 +56,6 @@
       starship
       zellij
       zoxide
-
-      mpv
-      ytmusic
-
-      dotfile-state
 
       env
     ];
