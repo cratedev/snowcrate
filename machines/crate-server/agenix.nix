@@ -1,11 +1,20 @@
 {inputs, ...}: {
   imports = [(import ../agenix.nix "server")];
 
-  age.secrets.unraidDeployKey = {
-    file = "${inputs.mysecrets}/secrets/server/unraid_deploy_key.age";
-    path = "/persist/etc/unraid_deploy_key";
-    mode = "400";
-    owner = "matt";
-    group = "users";
+  age.secrets = {
+    deployKey = {
+      file = "${inputs.mysecrets}/secrets/server/deploy_key.age";
+      path = "/persist/etc/deploy_key";
+      mode = "400";
+      owner = "matt";
+      group = "users";
+    };
+
+    komodo-env = {
+      file = "${inputs.mysecrets}/secrets/env/komodo.age";
+      mode = "400";
+      owner = "matt";
+      group = "users";
+    };
   };
 }

@@ -20,6 +20,7 @@
       self.modules.nixos.docker
       self.modules.nixos.cockpit
       self.modules.nixos.komodo-periphery
+      self.modules.nixos.unraid-compose
 
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input" "video" "render"];
