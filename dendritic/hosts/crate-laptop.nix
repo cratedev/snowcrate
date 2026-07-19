@@ -18,6 +18,8 @@
       self.modules.nixos.role-laptop
       self.modules.nixos.bluetooth
       self.modules.nixos.libvirtd
+      self.modules.nixos.deploy
+      self.modules.nixos.deploy-test-vm
 
       {
         users.users.matt.extraGroups = ["wheel" "input"];
