@@ -1,85 +1,158 @@
 {
   pkgs,
+  lib,
   ...
-}: {
-  # Uses partitions from disk-config-test.nix: cache_appdata, cache_data,
-  # 3-disk array.
+}: let
+  # Array disks: no parity, pooled with mergerfs. Referenced by-id since
+  # /dev/sdX ordering isn't guaranteed stable across boots.
+  arrayDisks = {
+    disk1 = "ata-WDC_WD120EMFZ-11A6JA0_9KGEW2KL";
+    disk2 = "ata-WDC_WD140EFGX-68B0GN0_9RHGR0WL";
+    disk3 = "ata-WDC_WD80EMAZ-00WJTA0_1EHEXVJZ";
+    disk4 = "ata-WDC_WD80EMAZ-00WJTA0_1EHYKNVZ";
+    disk5 = "ata-WDC_WD80EMAZ-00WJTA0_7HJW1EVF";
+    disk6 = "ata-WDC_WD80EMAZ-00WJTA0_7HK5WMHN";
+    disk7 = "ata-WDC_WD80EMAZ-00WJTA0_7HKHWTEJ";
+    disk8 = "ata-WDC_WD80EZAZ-11TDBA0_1SHKTUDZ";
+    disk9 = "ata-WDC_WD80EZAZ-11TDBA0_1SJ9S6EZ";
+  };
+
+  cacheAppdataId = "nvme-WD_Blue_SN580_1TB_24154H417383";
+  cacheDataId = "nvme-WD_Blue_SN580_1TB_24154G400745";
+
+  byId = id: "/dev/disk/by-id/${id}-part1";
+
+  arrayMountpoints = map (name: "/mnt/array/${name}") (builtins.attrNames arrayDisks);
+
+  # Shares that live permanently on Cache_appdata -- no mover involved.
+  pinnedShares = ["appdata" "backups" "dmz" "domains" "isos" "logs" "system"];
+
+  physicalDisks =
+    {
+      "/mnt/cache_appdata" = byId cacheAppdataId;
+      "/mnt/cache_data" = byId cacheDataId;
+    }
+    // lib.listToAttrs (map (name: lib.nameValuePair "/mnt/array/${name}" (byId arrayDisks.${name})) (builtins.attrNames arrayDisks));
+
+  physicalFileSystems =
+    lib.mapAttrs (_: device: {
+      inherit device;
+      fsType = "xfs";
+      options = ["defaults" "nofail"];
+    })
+    physicalDisks;
+
+  pinnedShareFileSystems = lib.listToAttrs (map (share:
+    lib.nameValuePair "/mnt/user/${share}" {
+      device = "/mnt/cache_appdata/${share}";
+      fsType = "none";
+      options = [
+        "bind"
+        "nofail"
+        "x-systemd.requires-mounts-for=/mnt/cache_appdata"
+      ];
+    })
+    pinnedShares);
+
+  dataMergerfs = {
+    "/mnt/user/data" = {
+      device = lib.concatStringsSep ":" (["/mnt/cache_data/data"] ++ map (m: "${m}/data") arrayMountpoints);
+      fsType = "fuse.mergerfs";
+      options =
+        [
+          "defaults"
+          "nofail"
+          "allow_other"
+          "use_ino"
+          "cache.files=partial"
+          "dropcacheonclose=true"
+          "category.create=ff" # new writes land on cache_data first
+          "moveonenospc=true" # overflow straight to array if cache fills up
+          "minfreespace=20G"
+          "fsname=mergerfs:data"
+        ]
+        ++ map (m: "x-systemd.requires-mounts-for=${m}") (["/mnt/cache_data"] ++ arrayMountpoints);
+    };
+  };
+in {
   environment.systemPackages = with pkgs; [
     mergerfs
     mergerfs-tools
     rsync
+    psmisc # fuser, used by the mover's open-file check
     (writeScriptBin "nixos-mover" ''
       #!/usr/bin/env bash
       exec /etc/nixos-mover.sh "$@"
     '')
   ];
 
-  # Mounts come from Disko via disk-config-test.nix; this configures
-  # MergerFS. Cache listed first so writes land there first.
-  fileSystems."/mnt/user" = {
-    device = "/mnt/cache_data:/mnt/disk1:/mnt/disk2:/mnt/disk3";
-    fsType = "fuse.mergerfs";
-    options = [
-      "defaults"
-      "allow_other"
-      "use_ino"
-      "cache.files=partial"
-      "dropcacheonclose=true"
-      "category.create=ff" # ff = first found with space (writes to cache first)
-      "moveonenospc=true" # Move to array if cache fills up
-      "minfreespace=5G" # Keep 5GB free on cache (smaller for testing)
-      "fsname=mergerfs:user"
-    ];
-  };
+  fileSystems = physicalFileSystems // pinnedShareFileSystems // dataMergerfs;
 
   environment.etc."nixos-mover.sh" = {
     text = ''
       #!/usr/bin/env bash
-      # Moves data from /mnt/cache_data to array drives.
+      # Moves data/ files from Cache_data to whichever array disk has the
+      # most free space, skipping anything currently open (e.g. actively
+      # streaming in Jellyfin). Mirrors unRAID's mover + high-water
+      # allocator behavior.
 
       set -euo pipefail
 
-      CACHE_DIR="/mnt/cache_data"
-      USER_DIR="/mnt/user"
+      CACHE_DIR="/mnt/cache_data/data"
+      ARRAY_DISKS=(${lib.concatStringsSep " " arrayMountpoints})
       LOG_FILE="/var/log/nixos-mover.log"
+      THRESHOLD=''${NIXOS_MOVER_THRESHOLD:-80}
 
       log() {
           echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
       }
 
-      log "Starting mover process..."
+      cache_usage=$(df --output=pcent "$CACHE_DIR" | tail -1 | tr -dc '0-9')
+      log "Cache usage: ''${cache_usage}%"
 
-      CACHE_USAGE=$(df "$CACHE_DIR" | awk 'NR==2 {print $5}' | sed 's/%//')
-      log "Cache usage: $CACHE_USAGE%"
-
-      # Threshold lowered to 50% for testing (production would use 80%).
-      if [ "$CACHE_USAGE" -lt 50 ]; then
-          log "Cache usage below threshold (50%), skipping move"
+      if [ "$cache_usage" -lt "$THRESHOLD" ]; then
+          log "Cache usage below threshold ($THRESHOLD%), skipping move"
           exit 0
       fi
 
-      cd "$CACHE_DIR" || exit 1
+      most_free_array_disk() {
+          local best="" best_avail=-1
+          for disk in "''${ARRAY_DISKS[@]}"; do
+              avail=$(df --output=avail "$disk" | tail -1 | tr -dc '0-9')
+              if [ "$avail" -gt "$best_avail" ]; then
+                  best="$disk"
+                  best_avail="$avail"
+              fi
+          done
+          echo "$best"
+      }
 
-      # mergerfs distributes writes through /mnt/user to array drives.
-      find . -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
-          dir_name=$(basename "$dir")
+      log "Starting mover process..."
+      moved=0 skipped=0
 
-          if [[ "$dir_name" == "appdata" ]] || [[ "$dir_name" == "domains" ]] || [[ "$dir_name" == "system" ]]; then
-              log "Skipping $dir_name (pinned to cache)"
+      while IFS= read -r -d "" file; do
+          rel="''${file#"$CACHE_DIR"/}"
+
+          if fuser -s "$file" 2>/dev/null; then
+              log "Skipping (open): $rel"
+              skipped=$((skipped + 1))
               continue
           fi
 
-          log "Moving $dir_name from cache to array..."
+          dest_disk=$(most_free_array_disk)
+          dest="$dest_disk/data/$rel"
+          mkdir -p "$(dirname "$dest")"
 
-          if rsync -aP --remove-source-files "$CACHE_DIR/$dir_name/" "$USER_DIR/$dir_name/"; then
-              find "$CACHE_DIR/$dir_name" -type d -empty -delete
-              log "Successfully moved $dir_name"
+          if rsync -a --remove-source-files "$file" "$dest"; then
+              moved=$((moved + 1))
           else
-              log "ERROR: Failed to move $dir_name"
+              log "ERROR: Failed to move $rel"
           fi
-      done
+      done < <(find "$CACHE_DIR" -mindepth 1 -type f -print0)
 
-      log "Mover process completed"
+      find "$CACHE_DIR" -mindepth 1 -type d -empty -delete
+
+      log "Mover process completed: $moved moved, $skipped skipped (open)"
     '';
     mode = "0755";
   };
@@ -104,15 +177,13 @@
       };
     };
 
-    # Ensures mount points exist; Disko may not create them all.
-    tmpfiles.rules = [
-      "d /mnt/cache_appdata 0755 root root -"
-      "d /mnt/cache_data 0755 root root -"
-      "d /mnt/disk1 0755 root root -"
-      "d /mnt/disk2 0755 root root -"
-      "d /mnt/disk3 0755 root root -"
-      "d /mnt/user 0755 root root -"
-      "d /var/log 0755 root root -"
-    ];
+    # Ensures mount points and per-disk share directories exist; the
+    # physical disks may not have these until first created.
+    tmpfiles.rules =
+      ["d /mnt/user 0755 root root -" "d /var/log 0755 root root -"]
+      ++ map (mp: "d ${mp} 0755 root root -") (["/mnt/cache_appdata" "/mnt/cache_data"] ++ arrayMountpoints)
+      ++ map (share: "d /mnt/cache_appdata/${share} 0755 root root -") pinnedShares
+      ++ ["d /mnt/cache_data/data 0755 root root -"]
+      ++ map (mp: "d ${mp}/data 0755 root root -") arrayMountpoints;
   };
 }

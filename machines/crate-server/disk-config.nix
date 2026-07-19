@@ -1,6 +1,8 @@
 {
-  # Simulates the full unRAID setup on a single 500GB SSD.
-  # Set device below to the real SSD path (check with `lsblk`).
+  # Only the boot SD card goes through disko. The 9 array drives and 2
+  # cache NVMe drives already hold real data and existing filesystems --
+  # they're mounted directly via plain fileSystems entries in storage.nix
+  # instead, so nothing here can accidentally reformat them.
 
   disko.devices = {
     disk = {
@@ -56,65 +58,6 @@
                     swap.swapfile.size = "8G";
                   };
                 };
-              };
-            };
-          };
-        };
-      };
-
-      test-storage = {
-        type = "disk";
-        device = "/dev/sda111";
-        content = {
-          type = "gpt";
-          partitions = {
-            cache_appdata = {
-              size = "100G";
-              content = {
-                type = "filesystem";
-                format = "xfs";
-                mountpoint = "/mnt/cache_appdata";
-                mountOptions = ["defaults"];
-              };
-            };
-
-            cache_data = {
-              size = "100G";
-              content = {
-                type = "filesystem";
-                format = "xfs";
-                mountpoint = "/mnt/cache_data";
-                mountOptions = ["defaults"];
-              };
-            };
-
-            disk1 = {
-              size = "100G";
-              content = {
-                type = "filesystem";
-                format = "xfs";
-                mountpoint = "/mnt/disk1";
-                mountOptions = ["defaults"];
-              };
-            };
-
-            disk2 = {
-              size = "100G";
-              content = {
-                type = "filesystem";
-                format = "xfs";
-                mountpoint = "/mnt/disk2";
-                mountOptions = ["defaults"];
-              };
-            };
-
-            disk3 = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "xfs";
-                mountpoint = "/mnt/disk3";
-                mountOptions = ["defaults"];
               };
             };
           };
