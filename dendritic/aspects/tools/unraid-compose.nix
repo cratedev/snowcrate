@@ -8,6 +8,7 @@
     envPath = config.age.secrets.komodo-env.path;
   in {
     systemd.tmpfiles.rules = [
+      "d /persist/unraid-compose 0755 matt users -"
       "d /mnt/cache_appdata/appdata/komodo/postgres-data 0755 root root -"
       "d /mnt/cache_appdata/appdata/komodo/ferretdb-state 0755 root root -"
       "d /mnt/cache_appdata/appdata/komodo/keys 0755 root root -"
