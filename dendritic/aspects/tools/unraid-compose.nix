@@ -6,6 +6,14 @@
   }: let
     repoDir = "/persist/unraid-compose";
     envPath = config.age.secrets.komodo-env.path;
+
+    # A single no-spaces path for GIT_SSH_COMMAND -- systemd's Environment=
+    # splits an unquoted value on whitespace into separate assignments, so
+    # "ssh -i <path> -o ..." as one string silently drops everything after
+    # the binary path. A wrapper script sidesteps that entirely.
+    gitSshWrapper = pkgs.writeShellScript "unraid-compose-git-ssh" ''
+      exec ${pkgs.openssh}/bin/ssh -i ${config.age.secrets.deployKey.path} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new "$@"
+    '';
   in {
     systemd.tmpfiles.rules = [
       "d /persist/unraid-compose 0755 matt users -"
@@ -33,7 +41,7 @@
       serviceConfig = {
         Type = "oneshot";
         User = "matt";
-        Environment = "GIT_SSH_COMMAND=${pkgs.openssh}/bin/ssh -i ${config.age.secrets.deployKey.path} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new";
+        Environment = "GIT_SSH_COMMAND=${gitSshWrapper}";
         Restart = "on-failure";
         RestartSec = "20s";
       };
