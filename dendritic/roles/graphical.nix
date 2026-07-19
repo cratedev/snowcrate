@@ -2,8 +2,9 @@
   flake.modules.nixos.role-graphical = {
     imports = with self.modules.nixos; [
       niri
+      dms-shell
+      dms-greeter
       noctalia-shell
-      noctalia-greeter
 
       onepassword
 

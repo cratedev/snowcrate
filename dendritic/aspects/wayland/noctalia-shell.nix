@@ -11,7 +11,9 @@
 
     programs.noctalia = {
       enable = true;
-      systemd.enable = true;
+      # Installed and configured, but not autostarted -- DMS is the
+      # active shell for now. Flip to true to make Noctalia active again.
+      systemd.enable = false;
     };
   };
 }

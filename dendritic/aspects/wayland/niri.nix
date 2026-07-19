@@ -21,6 +21,17 @@
   }: {
     imports = [inputs.niri-nix.homeModules.default];
 
+    # Pre-seeds empty placeholders for the dms/*.kdl includes below,
+    # since niri parses config.kdl before DMS generates them. Only
+    # creates missing files, so real DMS-generated content is kept.
+    home.activation.dmsNiriPlaceholders = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      run mkdir -p "$HOME/.config/niri/dms"
+      for f in alttab binds colors cursor layout outputs windowrules wpblur; do
+        target="$HOME/.config/niri/dms/$f.kdl"
+        [ -e "$target" ] || run touch "$target"
+      done
+    '';
+
     home.packages = [
       pkgs.xwayland-satellite-unstable
       pkgs.gtk4
@@ -36,6 +47,20 @@
       # Matches the NixOS module's package; niri-nix's config validation
       # requires cfg.package.system to be non-null.
       package = pkgs.niri-unstable;
+
+      # DMS generates these under ~/.config/niri/dms/ at runtime.
+      # extraConfig is appended after the settings-derived config, so
+      # these parse last.
+      extraConfig = ''
+        include "dms/alttab.kdl"
+        include "dms/binds.kdl"
+        include "dms/colors.kdl"
+        include "dms/cursor.kdl"
+        include "dms/layout.kdl"
+        include "dms/outputs.kdl"
+        include "dms/windowrules.kdl"
+        include "dms/wpblur.kdl"
+      '';
 
       settings = {
       hotkey-overlay.skip-at-startup = [];
@@ -114,6 +139,13 @@
         '';
       };
 
+      layer-rule = [
+        {
+          match._props.namespace = "dms:blurwallpaper";
+          place-within-backdrop = true;
+        }
+      ];
+
       window-rule = [
         {
           match._props.app-id = "1Password";
@@ -137,11 +169,11 @@
 
         "Mod+Return".spawn = ["ghostty" "-e" "zellij" "attach" "--create" "main"];
         "Mod+grave".spawn = "dropdown-terminal-toggle";
-        "Mod+D".spawn = ["noctalia-shell" "ipc" "call" "launcher" "toggle"];
-        "Mod+S".spawn = ["noctalia-shell" "ipc" "call" "settings" "toggle"];
-        "Mod+L".spawn = ["noctalia-shell" "ipc" "call" "lockScreen" "lock"];
-        "Mod+P".spawn = ["noctalia-shell" "ipc" "call" "sessionMenu" "toggle"];
-        "Mod+C".spawn = ["noctalia-shell" "ipc" "call" "controlCenter" "toggle"];
+        "Mod+D".spawn = ["dms" "ipc" "call" "spotlight" "toggle"];
+        "Mod+S".spawn = ["dms" "ipc" "call" "settings" "toggle"];
+        "Mod+L".spawn = ["dms" "ipc" "call" "lock" "lock"];
+        "Mod+P".spawn = ["dms" "ipc" "call" "powermenu" "toggle"];
+        "Mod+C".spawn = ["dms" "ipc" "call" "control-center" "toggle"];
         "Mod+Q".close-window = [];
 
         "Mod+WheelScrollDown".focus-column-right = [];
