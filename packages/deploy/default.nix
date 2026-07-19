@@ -7,7 +7,7 @@ pkgs.writeShellScriptBin "deploy" ''
   set -euo pipefail
 
   usage() {
-    echo "Usage: deploy <crate-laptop|crate-desktop|crate-server> [--target <ssh-target>]" >&2
+    echo "Usage: deploy <crate-laptop|crate-desktop|crate-server|crate-server-vm> [--target <ssh-target>]" >&2
     echo "  --target overrides the default host address, e.g. for testing" >&2
     echo "  against a local VM: --target ssh://nixos@localhost:2222" >&2
     exit 1
@@ -32,6 +32,11 @@ pkgs.writeShellScriptBin "deploy" ''
       ;;
     crate-server)
       TARGET_HOST="nixos@10.0.0.55"
+      ;;
+    crate-server-vm)
+      # Test-only flake output (see packages/deploy-test-vm) -- always
+      # used with --target against a local VM, never a real address.
+      TARGET_HOST="nixos@unused-vm-target"
       ;;
     *)
       usage

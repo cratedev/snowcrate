@@ -37,10 +37,14 @@
           ${pkgs.git}/bin/git clone git@github.com:cratedev/unraid.git "${repoDir}"
         fi
 
-        ln -sf "${envPath}" "${repoDir}/komodo/.env"
-
         ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
-        ${pkgs.docker}/bin/docker compose -p komodo -f "${repoDir}/komodo/compose.yaml" --env-file "${envPath}" up -d
+
+        if [ -f "${repoDir}/komodo/compose.yaml" ]; then
+          ln -sf "${envPath}" "${repoDir}/komodo/.env"
+          ${pkgs.docker}/bin/docker compose -p komodo -f "${repoDir}/komodo/compose.yaml" --env-file "${envPath}" up -d
+        else
+          echo "komodo/compose.yaml not in the repo yet, skipping Komodo"
+        fi
       '';
     };
 

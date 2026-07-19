@@ -7,6 +7,10 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   installer_result="$state_dir/installer-result"
   disk_img="$state_dir/disk.qcow2"
   dummy_img="$state_dir/dummy-nvme0.qcow2"
+  # crate-server: 2 cache disks + 9 array disks, pre-formatted XFS (raw
+  # format, not qcow2, so mkfs.xfs can write directly to the file).
+  # 8G each = 88G, plus the 40G boot disk -- well under the 200G budget.
+  server_data_disk_size="8G"
   ovmf_vars="$state_dir/OVMF_VARS.fd"
   pidfile="$state_dir/qemu.pid"
   portfile="$state_dir/ssh_port"
@@ -20,7 +24,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   ovmf_vars_template="${pkgs.OVMF.fd}/FV/OVMF_VARS.fd"
 
   usage() {
-    echo "Usage: deploy-test-vm <start <crate-laptop|crate-desktop>|stop|status|reboot|verify-persistence>" >&2
+    echo "Usage: deploy-test-vm <start <crate-laptop|crate-desktop|crate-server>|stop|status|reboot|verify-persistence>" >&2
     echo "  start <host>          boot a fresh VM for testing deploy against" >&2
     echo "  reboot                power-cycle the running VM, keeping its disk" >&2
     echo "  verify-persistence    after a real deploy, reboot and confirm" >&2
@@ -63,6 +67,25 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
         -drive file="$disk_img",if=none,id=nvme1,format=qcow2
         -device nvme,drive=nvme1,serial=deadbeef01,bootindex=1
       )
+    elif [ "$host" = "crate-server" ]; then
+      # nvme0n1 = boot card, nvme1n1/nvme2n1 = cache pair, nvme3n1..11n1
+      # = the 9 array disks. Matches dendritic/hosts/crate-server-vm.nix.
+      extra_disk_args=(
+        -drive file="$disk_img",if=none,id=nvme0,format=qcow2
+        -device nvme,drive=nvme0,serial=srv-boot,bootindex=1
+        -drive file="$state_dir/cache-appdata.img",if=none,id=nvme1,format=raw
+        -device nvme,drive=nvme1,serial=srv-cache-appdata
+        -drive file="$state_dir/cache-data.img",if=none,id=nvme2,format=raw
+        -device nvme,drive=nvme2,serial=srv-cache-data
+      )
+      local i n
+      for i in $(seq 1 9); do
+        n=$((i + 2))
+        extra_disk_args+=(
+          -drive file="$state_dir/array-disk$i.img",if=none,id="nvme$n",format=raw
+          -device nvme,drive="nvme$n",serial="srv-array-disk$i"
+        )
+      done
     else
       extra_disk_args=(
         -drive file="$disk_img",if=none,id=nvme0,format=qcow2
@@ -122,7 +145,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   cmd_start() {
     local host="''${1:-}"
     case "$host" in
-      crate-laptop | crate-desktop) ;;
+      crate-laptop | crate-desktop | crate-server) ;;
       *) usage ;;
     esac
 
@@ -163,16 +186,35 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     if [ "$host" = "crate-laptop" ]; then
       rm -f "$dummy_img"
       ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$dummy_img" 64M >/dev/null
+    elif [ "$host" = "crate-server" ]; then
+      echo "Creating and formatting cache + array disk images (raw, XFS)..."
+      local name
+      for name in cache-appdata cache-data; do
+        rm -f "$state_dir/$name.img"
+        ${pkgs.qemu}/bin/qemu-img create -f raw "$state_dir/$name.img" "$server_data_disk_size" >/dev/null
+        ${pkgs.xfsprogs}/bin/mkfs.xfs -q "$state_dir/$name.img"
+      done
+      local i
+      for i in $(seq 1 9); do
+        rm -f "$state_dir/array-disk$i.img"
+        ${pkgs.qemu}/bin/qemu-img create -f raw "$state_dir/array-disk$i.img" "$server_data_disk_size" >/dev/null
+        ${pkgs.xfsprogs}/bin/mkfs.xfs -q "$state_dir/array-disk$i.img"
+      done
     fi
 
     echo "Starting VM for $host (RAM: ''${ram_mb}MB, CPUs: $cpus, disk: $disk_size)..."
     launch_qemu "$host"
     wait_for_ssh
 
+    local deploy_target="$host"
+    if [ "$host" = "crate-server" ]; then
+      deploy_target="crate-server-vm"
+    fi
+
     echo ""
     echo "VM ready. Test the deploy script against it with:"
     echo ""
-    echo "  deploy $host --target ssh://nixos@localhost:$ssh_port"
+    echo "  deploy $deploy_target --target ssh://nixos@localhost:$ssh_port"
     echo ""
     echo "Stop the VM afterward with: deploy-test-vm stop"
   }

@@ -1,15 +1,24 @@
 {
+  lib,
+  config,
+  ...
+}: {
   # Only the boot SD card goes through disko. The 9 array drives and 2
   # cache NVMe drives already hold real data and existing filesystems --
   # they're mounted directly via plain fileSystems entries in storage.nix
   # instead, so nothing here can accidentally reformat them.
 
-  disko.devices = {
+  options.crate.storage.crateServer.bootDevice = lib.mkOption {
+    type = lib.types.str;
+    default = "/dev/mmcblk0";
+    description = "Boot device (a microSD card on real hardware).";
+  };
+
+  config.disko.devices = {
     disk = {
-      # Boot drive - microSD card
       boot = {
         type = "disk";
-        device = "/dev/mmcblk0";
+        device = config.crate.storage.crateServer.bootDevice;
         content = {
           type = "gpt";
           partitions = {
