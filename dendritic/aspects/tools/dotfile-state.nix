@@ -2,8 +2,8 @@
   flake.modules.homeManager.dotfile-state = {pkgs, ...}: let
     # Shared by dotfile-state-capture and dotfile-state-check.
     capturedPaths = [
-      ".config/DankMaterialShell"
-      ".local/state/DankMaterialShell"
+      ".config/noctalia"
+      ".local/state/noctalia"
       ".config/vesktop"
       ".config/obsidian"
       ".config/YouTube Music Desktop App"
@@ -11,10 +11,7 @@
 
     # Paths dotfile-state-check ignores as regenerated from something
     # already captured elsewhere.
-    ignoredPaths = [
-      # Regenerated from .config/DankMaterialShell/settings.json.
-      ".config/niri/dms"
-    ];
+    ignoredPaths = [];
 
     capture = import ../../../packages/dotfile-state-capture {inherit pkgs capturedPaths;};
     restore = import ../../../packages/dotfile-state-restore {inherit pkgs;};
