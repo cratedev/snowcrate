@@ -4,7 +4,7 @@
   age.secrets = {
     deployKey = {
       file = "${inputs.mysecrets}/secrets/server/deploy_key.age";
-      path = "/persist/etc/deploy_key";
+      path = "/persist/home/matt/.ssh/deploy_key";
       mode = "400";
       owner = "matt";
       group = "users";
