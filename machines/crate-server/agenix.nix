@@ -11,7 +11,7 @@
     };
 
     komodo-env = {
-      file = "${inputs.mysecrets}/secrets/env/komodo.age";
+      file = "${inputs.mysecrets}/secrets/server/komodo.age";
       mode = "400";
       owner = "matt";
       group = "users";
