@@ -10,6 +10,7 @@
         "/var/log"
         "/etc/NetworkManager/system-connections"
         "/var/lib/tailscale"
+        "/var/lib/docker"
       ];
 
       # SSH host keys persist via services.openssh.hostKeys (openssh.nix).
