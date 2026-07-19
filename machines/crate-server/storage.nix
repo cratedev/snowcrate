@@ -34,6 +34,7 @@
         "bind"
         "nofail"
         "x-systemd.requires-mounts-for=/mnt/cache_appdata"
+        "x-systemd.requires=crate-server-storage-dirs.service"
       ];
     })
     pinnedShares);
@@ -54,10 +55,13 @@
           "moveonenospc=true" # overflow straight to array if cache fills up
           "minfreespace=20G"
           "fsname=mergerfs:data"
+          "x-systemd.requires=crate-server-storage-dirs.service"
         ]
         ++ map (m: "x-systemd.requires-mounts-for=${m}") (["/mnt/cache_data"] ++ arrayMountpoints);
     };
   };
+
+  physicalMountpoints = builtins.attrNames physicalDisks;
 in {
   options.crate.storage.crateServer = {
     cacheAppdataDevice = lib.mkOption {
@@ -192,14 +196,35 @@ in {
         };
       };
 
-      # Ensures mount points and per-disk share directories exist; the
-      # physical disks may not have these until first created.
+      # Only the bare mountpoint stubs -- these live on the root filesystem
+      # and just need to exist before each disk mounts onto them. The
+      # directories *inside* those mounts (data/, share dirs) can't be
+      # tmpfiles rules: the disks are nofail, so they aren't part of
+      # local-fs.target's boot wait, and tmpfiles-setup isn't guaranteed to
+      # run after them -- see crate-server-storage-dirs below.
       tmpfiles.rules =
         ["d /mnt/user 0755 root root -" "d /var/log 0755 root root -"]
-        ++ map (mp: "d ${mp} 0755 root root -") (["/mnt/cache_appdata" "/mnt/cache_data"] ++ arrayMountpoints)
-        ++ map (share: "d /mnt/cache_appdata/${share} 0755 root root -") pinnedShares
-        ++ ["d /mnt/cache_data/data 0755 root root -"]
-        ++ map (mp: "d ${mp}/data 0755 root root -") arrayMountpoints;
+        ++ map (mp: "d ${mp} 0755 root root -") (["/mnt/cache_appdata" "/mnt/cache_data"] ++ arrayMountpoints);
+
+      # Creates the directories inside each physical disk (per-disk share
+      # dirs on cache_appdata, data/ on cache_data and every array disk)
+      # once those disks are actually mounted. mergerfs and the share bind
+      # mounts both require this to have run first (see their
+      # x-systemd.requires options above).
+      services.crate-server-storage-dirs = {
+        description = "Create mergerfs branch and share directories on crate-server's physical disks";
+        unitConfig.RequiresMountsFor = physicalMountpoints;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          set -euo pipefail
+          ${lib.concatMapStringsSep "\n" (share: "mkdir -p '/mnt/cache_appdata/${share}'") pinnedShares}
+          mkdir -p '/mnt/cache_data/data'
+          ${lib.concatMapStringsSep "\n" (mp: "mkdir -p '${mp}/data'") arrayMountpoints}
+        '';
+      };
     };
   };
 }
