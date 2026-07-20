@@ -57,9 +57,10 @@
         };
       }
 
-      # Bridges enp5s0 into br0 so QEMU test VMs (see
-      # packages/deploy-test-vm) can get their own real LAN IP instead of
-      # NAT/port-forwarding -- used for the crate-server rehearsal VM.
+      # Bridges enp4s0 (the live LAN NIC -- enp5s0 is unplugged) into br0
+      # so QEMU test VMs (see packages/deploy-test-vm) can get their own
+      # real LAN IP instead of NAT/port-forwarding -- used for the
+      # crate-server rehearsal VM.
       ({pkgs, ...}: {
         networking.networkmanager.ensureProfiles.profiles = {
           br0 = {
@@ -72,11 +73,11 @@
             ipv4.method = "auto";
             ipv6.method = "auto";
           };
-          enp5s0 = {
+          enp4s0 = {
             connection = {
-              id = "enp5s0";
+              id = "enp4s0";
               type = "ethernet";
-              interface-name = "enp5s0";
+              interface-name = "enp4s0";
               master = "br0";
               slave-type = "bridge";
               autoconnect = true;
