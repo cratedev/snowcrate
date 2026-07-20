@@ -28,6 +28,7 @@
       tailscale
 
       boot
+      fstrim
       locale
       nix-settings
       time
