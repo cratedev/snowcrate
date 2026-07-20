@@ -15,6 +15,12 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   pidfile="$state_dir/qemu.pid"
   portfile="$state_dir/ssh_port"
   hostfile="$state_dir/current-host"
+  sshhostfile="$state_dir/ssh_host"
+  # crate-server gets bridged networking with a real LAN IP instead of
+  # NAT+hostfwd (see build_disk_args/launch_qemu); this MAC is what the
+  # static NetworkManager profile in crate-server-vm.nix matches on.
+  server_mac="52:54:00:12:34:60"
+  server_ip="10.0.0.60"
   console_log="$state_dir/console.log"
   disk_size="40G"
   ram_mb=8192
@@ -39,7 +45,10 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
 
   cmd_status() {
     if is_running; then
-      echo "VM running (pid $(cat "$pidfile")), SSH forwarded to localhost:$(cat "$portfile")"
+      local ssh_host ssh_port
+      ssh_host="$(cat "$sshhostfile" 2>/dev/null || echo localhost)"
+      ssh_port="$(cat "$portfile" 2>/dev/null || echo 22)"
+      echo "VM running (pid $(cat "$pidfile")), SSH reachable at $ssh_host:$ssh_port"
     else
       echo "VM not running"
     fi
@@ -49,7 +58,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     if is_running; then
       echo "Stopping VM (pid $(cat "$pidfile"))..."
       kill "$(cat "$pidfile")"
-      rm -f "$pidfile" "$portfile" "$hostfile"
+      rm -f "$pidfile" "$portfile" "$hostfile" "$sshhostfile"
     else
       echo "VM not running"
     fi
@@ -110,6 +119,22 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       )
     fi
 
+    local netdev_args=()
+    if [ "$host" = "crate-server" ]; then
+      # Bridged instead of NAT+hostfwd: crate-server-vm gets a real LAN
+      # IP (see server_ip/server_mac) via crate-desktop's br0 bridge, so
+      # containers are reachable directly at $server_ip:<port>.
+      netdev_args=(
+        -netdev bridge,id=net0,br=br0,helper=/run/wrappers/bin/qemu-bridge-helper
+        -device virtio-net-pci,netdev=net0,mac="$server_mac"
+      )
+    else
+      netdev_args=(
+        -netdev user,id=net0,hostfwd=tcp::''${ssh_port}-:22
+        -device virtio-net-pci,netdev=net0
+      )
+    fi
+
     ${pkgs.qemu}/bin/qemu-system-x86_64 \
       -enable-kvm \
       -m "$ram_mb" \
@@ -120,8 +145,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       "''${extra_disk_args[@]}" \
       "''${iso_args[@]}" \
       -boot menu=off \
-      -netdev user,id=net0,hostfwd=tcp::''${ssh_port}-:22 \
-      -device virtio-net-pci,netdev=net0 \
+      "''${netdev_args[@]}" \
       -display none \
       -serial file:"$console_log" \
       -monitor none \
@@ -130,9 +154,10 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   }
 
   wait_for_ssh() {
-    echo "Waiting for SSH to become reachable on localhost:$ssh_port..."
+    local ssh_host="$1" ssh_port="$2"
+    echo "Waiting for SSH to become reachable on $ssh_host:$ssh_port..."
     local waited=0
-    until ${pkgs.netcat}/bin/nc -z localhost "$ssh_port" 2>/dev/null; do
+    until ${pkgs.netcat}/bin/nc -z "$ssh_host" "$ssh_port" 2>/dev/null; do
       sleep 5
       waited=$((waited + 5))
       if [ "$waited" -ge 300 ]; then
@@ -157,9 +182,16 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     mkdir -p "$state_dir"
     echo "$host" > "$hostfile"
 
-    # Pick a free ephemeral port for SSH forwarding.
-    local ssh_port
-    ssh_port="$(${pkgs.python3}/bin/python3 -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
+    local ssh_host ssh_port
+    if [ "$host" = "crate-server" ]; then
+      ssh_host="$server_ip"
+      ssh_port="22"
+    else
+      # Pick a free ephemeral port for SSH forwarding.
+      ssh_host="localhost"
+      ssh_port="$(${pkgs.python3}/bin/python3 -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')"
+    fi
+    echo "$ssh_host" > "$sshhostfile"
     echo "$ssh_port" > "$portfile"
 
     # Build a custom installer ISO with matt's SSH key baked into the
@@ -204,7 +236,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
 
     echo "Starting VM for $host (RAM: ''${ram_mb}MB, CPUs: $cpus, disk: $disk_size)..."
     launch_qemu "$host"
-    wait_for_ssh
+    wait_for_ssh "$ssh_host" "$ssh_port"
 
     local deploy_target="$host"
     if [ "$host" = "crate-server" ]; then
@@ -214,7 +246,7 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
     echo ""
     echo "VM ready. Test the deploy script against it with:"
     echo ""
-    echo "  deploy $deploy_target --target ssh://nixos@localhost:$ssh_port"
+    echo "  deploy $deploy_target --target ssh://nixos@$ssh_host:$ssh_port"
     echo ""
     echo "Stop the VM afterward with: deploy-test-vm stop"
   }
@@ -230,7 +262,8 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       echo "Don't know which host this VM was started for -- run 'deploy-test-vm start <host>' first" >&2
       exit 1
     fi
-    local ssh_port
+    local ssh_host ssh_port
+    ssh_host="$(cat "$sshhostfile")"
     ssh_port="$(cat "$portfile")"
     local iso_path=""
 
@@ -249,8 +282,8 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
 
     echo "Restarting VM from its existing disk (simulating a power cycle)..."
     launch_qemu "$host"
-    wait_for_ssh
-    echo "VM back up on localhost:$ssh_port"
+    wait_for_ssh "$ssh_host" "$ssh_port"
+    echo "VM back up on $ssh_host:$ssh_port"
   }
 
   cmd_verify_persistence() {
@@ -259,24 +292,26 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       exit 1
     fi
 
-    local ssh_port ssh_opts marker
+    local ssh_host ssh_port ssh_opts marker
+    ssh_host="$(cat "$sshhostfile")"
     ssh_port="$(cat "$portfile")"
     ssh_opts=(-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p "$ssh_port")
     marker="persist-check-$(date +%s)"
 
     echo "Writing a marker under ~/documents (persisted) and one directly under \$HOME (not persisted)..."
-    ${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@localhost \
+    ${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@"$ssh_host" \
       "mkdir -p ~/documents && echo $marker > ~/documents/.persistence-test && echo $marker > ~/.persistence-test-should-vanish"
 
     cmd_reboot
 
+    ssh_host="$(cat "$sshhostfile")"
     ssh_port="$(cat "$portfile")"
     ssh_opts=(-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p "$ssh_port")
 
     local persisted vanished
-    persisted="$(${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@localhost "cat ~/documents/.persistence-test 2>/dev/null || true")"
-    vanished="$(${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@localhost "cat ~/.persistence-test-should-vanish 2>/dev/null || true")"
-    ${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@localhost "rm -f ~/documents/.persistence-test" || true
+    persisted="$(${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@"$ssh_host" "cat ~/documents/.persistence-test 2>/dev/null || true")"
+    vanished="$(${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@"$ssh_host" "cat ~/.persistence-test-should-vanish 2>/dev/null || true")"
+    ${pkgs.openssh}/bin/ssh "''${ssh_opts[@]}" matt@"$ssh_host" "rm -f ~/documents/.persistence-test" || true
 
     echo ""
     local ok=1

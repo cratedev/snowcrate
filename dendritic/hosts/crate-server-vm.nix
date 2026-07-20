@@ -51,7 +51,27 @@
         networking = {
           hostName = "crate-server-vm";
           domain = "crate.dev";
-          networkmanager.enable = true;
+          networkmanager = {
+            enable = true;
+            # Static LAN IP over DHCP, matched by the fixed MAC set on the
+            # QEMU virtio-net device (see packages/deploy-test-vm), so
+            # containers here are reachable at 10.0.0.60:<port> from
+            # crate-laptop instead of needing per-port NAT forwarding.
+            ensureProfiles.profiles.lan = {
+              connection = {
+                id = "lan";
+                type = "ethernet";
+                autoconnect = true;
+              };
+              ethernet.mac-address = "52:54:00:12:34:60";
+              ipv4 = {
+                method = "manual";
+                address1 = "10.0.0.60/24,10.0.0.1";
+                dns = "10.0.0.1;";
+              };
+              ipv6.method = "ignore";
+            };
+          };
           firewall = {
             enable = true;
             allowedTCPPorts = [22 2222 80 443 3552 9120];

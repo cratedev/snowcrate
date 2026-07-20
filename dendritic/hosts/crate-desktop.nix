@@ -56,6 +56,43 @@
           ];
         };
       }
+
+      # Bridges enp5s0 into br0 so QEMU test VMs (see
+      # packages/deploy-test-vm) can get their own real LAN IP instead of
+      # NAT/port-forwarding -- used for the crate-server rehearsal VM.
+      ({pkgs, ...}: {
+        networking.networkmanager.ensureProfiles.profiles = {
+          br0 = {
+            connection = {
+              id = "br0";
+              type = "bridge";
+              interface-name = "br0";
+              autoconnect = true;
+            };
+            ipv4.method = "auto";
+            ipv6.method = "auto";
+          };
+          enp5s0 = {
+            connection = {
+              id = "enp5s0";
+              type = "ethernet";
+              interface-name = "enp5s0";
+              master = "br0";
+              slave-type = "bridge";
+              autoconnect = true;
+            };
+          };
+        };
+
+        security.wrappers.qemu-bridge-helper = {
+          source = "${pkgs.qemu}/libexec/qemu-bridge-helper";
+          owner = "root";
+          group = "root";
+          setuid = true;
+        };
+
+        environment.etc."qemu/bridge.conf".text = "allow br0\n";
+      })
     ];
   };
 }
