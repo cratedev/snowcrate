@@ -43,58 +43,60 @@
       '';
     };
 
-    systemd.tmpfiles.rules = [
-      "d /persist/unraid-compose 0755 matt users -"
-      "d /mnt/cache_appdata/appdata/komodo/postgres-data 0755 root root -"
-      "d /mnt/cache_appdata/appdata/komodo/ferretdb-state 0755 root root -"
-      "d /mnt/cache_appdata/appdata/komodo/keys 0755 root root -"
-      "d /mnt/cache_appdata/appdata/komodo/backups 0755 root root -"
-      "d /mnt/cache_appdata/appdata/komodo/komodo-data 0755 root root -"
-    ];
+    config = {
+      systemd.tmpfiles.rules = [
+        "d /persist/unraid-compose 0755 matt users -"
+        "d /mnt/cache_appdata/appdata/komodo/postgres-data 0755 root root -"
+        "d /mnt/cache_appdata/appdata/komodo/ferretdb-state 0755 root root -"
+        "d /mnt/cache_appdata/appdata/komodo/keys 0755 root root -"
+        "d /mnt/cache_appdata/appdata/komodo/backups 0755 root root -"
+        "d /mnt/cache_appdata/appdata/komodo/komodo-data 0755 root root -"
+      ];
 
-    systemd.services.unraid-compose = {
-      description = "Sync cratedev/crate-server and bring up Arcane + Komodo";
-      after = ["docker.service" "network-online.target" "mnt-user-appdata.mount"];
-      wants = ["network-online.target"];
-      requires = ["docker.service"];
-      wantedBy = ["multi-user.target"];
+      systemd.services.unraid-compose = {
+        description = "Sync cratedev/crate-server and bring up Arcane + Komodo";
+        after = ["docker.service" "network-online.target" "mnt-user-appdata.mount"];
+        wants = ["network-online.target"];
+        requires = ["docker.service"];
+        wantedBy = ["multi-user.target"];
 
-      # Retries on failure: network-online.target doesn't guarantee DNS is
-      # actually usable yet (seen at boot with DHCP/NetworkManager still
-      # settling), and this shouldn't have to wait a full hour to recover
-      # from a transient failure like that.
-      startLimitIntervalSec = 600;
-      startLimitBurst = 6;
+        # Retries on failure: network-online.target doesn't guarantee DNS is
+        # actually usable yet (seen at boot with DHCP/NetworkManager still
+        # settling), and this shouldn't have to wait a full hour to recover
+        # from a transient failure like that.
+        startLimitIntervalSec = 600;
+        startLimitBurst = 6;
 
-      serviceConfig = {
-        Type = "oneshot";
-        User = "matt";
-        Environment = "GIT_SSH_COMMAND=${gitSshWrapper}";
-        Restart = "on-failure";
-        RestartSec = "20s";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "matt";
+          Environment = "GIT_SSH_COMMAND=${gitSshWrapper}";
+          Restart = "on-failure";
+          RestartSec = "20s";
+        };
+
+        script = ''
+          set -euo pipefail
+
+          if [ -d "${repoDir}/.git" ]; then
+            ${pkgs.git}/bin/git -C "${repoDir}" pull --ff-only
+          else
+            ${pkgs.git}/bin/git clone git@github.com:cratedev/crate-server.git "${repoDir}"
+          fi
+
+          ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
+
+          ${komodoBringup}
+        '';
       };
 
-      script = ''
-        set -euo pipefail
-
-        if [ -d "${repoDir}/.git" ]; then
-          ${pkgs.git}/bin/git -C "${repoDir}" pull --ff-only
-        else
-          ${pkgs.git}/bin/git clone git@github.com:cratedev/crate-server.git "${repoDir}"
-        fi
-
-        ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
-
-        ${komodoBringup}
-      '';
-    };
-
-    systemd.timers.unraid-compose = {
-      description = "Periodically resync cratedev/crate-server and reapply compose state";
-      wantedBy = ["timers.target"];
-      timerConfig = {
-        OnCalendar = "hourly";
-        Persistent = true;
+      systemd.timers.unraid-compose = {
+        description = "Periodically resync cratedev/crate-server and reapply compose state";
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnCalendar = "hourly";
+          Persistent = true;
+        };
       };
     };
   };
