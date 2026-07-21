@@ -28,9 +28,13 @@
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input" "video" "render"];
 
-        # nvme0n1 is the dedicated "boot card" disk; nvme1n1/nvme2n1 are
-        # the cache pair; nvme3n1..nvme11n1 are the 9 array disks. Order
-        # matches packages/deploy-test-vm's QEMU device wiring.
+        # nvme0n1 is the ephemeral boot disk (recreated each test run);
+        # nvme1n1/nvme2n1/nvme3n1/nvme4n1 are real, already-formatted
+        # partitions on crate-desktop's dedicated 3TB rehearsal drive
+        # (cache_appdata/cache_data/array1/array2), passed through as raw
+        # block devices -- mimicking only 2 array disks, not the real
+        # hardware's 9. Order matches packages/deploy-test-vm's QEMU
+        # device wiring.
         crate.storage.crateServer = {
           bootDevice = "/dev/nvme0n1";
           cacheAppdataDevice = "/dev/nvme1n1";
@@ -38,13 +42,6 @@
           arrayDisks = {
             disk1 = "/dev/nvme3n1";
             disk2 = "/dev/nvme4n1";
-            disk3 = "/dev/nvme5n1";
-            disk4 = "/dev/nvme6n1";
-            disk5 = "/dev/nvme7n1";
-            disk6 = "/dev/nvme8n1";
-            disk7 = "/dev/nvme9n1";
-            disk8 = "/dev/nvme10n1";
-            disk9 = "/dev/nvme11n1";
           };
         };
 

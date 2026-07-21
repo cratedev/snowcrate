@@ -7,10 +7,14 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
   installer_result="$state_dir/installer-result"
   disk_img="$state_dir/disk.qcow2"
   dummy_img="$state_dir/dummy-nvme0.qcow2"
-  # crate-server: 2 cache disks + 9 array disks, pre-formatted XFS (raw
-  # format, not qcow2, so mkfs.xfs can write directly to the file).
-  # 8G each = 88G, plus the 40G boot disk -- well under the 200G budget.
-  server_data_disk_size="8G"
+  # crate-server: cache_appdata/cache_data/array1/array2, real
+  # already-formatted partitions on crate-desktop's dedicated 3TB
+  # rehearsal drive -- passed through as raw block devices, never
+  # created or mkfs'd by this script (see build_disk_args).
+  server_cache_appdata_part="/dev/disk/by-partlabel/cache_appdata"
+  server_cache_data_part="/dev/disk/by-partlabel/cache_data"
+  server_array1_part="/dev/disk/by-partlabel/array1"
+  server_array2_part="/dev/disk/by-partlabel/array2"
   ovmf_vars="$state_dir/OVMF_VARS.fd"
   pidfile="$state_dir/qemu.pid"
   portfile="$state_dir/ssh_port"
@@ -77,24 +81,22 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
         -device nvme,drive=nvme1,serial=deadbeef01,bootindex=1
       )
     elif [ "$host" = "crate-server" ]; then
-      # nvme0n1 = boot card, nvme1n1/nvme2n1 = cache pair, nvme3n1..11n1
-      # = the 9 array disks. Matches dendritic/hosts/crate-server-vm.nix.
+      # nvme0n1 = ephemeral boot disk; nvme1n1/nvme2n1/nvme3n1/nvme4n1 =
+      # cache_appdata/cache_data/array1/array2, real partitions on
+      # crate-desktop's 3TB rehearsal drive. Matches
+      # dendritic/hosts/crate-server-vm.nix.
       extra_disk_args=(
         -drive file="$disk_img",if=none,id=nvme0,format=qcow2
         -device nvme,drive=nvme0,serial=srv-boot,bootindex=1
-        -drive file="$state_dir/cache-appdata.img",if=none,id=nvme1,format=raw
+        -drive file="$server_cache_appdata_part",if=none,id=nvme1,format=raw
         -device nvme,drive=nvme1,serial=srv-cache-appdata
-        -drive file="$state_dir/cache-data.img",if=none,id=nvme2,format=raw
+        -drive file="$server_cache_data_part",if=none,id=nvme2,format=raw
         -device nvme,drive=nvme2,serial=srv-cache-data
+        -drive file="$server_array1_part",if=none,id=nvme3,format=raw
+        -device nvme,drive=nvme3,serial=srv-array-disk1
+        -drive file="$server_array2_part",if=none,id=nvme4,format=raw
+        -device nvme,drive=nvme4,serial=srv-array-disk2
       )
-      local i n
-      for i in $(seq 1 9); do
-        n=$((i + 2))
-        extra_disk_args+=(
-          -drive file="$state_dir/array-disk$i.img",if=none,id="nvme$n",format=raw
-          -device nvme,drive="nvme$n",serial="srv-array-disk$i"
-        )
-      done
     else
       extra_disk_args=(
         -drive file="$disk_img",if=none,id=nvme0,format=qcow2
@@ -219,18 +221,16 @@ pkgs.writeShellScriptBin "deploy-test-vm" ''
       rm -f "$dummy_img"
       ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$dummy_img" 64M >/dev/null
     elif [ "$host" = "crate-server" ]; then
-      echo "Creating and formatting cache + array disk images (raw, XFS)..."
-      local name
-      for name in cache-appdata cache-data; do
-        rm -f "$state_dir/$name.img"
-        ${pkgs.qemu}/bin/qemu-img create -f raw "$state_dir/$name.img" "$server_data_disk_size" >/dev/null
-        ${pkgs.xfsprogs}/bin/mkfs.xfs -q "$state_dir/$name.img"
-      done
-      local i
-      for i in $(seq 1 9); do
-        rm -f "$state_dir/array-disk$i.img"
-        ${pkgs.qemu}/bin/qemu-img create -f raw "$state_dir/array-disk$i.img" "$server_data_disk_size" >/dev/null
-        ${pkgs.xfsprogs}/bin/mkfs.xfs -q "$state_dir/array-disk$i.img"
+      # These are real, already-formatted partitions on crate-desktop's
+      # dedicated rehearsal drive -- never created or mkfs'd here, only
+      # checked for existence so a missing/renamed by-partlabel entry
+      # fails fast with a clear message instead of a cryptic QEMU error.
+      local part
+      for part in "$server_cache_appdata_part" "$server_cache_data_part" "$server_array1_part" "$server_array2_part"; do
+        if [ ! -e "$part" ]; then
+          echo "Expected partition $part not found -- check 'ls -la /dev/disk/by-partlabel/' and update packages/deploy-test-vm/default.nix if the label differs." >&2
+          exit 1
+        fi
       done
     fi
 

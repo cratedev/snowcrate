@@ -22,7 +22,11 @@
       self.modules.nixos.cachix-push
 
       {
-        users.users.matt.extraGroups = ["wheel" "docker" "input"];
+        # "disk" grants raw access to /dev/disk/by-partlabel/* block
+        # devices, needed so QEMU (run as matt, not root) can pass
+        # crate-server-vm's cache/array partitions straight through --
+        # see packages/deploy-test-vm.
+        users.users.matt.extraGroups = ["wheel" "docker" "input" "disk"];
 
         networking = {
           hostName = "crate-desktop";

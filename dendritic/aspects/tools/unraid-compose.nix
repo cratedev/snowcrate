@@ -25,7 +25,7 @@
     ];
 
     systemd.services.unraid-compose = {
-      description = "Sync cratedev/unraid and bring up Arcane + Komodo";
+      description = "Sync cratedev/crate-server and bring up Arcane + Komodo";
       after = ["docker.service" "network-online.target" "mnt-user-appdata.mount"];
       wants = ["network-online.target"];
       requires = ["docker.service"];
@@ -52,7 +52,7 @@
         if [ -d "${repoDir}/.git" ]; then
           ${pkgs.git}/bin/git -C "${repoDir}" pull --ff-only
         else
-          ${pkgs.git}/bin/git clone git@github.com:cratedev/unraid.git "${repoDir}"
+          ${pkgs.git}/bin/git clone git@github.com:cratedev/crate-server.git "${repoDir}"
         fi
 
         ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
@@ -67,7 +67,7 @@
     };
 
     systemd.timers.unraid-compose = {
-      description = "Periodically resync cratedev/unraid and reapply compose state";
+      description = "Periodically resync cratedev/crate-server and reapply compose state";
       wantedBy = ["timers.target"];
       timerConfig = {
         OnCalendar = "hourly";
