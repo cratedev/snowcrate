@@ -31,6 +31,7 @@
       fstrim
       locale
       nix-settings
+      polkit-wheel-rebuild
       time
 
       impermanence

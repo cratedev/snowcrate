@@ -1,9 +1,11 @@
 {...}: {
   flake.modules.nixos.unraid-compose = {
     config,
+    lib,
     pkgs,
     ...
   }: let
+    cfg = config.crate.unraidCompose;
     repoDir = "/persist/unraid-compose";
     envPath = config.age.secrets.komodo-env.path;
 
@@ -14,7 +16,33 @@
     gitSshWrapper = pkgs.writeShellScript "unraid-compose-git-ssh" ''
       exec ${pkgs.openssh}/bin/ssh -i ${config.age.secrets.deployKey.path} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new "$@"
     '';
+
+    komodoBringup =
+      if cfg.enableKomodo
+      then ''
+        if [ -f "${repoDir}/komodo/compose.yaml" ]; then
+          ln -sf "${envPath}" "${repoDir}/komodo/.env"
+          ${pkgs.docker}/bin/docker compose -p komodo -f "${repoDir}/komodo/compose.yaml" --env-file "${envPath}" up -d
+        else
+          echo "komodo/compose.yaml not in the repo yet, skipping Komodo"
+        fi
+      ''
+      else ''
+        echo "Komodo disabled via crate.unraidCompose.enableKomodo, skipping"
+      '';
   in {
+    options.crate.unraidCompose.enableKomodo = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether unraid-compose should also bring up Komodo (when
+        komodo/compose.yaml exists in the repo). Set false on hosts that
+        should only run Arcane, e.g. rehearsal VMs not yet ready for
+        Komodo. Doesn't stop an already-running Komodo stack -- this only
+        gates future bring-up.
+      '';
+    };
+
     systemd.tmpfiles.rules = [
       "d /persist/unraid-compose 0755 matt users -"
       "d /mnt/cache_appdata/appdata/komodo/postgres-data 0755 root root -"
@@ -57,12 +85,7 @@
 
         ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
 
-        if [ -f "${repoDir}/komodo/compose.yaml" ]; then
-          ln -sf "${envPath}" "${repoDir}/komodo/.env"
-          ${pkgs.docker}/bin/docker compose -p komodo -f "${repoDir}/komodo/compose.yaml" --env-file "${envPath}" up -d
-        else
-          echo "komodo/compose.yaml not in the repo yet, skipping Komodo"
-        fi
+        ${komodoBringup}
       '';
     };
 

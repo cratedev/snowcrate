@@ -1,7 +1,28 @@
-shortName: {inputs, ...}: {
+shortName: {
+  inputs,
+  config,
+  ...
+}: {
   imports = [
     inputs.agenix.nixosModules.default
   ];
+
+  # Lets `sudo nixos-rebuild switch/test` (and anything else run as root)
+  # fetch the private nix-secrets flake input over SSH -- root has no SSH
+  # access of its own, so without this, evaluating as root fails outright
+  # (nothing to do with the secrets themselves; the whole flake input
+  # fetch never gets that far). matt's own key already has nix-secrets
+  # access, so system-wide config just points root at the same key
+  # (readable by root regardless of its 400/matt:users mode). This is
+  # system-wide rather than root-only because there's no per-user config
+  # to override it with here, and it doesn't weaken anything -- it's the
+  # exact same key matt's own shell already uses for this host.
+  programs.ssh.extraConfig = ''
+    Host github.com
+      IdentityFile ${config.age.secrets.sshUserKey.path}
+      IdentitiesOnly yes
+  '';
+
   age = {
     secrets = {
       sshHostKey = {

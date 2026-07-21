@@ -28,6 +28,11 @@
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input" "video" "render"];
 
+        # Rehearsal-only: should just run Arcane, not the full production
+        # stack. Doesn't stop Komodo if it's already running from before
+        # this was set -- see the README note on unraid-compose.service.
+        crate.unraidCompose.enableKomodo = false;
+
         # nvme0n1 is the ephemeral boot disk (recreated each test run);
         # nvme1n1/nvme2n1/nvme3n1/nvme4n1 are real, already-formatted
         # partitions on crate-desktop's dedicated 3TB rehearsal drive
