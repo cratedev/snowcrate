@@ -221,8 +221,23 @@ in {
         script = ''
           set -euo pipefail
           ${lib.concatMapStringsSep "\n" (share: "mkdir -p '/mnt/cache_appdata/${share}'") pinnedShares}
+
+          # Owned nobody:users (99:100, unRAID's convention -- matches the
+          # PUID/PGID nearly every container in cratedev/crate-server runs
+          # as) so containers can create their own subdirectories directly
+          # under /data (e.g. sabnzbd's usenet/incomplete, /completed).
+          # Unlike the per-app appdata dirs below, nothing else chowns this
+          # shared pool -- linuxserver.io images only self-chown their own
+          # dedicated /config volume on startup, not arbitrary extra mounts.
           mkdir -p '/mnt/cache_data/data'
-          ${lib.concatMapStringsSep "\n" (mp: "mkdir -p '${mp}/data'") arrayMountpoints}
+          chown 99:100 '/mnt/cache_data/data'
+          chmod 0775 '/mnt/cache_data/data'
+          ${lib.concatMapStringsSep "\n" (mp: ''
+            mkdir -p '${mp}/data'
+            chown 99:100 '${mp}/data'
+            chmod 0775 '${mp}/data'
+          '')
+          arrayMountpoints}
         '';
       };
     };
