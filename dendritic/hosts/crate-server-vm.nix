@@ -3,8 +3,8 @@
   self,
   ...
 }: {
-  # Test-only twin of crate-server: same modules, but pointed at QEMU
-  # NVMe devices instead of the real hardware's by-id serials. See
+  # Test-only twin of crate-server: same modules, but pointed at QEMU's
+  # own by-id NVMe serials instead of the real hardware's. See
   # packages/deploy-test-vm. Never deploy this to real hardware.
   flake.nixosConfigurations.crate-server-vm = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
@@ -33,20 +33,24 @@
         # this was set -- see the README note on unraid-compose.service.
         crate.unraidCompose.enableKomodo = false;
 
-        # nvme0n1 is the ephemeral boot disk (recreated each test run);
-        # nvme1n1/nvme2n1/nvme3n1/nvme4n1 are real, already-formatted
-        # partitions on crate-desktop's dedicated 3TB rehearsal drive
-        # (cache_appdata/cache_data/array1/array2), passed through as raw
-        # block devices -- mimicking only 2 array disks, not the real
-        # hardware's 9. Order matches packages/deploy-test-vm's QEMU
-        # device wiring.
+        # /dev/nvmeXn1 naming is assigned by kernel probe order, which
+        # isn't guaranteed to match QEMU's command-line device order when
+        # there are several identical NVMe controllers -- confirmed to
+        # actually shift between boots on this VM. Use the by-id paths
+        # QEMU derives from each device's serial= (set in
+        # packages/deploy-test-vm) instead, same as real crate-server
+        # hardware already does with its own by-id serials. The boot disk
+        # is ephemeral (recreated each test run); the other four are
+        # real, already-formatted partitions on crate-desktop's dedicated
+        # 3TB rehearsal drive -- mimicking only 2 array disks, not the
+        # real hardware's 9.
         crate.storage.crateServer = {
-          bootDevice = "/dev/nvme0n1";
-          cacheAppdataDevice = "/dev/nvme1n1";
-          cacheDataDevice = "/dev/nvme2n1";
+          bootDevice = "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_srv-boot";
+          cacheAppdataDevice = "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_srv-cache-appdata";
+          cacheDataDevice = "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_srv-cache-data";
           arrayDisks = {
-            disk1 = "/dev/nvme3n1";
-            disk2 = "/dev/nvme4n1";
+            disk1 = "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_srv-array-disk1";
+            disk2 = "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_srv-array-disk2";
           };
         };
 
