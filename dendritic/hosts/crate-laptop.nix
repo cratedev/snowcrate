@@ -20,6 +20,7 @@
       self.modules.nixos.libvirtd
       self.modules.nixos.deploy
       self.modules.nixos.deploy-test-vm
+      self.modules.nixos.impactor
 
       {
         users.users.matt.extraGroups = ["wheel" "input"];

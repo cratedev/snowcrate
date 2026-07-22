@@ -4,7 +4,6 @@
       niri
       dms-shell
       dms-greeter
-      noctalia-shell
 
       onepassword
 
@@ -26,7 +25,6 @@
   flake.modules.homeManager.role-graphical = {
     imports = with self.modules.homeManager; [
       niri
-      noctalia-shell
       xdg
 
       discord
