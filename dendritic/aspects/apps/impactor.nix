@@ -5,6 +5,9 @@
   # supported Linux distribution method.
   flake.modules.nixos.impactor = {pkgs, ...}: {
     services.flatpak.enable = true;
+    # Manages the USB multiplexing connection to iOS devices -- Impactor
+    # can't see/pair a connected device without it.
+    services.usbmuxd.enable = true;
 
     systemd.services.flatpak-impactor-setup = {
       description = "Ensure the flathub remote and Impactor flatpak are installed";
