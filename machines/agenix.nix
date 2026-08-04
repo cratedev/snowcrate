@@ -73,6 +73,10 @@ shortName: {
   };
 
   # Corrects /persist/home/matt ownership left root-owned by agenix's
-  # activation script.
-  systemd.tmpfiles.rules = ["Z /persist/home/matt 0755 matt users -"];
+  # activation script (mkdir -p'd as root when creating intermediate
+  # paths for decrypted secrets). Lowercase z is deliberate -- it fixes
+  # just this directory, not recursively: uppercase Z previously forced
+  # 0755 onto every file underneath on every boot, clobbering whatever
+  # mode git (or anything else) actually expected.
+  systemd.tmpfiles.rules = ["z /persist/home/matt 0755 matt users -"];
 }
