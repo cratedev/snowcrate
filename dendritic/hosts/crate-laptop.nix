@@ -22,7 +22,6 @@
       self.modules.nixos.deploy-test-vm
       self.modules.nixos.impactor
       self.modules.nixos.docker
-      self.modules.nixos.companion
 
       {
         users.users.matt.extraGroups = ["wheel" "docker" "input"];
