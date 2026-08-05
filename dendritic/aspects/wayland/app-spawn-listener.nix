@@ -17,12 +17,13 @@
       zen = ["zen-beta"];
     };
 
-    listener = pkgs.writers.writePython3Bin "app-spawn-listener" {} ''
+    listener = pkgs.writers.writePython3Bin "app-spawn-listener" {flakeIgnore = ["E231"];} ''
       import http.server
       import re
       import subprocess
 
       APPS = ${builtins.toJSON apps}
+
 
       class Handler(http.server.BaseHTTPRequestHandler):
           def do_GET(self):
@@ -37,6 +38,7 @@
               self.send_response(200)
               self.end_headers()
               self.wfile.write(b"spawned\n")
+
 
       if __name__ == "__main__":
           http.server.HTTPServer(("0.0.0.0", ${toString port}), Handler).serve_forever()
