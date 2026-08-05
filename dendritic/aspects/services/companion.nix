@@ -8,7 +8,9 @@
     virtualisation.oci-containers.backend = "docker";
 
     virtualisation.oci-containers.containers.companion = {
-      image = "bitfocus/companion:latest";
+      # Not on Docker Hub -- ghcr.io only. "main" tracks the latest
+      # build off the main branch (no separate stable channel).
+      image = "ghcr.io/bitfocus/companion/companion:main";
       autoStart = true;
       ports = [
         "8000:8000"
