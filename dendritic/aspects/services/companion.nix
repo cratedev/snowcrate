@@ -19,13 +19,16 @@
     };
 
     # Same class of bug hit with unraid-compose: at boot, the image pull
-    # can race ahead of DNS actually being usable (NetworkManager still
-    # settling), and the default restart spacing is too tight to survive
-    # more than a couple of quick failures before hitting systemd's
-    # start-limit.
+    # can race ahead of DNS actually being usable. On this host DNS is
+    # resolved entirely through Tailscale's MagicDNS (100.100.100.100,
+    # per /etc/resolv.conf) -- network-online.target alone doesn't
+    # guarantee tailscaled has finished reconnecting yet, so wait for it
+    # explicitly too. The default restart spacing is also too tight to
+    # survive more than a couple of quick failures before hitting
+    # systemd's start-limit.
     systemd.services.docker-companion = {
-      after = ["network-online.target"];
-      wants = ["network-online.target"];
+      after = ["network-online.target" "tailscaled.service"];
+      wants = ["network-online.target" "tailscaled.service"];
       serviceConfig.RestartSec = "20s";
       startLimitIntervalSec = 600;
       startLimitBurst = 6;
