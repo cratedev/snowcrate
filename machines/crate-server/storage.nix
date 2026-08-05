@@ -223,7 +223,7 @@ in {
           ${lib.concatMapStringsSep "\n" (share: "mkdir -p '/mnt/cache_appdata/${share}'") pinnedShares}
 
           # Owned nobody:users (99:100, unRAID's convention -- matches the
-          # PUID/PGID nearly every container in cratedev/crate-server runs
+          # PUID/PGID nearly every container in cratedev/unraid runs
           # as) so containers can create their own subdirectories directly
           # under /data (e.g. sabnzbd's usenet/incomplete, /completed).
           # Unlike the per-app appdata dirs below, nothing else chowns this
