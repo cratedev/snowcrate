@@ -46,6 +46,7 @@
 
           users.matt.imports = [
             self.modules.homeManager.role-laptop
+            self.modules.homeManager.app-spawn-listener
             {
               wayland.windowManager.niri.settings.output = [
                 {

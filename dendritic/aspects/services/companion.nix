@@ -18,6 +18,11 @@
         "16623:16623"
       ];
       volumes = ["/var/lib/companion:/companion"];
+      # Lets a Companion button's HTTP Request action reach
+      # aspects/wayland/app-spawn-listener.nix on the host via
+      # http://host.docker.internal:9797/spawn/<name>, without hardcoding
+      # crate-laptop's LAN IP (which can change on DHCP renewal).
+      extraOptions = ["--add-host=host.docker.internal:host-gateway"];
     };
 
     # Same class of bug hit with unraid-compose: at boot, the image pull
