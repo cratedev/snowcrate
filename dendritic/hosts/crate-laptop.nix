@@ -25,7 +25,7 @@
       self.modules.nixos.companion
 
       {
-        users.users.matt.extraGroups = ["wheel" "input"];
+        users.users.matt.extraGroups = ["wheel" "docker" "input"];
 
         networking = {
           hostName = "crate-laptop";

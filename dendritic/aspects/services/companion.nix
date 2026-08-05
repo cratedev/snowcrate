@@ -5,6 +5,8 @@
   # 16622/16623 are for Companion Satellite (unused for now, but cheap
   # to expose in case physical surfaces get added later).
   flake.modules.nixos.companion = {...}: {
+    virtualisation.oci-containers.backend = "docker";
+
     virtualisation.oci-containers.containers.companion = {
       image = "bitfocus/companion:latest";
       autoStart = true;
