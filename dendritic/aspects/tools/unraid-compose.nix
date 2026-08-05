@@ -52,16 +52,10 @@
           "d /mnt/cache_appdata/appdata/komodo/keys 0755 root root -"
           "d /mnt/cache_appdata/appdata/komodo/backups 0755 root root -"
           "d /mnt/cache_appdata/appdata/komodo/komodo-data 0755 root root -"
-          # Companion's image has no PUID/PGID mechanism -- it always runs
-          # as a fixed non-root uid/gid 1000, so (unlike Arcane/Komodo,
-          # which self-chown via PUID/PGID or run as root) this needs to
-          # be pre-created with the right ownership or Companion can't
-          # write its own config into it.
-          "d /mnt/cache_appdata/appdata/companion/data 0755 1000 1000 -"
         ];
 
         services.unraid-compose = {
-          description = "Sync cratedev/crate-server and bring up Arcane + Komodo + Companion";
+          description = "Sync cratedev/crate-server and bring up Arcane + Komodo";
           after = ["docker.service" "network-online.target" "mnt-user-appdata.mount"];
           wants = ["network-online.target"];
           requires = ["docker.service"];
@@ -92,7 +86,6 @@
             fi
 
             ${pkgs.docker}/bin/docker compose -p arcane -f "${repoDir}/arcane/compose.yaml" up -d
-            ${pkgs.docker}/bin/docker compose -p companion -f "${repoDir}/companion/compose.yaml" up -d
 
             ${komodoBringup}
           '';
