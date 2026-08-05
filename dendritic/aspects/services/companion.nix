@@ -18,6 +18,19 @@
       volumes = ["/var/lib/companion:/companion"];
     };
 
+    # Same class of bug hit with unraid-compose: at boot, the image pull
+    # can race ahead of DNS actually being usable (NetworkManager still
+    # settling), and the default restart spacing is too tight to survive
+    # more than a couple of quick failures before hitting systemd's
+    # start-limit.
+    systemd.services.docker-companion = {
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
+      serviceConfig.RestartSec = "20s";
+      startLimitIntervalSec = 600;
+      startLimitBurst = 6;
+    };
+
     environment.persistence."/persist".directories = ["/var/lib/companion"];
   };
 }
