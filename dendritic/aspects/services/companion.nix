@@ -36,6 +36,15 @@
       startLimitBurst = 6;
     };
 
+    # The container runs as a fixed non-root uid/gid 1000 (no PUID/PGID
+    # mechanism to match it to the host instead) -- /var/lib/companion
+    # otherwise gets auto-created root-owned by Docker on first bind
+    # mount, which the container then can't write its own config into.
+    # Non-recursive (z, not Z): only the top-level directory needs
+    # fixing, everything the container creates underneath it already
+    # gets correct ownership since it's running as the matching uid.
+    systemd.tmpfiles.rules = ["z /var/lib/companion 0755 1000 1000 -"];
+
     environment.persistence."/persist".directories = ["/var/lib/companion"];
   };
 }
