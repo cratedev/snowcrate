@@ -190,11 +190,6 @@ game:
 push:
     git push -u origin HEAD
 
-# Delete all failed pods
-[group('k8s')]
-del-failed:
-  kubectl delete pod --all-namespaces --field-selector="status.phase==Failed"
-
 [linux]
 [group('services')]
 list-inactive:
@@ -214,4 +209,4 @@ list-systemd:
 [linux]
 [group('services')]
 jctl:
-  ^jctl = "journalctl -p 5 -xb";
+  journalctl -p 5 -xb
