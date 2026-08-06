@@ -13,10 +13,19 @@ default:
 # pull if there are uncommitted changes (e.g. a local `nix flake
 # update` you haven't committed yet) rather than failing outright --
 # this is a convenience, not something that should block real work.
+#
+# flake.lock is excluded from that dirty check (though still left
+# alone, not discarded): `nh os switch` rewrites it in place on every
+# build, churn or not, so a dirty flake.lock is the normal
+# post-switch state, not WIP -- counting it would block every future
+# sync. `git pull` itself is still the backstop: on the rare occasion
+# upstream also touched flake.lock (e.g. a flake-lock-update PR), the
+# merge will fail loudly on that real conflict instead of silently
+# skipping, same as it would for any other file.
 _sync:
     #!/usr/bin/env fish
     cd {{flake_path}}
-    if git diff --quiet; and git diff --cached --quiet
+    if git diff --quiet -- . ':!flake.lock'; and git diff --cached --quiet -- . ':!flake.lock'
         git pull
     else
         echo "Skipping git pull -- uncommitted changes present."
@@ -31,7 +40,7 @@ switch: _sync
     if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
         set build_host_args --build-host matt@10.0.0.50
     end
-    nh os switch --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0 --no-write-lock-file
+    nh os switch --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
 
 # Flake Update
 [group('nix')]
@@ -47,7 +56,7 @@ test: _sync
     if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
         set build_host_args --build-host matt@10.0.0.50
     end
-    nh os test --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0 --no-write-lock-file
+    nh os test --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
 
 # Update specific input
 # Usage: just upp nixpkgs
@@ -79,7 +88,7 @@ check-dotfiles:
 # Test
 [group('nix')]
 ft: _sync
-    nh os test --hostname {{hostname}} {{flake_path}} -- --no-write-lock-file
+    nh os test --hostname {{hostname}} {{flake_path}}
 # Collect Garbage
 [group('nix')]
 ncg:
