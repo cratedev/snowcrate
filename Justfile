@@ -1,9 +1,6 @@
 set shell := ["fish", "-c"]
 flake_path := justfile_directory()
 hostname := `hostname`
-home_manager_output := "matt@${hostname}"
-
-utils_nu := absolute_path("utils.nu")
 
 default:
     @just --list
@@ -191,12 +188,7 @@ game:
 
 [group('git')]
 push:
-    git push -u origin main
-
-# Delete all failed pods
-[group('k8s')]
-del-failed:
-  kubectl delete pod --all-namespaces --field-selector="status.phase==Failed"
+    git push -u origin HEAD
 
 [linux]
 [group('services')]
@@ -217,4 +209,4 @@ list-systemd:
 [linux]
 [group('services')]
 jctl:
-  ^jctl = "journalctl -p 5 -xb";
+  journalctl -p 5 -xb
