@@ -31,7 +31,7 @@ switch: _sync
     if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
         set build_host_args --build-host matt@10.0.0.50
     end
-    nh os switch --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
+    nh os switch --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0 --no-write-lock-file
 
 # Flake Update
 [group('nix')]
@@ -47,7 +47,7 @@ test: _sync
     if test "{{hostname}}" != "crate-desktop"; and ssh -o ConnectTimeout=3 -o BatchMode=yes matt@10.0.0.50 true 2>/dev/null
         set build_host_args --build-host matt@10.0.0.50
     end
-    nh os test --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0
+    nh os test --hostname {{hostname}} {{flake_path}} $build_host_args -- --max-jobs auto --cores 0 --no-write-lock-file
 
 # Update specific input
 # Usage: just upp nixpkgs
@@ -79,7 +79,7 @@ check-dotfiles:
 # Test
 [group('nix')]
 ft: _sync
-    nh os test --hostname {{hostname}} {{flake_path}}
+    nh os test --hostname {{hostname}} {{flake_path}} -- --no-write-lock-file
 # Collect Garbage
 [group('nix')]
 ncg:
