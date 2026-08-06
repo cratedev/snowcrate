@@ -1,9 +1,6 @@
 set shell := ["fish", "-c"]
 flake_path := justfile_directory()
 hostname := `hostname`
-home_manager_output := "matt@${hostname}"
-
-utils_nu := absolute_path("utils.nu")
 
 default:
     @just --list
@@ -191,7 +188,7 @@ game:
 
 [group('git')]
 push:
-    git push -u origin main
+    git push -u origin HEAD
 
 # Delete all failed pods
 [group('k8s')]
