@@ -20,6 +20,7 @@
       self.modules.nixos.deploy
       self.modules.nixos.deploy-test-vm
       self.modules.nixos.cachix-push
+      self.modules.nixos.android-studio
 
       {
         # "disk" grants raw access to /dev/disk/by-partlabel/* block
@@ -49,6 +50,7 @@
           users.matt.imports = [
             self.modules.homeManager.role-desktop
             self.modules.homeManager.app-spawn-listener
+            self.modules.homeManager.android-studio
             {
               wayland.windowManager.niri.settings.output = [
                 {
