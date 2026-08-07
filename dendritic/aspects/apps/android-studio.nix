@@ -1,8 +1,20 @@
 {...}: {
-  flake.modules.nixos.android-studio = {...}: {
+  flake.modules.nixos.android-studio = {pkgs, ...}: {
     # Lets nix build Android SDK components directly (androidenv), not just
     # whatever Android Studio's own SDK Manager downloads at runtime.
     nixpkgs.config.android_sdk.accept_license = true;
+
+    # Gradle pulls aapt2 (and other AGP build tools) as prebuilt dynamically
+    # linked binaries via Maven -- they expect a standard FHS dynamic linker
+    # that doesn't exist on NixOS and fail with "cannot execute binary
+    # file" / "error while loading shared libraries" otherwise.
+    programs.nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc
+        zlib
+      ];
+    };
 
     programs.adb.enable = true;
     users.users.matt.extraGroups = [
