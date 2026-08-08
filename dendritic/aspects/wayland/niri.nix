@@ -41,6 +41,28 @@
       (import ../../../packages/dropdown-terminal-toggle {inherit pkgs;})
     ];
 
+    # niri doesn't bundle XWayland like most wlroots compositors do --
+    # without this, X11-only apps (Android Studio's JBR/AWT included) get
+    # no DISPLAY at all and crash with java.awt.HeadlessException. Fixed
+    # at :0 to match the DISPLAY session variable below; propagated via
+    # environment.d so anything launched in the session (uwsm, terminals,
+    # systemd --user services) sees it, not just niri's own children.
+    home.sessionVariables.DISPLAY = ":0";
+
+    systemd.user.services.xwayland-satellite = {
+      Unit = {
+        Description = "Xwayland bridge for X11 app compatibility under niri";
+        After = ["graphical-session.target"];
+        PartOf = ["graphical-session.target"];
+      };
+      Service = {
+        ExecStart = "${pkgs.xwayland-satellite-unstable}/bin/xwayland-satellite :0";
+        Restart = "on-failure";
+        RestartSec = "5s";
+      };
+      Install.WantedBy = ["graphical-session.target"];
+    };
+
     wayland.windowManager.niri = {
       enable = true;
 
